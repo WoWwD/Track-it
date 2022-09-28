@@ -79,7 +79,7 @@ class MarketDataCoin {
 }
 
 class CurrentPriceCoin {
-  final double usd;
+  final int usd;
 
   CurrentPriceCoin({required this.usd});
 
