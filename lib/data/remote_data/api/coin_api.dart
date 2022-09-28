@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:track_it/data/api/base_api.dart';
 import 'package:track_it/data/model/coin_model.dart';
 import 'package:track_it/service/exception/api_exception.dart';
 import 'package:track_it/service/mixin/coin_actions_mixin.dart';
+import 'base_api.dart';
 
 class CoinApi extends BaseApi implements CoinActions {
   final Dio dio;

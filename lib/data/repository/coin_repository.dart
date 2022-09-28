@@ -1,6 +1,7 @@
-import 'package:track_it/data/api/coin_api.dart';
 import 'package:track_it/data/model/coin_model.dart';
 import 'package:track_it/service/mixin/coin_actions_mixin.dart';
+
+import '../remote_data/api/coin_api.dart';
 
 class CoinRepository implements CoinActions {
   final CoinApi coinApi;
