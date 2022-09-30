@@ -8,8 +8,8 @@ final getIt = GetIt.instance;
 
 Future<void> init() async {
   final Dio dio = Dio();
-  final CoinApi coinApi = CoinApi(dio: dio);
-  final CoinRepository coinRepository = CoinRepository(coinApi: coinApi);
+  final CoinApi coinApi = CoinApi(dio);
+  final CoinRepository coinRepository = CoinRepository(coinApi);
 
   getIt.registerLazySingleton(() => coinRepository);
 

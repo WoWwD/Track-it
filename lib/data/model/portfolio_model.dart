@@ -5,5 +5,5 @@ class Portfolio {
   final String name;
   final List<Asset> listAssets;
 
-  Portfolio(this.id, this.name, this.listAssets);
+  Portfolio({required this.id, required this.name, required this.listAssets});
 }

@@ -10,5 +10,10 @@ class Transaction {
   final String description;
   final TypeOfTransaction typeOfTransaction;
 
-  Transaction(this.coin, this.dateTime, this.description, this.typeOfTransaction);
+  Transaction({
+    required this.coin,
+    required this.dateTime,
+    required this.description,
+    required this.typeOfTransaction
+  });
 }

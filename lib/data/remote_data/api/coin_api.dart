@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:track_it/data/model/coin_model.dart';
 import 'package:track_it/service/exception/api_exception.dart';
-import 'package:track_it/service/mixin/coin_actions_mixin.dart';
+import 'package:track_it/service/interface/coin_action_interface.dart';
 import 'base_api.dart';
 
-class CoinApi extends BaseApi implements CoinActions {
+class CoinApi extends BaseApi implements CoinAction {
   final Dio dio;
 
-  CoinApi({required this.dio});
+  CoinApi(this.dio);
 
   @override
   Future<Coin> getCoinById(String id) async {
@@ -16,7 +16,7 @@ class CoinApi extends BaseApi implements CoinActions {
       return Coin.fromJson(response.data);
     }
     else {
-      throw ApiException(errorMessage: response.data.toString(), errorCode: response.statusCode ?? 0);
+      throw ApiException(response.data.toString(), response.statusCode ?? 0);
     }
   }
 
@@ -26,13 +26,10 @@ class CoinApi extends BaseApi implements CoinActions {
     List<Coin> listCoins = [];
     Response response = await dio.get('${super.baseUrl}/simple/price?ids=bitcoin%2Ccardano&vs_currencies=$currency');
     if (response.statusCode == 200) {
-      for (var coin in response.data) {
-        listCoins.add(Coin.fromJson(coin));
-      }
       return listCoins;
     }
     else {
-      throw ApiException(errorMessage: response.data.toString(), errorCode: response.statusCode ?? 0);
+      throw ApiException(response.data.toString(), response.statusCode ?? 0);
     }
   }
 }

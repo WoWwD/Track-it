@@ -5,5 +5,5 @@ class Asset {
   final Coin coin;
   final List<Transaction> listTransactions;
 
-  Asset(this.coin, this.listTransactions);
+  Asset({required this.coin, required this.listTransactions});
 }
