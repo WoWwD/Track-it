@@ -1,22 +1,28 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:track_it/data/repository/coin_repository.dart';
+import 'package:track_it/data/local_data/portfolio_local_data.dart';
+import 'package:track_it/data/repository/remote_repository/coin_remote_repository.dart';
 import 'package:track_it/presentation/cubit/portfolio_cubit/portfolio_cubit.dart';
-import '../../data/remote_data/api/coin_api.dart';
+import '../../data/remote_data/coin_remote_data.dart';
+import '../../data/repository/local_repository/portfolio_local_repository.dart';
 
 final getIt = GetIt.instance;
 
 Future<void> init() async {
   final Dio dio = Dio();
-  final CoinApi coinApi = CoinApi(dio);
-  final CoinRepository coinRepository = CoinRepository(coinApi);
+  final CoinRemoteData coinRemoteData = CoinRemoteData(dio);
+  final PortfolioLocalData portfolioLocalData = PortfolioLocalData();
+  final CoinRemoteRepository coinRemoteRepository = CoinRemoteRepository(coinRemoteData);
+  final PortfolioLocalRepository portfolioLocalRepository = PortfolioLocalRepository(portfolioLocalData);
 
-  getIt.registerLazySingleton(() => coinRepository);
+  getIt.registerLazySingleton(() => coinRemoteRepository);
+  getIt.registerLazySingleton(() => portfolioLocalRepository);
 
   //region Cubit
   getIt.registerLazySingleton<PortfolioCubit>(() =>
     PortfolioCubit(
-     coinRepository: getIt.call()
+      coinRepository: getIt.call(),
+      portfolioLocalRepository: getIt.call()
     )
   );
 }

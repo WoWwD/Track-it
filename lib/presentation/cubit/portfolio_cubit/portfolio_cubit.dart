@@ -1,13 +1,20 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:track_it/data/repository/coin_repository.dart';
+import 'package:track_it/data/repository/remote_repository/coin_remote_repository.dart';
+import '../../../data/repository/local_repository/portfolio_local_repository.dart';
 
 part 'portfolio_state.dart';
 
 class PortfolioCubit extends Cubit<PortfolioState> {
-  final CoinRepository coinRepository;
+  final CoinRemoteRepository coinRepository;
+  final PortfolioLocalRepository portfolioLocalRepository;
 
   PortfolioCubit({
-    required this.coinRepository
+    required this.coinRepository,
+    required this.portfolioLocalRepository
   }) : super(PortfolioInitial());
+
+  Future<void> firstLaunch() async {
+
+  }
 }
