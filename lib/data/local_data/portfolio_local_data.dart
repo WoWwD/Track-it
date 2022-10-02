@@ -8,21 +8,21 @@ class PortfolioLocalData implements PortfolioLocalAction {
   Future<void> addPortfolio(Portfolio portfolio) async {
     final Box portfolioBox = await _openBox();
     await portfolioBox.put(portfolio.name, portfolio);
-    portfolioBox.close();
+    await portfolioBox.close();
   }
 
   @override
   Future<void> deletePortfolio(String name) async {
     final Box portfolioBox = await  _openBox();
     await portfolioBox.delete(name);
-    portfolioBox.close();
+    await portfolioBox.close();
   }
 
   @override
   Future<Portfolio> getPortfolio(String name) async {
     final Box portfolioBox = await _openBox();
     final res = await portfolioBox.get(name);
-    portfolioBox.close();
+    await portfolioBox.close();
     return res;
   }
 
