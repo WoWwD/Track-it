@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:track_it/data/model/coin_model.dart';
 import 'package:track_it/service/exception/api_exception.dart';
-import 'package:track_it/service/interface/coin_action_interface.dart';
-import 'base_api.dart';
+import 'package:track_it/service/interface/coin_remote_action_interface.dart';
+import 'api/base_api.dart';
 
-class CoinApi extends BaseApi implements CoinAction {
+class CoinRemoteData extends BaseApi implements CoinRemoteAction {
   final Dio dio;
 
-  CoinApi(this.dio);
+  CoinRemoteData(this.dio);
 
   @override
   Future<Coin> getCoinById(String id) async {
