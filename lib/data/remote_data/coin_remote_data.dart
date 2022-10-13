@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:track_it/data/model/coin_model.dart';
 import 'package:track_it/service/exception/api_exception.dart';
+import 'package:track_it/service/helpers.dart';
 import 'package:track_it/service/interface/coin_remote_action_interface.dart';
 import 'api/base_api.dart';
 
@@ -11,6 +12,7 @@ class CoinRemoteData extends BaseApi implements CoinRemoteAction {
 
   @override
   Future<Coin> getCoinById(String id) async {
+    //TODO: Переделать
     Response response = await dio.get('${super.baseUrl}/coins/$id');
     if (response.statusCode == 200) {
       return Coin.fromJson(response.data);
@@ -21,11 +23,15 @@ class CoinRemoteData extends BaseApi implements CoinRemoteAction {
   }
 
   @override
-  Future<List<Coin>> getOnlyCoinsPrice(List<String> ids, {String currency = 'usd'}) async {
-    //TODO: доделать
+  Future<List<Coin>> getListCoins(List<String> ids, {String currency = 'usd'}) async {
+    final String idsFromList = Helpers.createStringFromItemsList(ids);
     List<Coin> listCoins = [];
-    Response response = await dio.get('${super.baseUrl}/simple/price?ids=bitcoin%2Ccardano&vs_currencies=$currency');
+    Response response =
+      await dio.get('${super.baseUrl}/coins/markets?vs_currency=$currency&ids=$idsFromList&order=market_cap_desc&per_page=100&page=1&sparkline=false');
     if (response.statusCode == 200) {
+      for (var item in response.data) {
+        listCoins.add(Coin.fromJson(item));
+      }
       return listCoins;
     }
     else {
