@@ -13,7 +13,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       home: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (_) => di.getIt<PortfolioCubit>()),
+          BlocProvider(create: (_) => di.getIt<PortfolioCubit>()..firstLaunch()),
         ],
         child: const NavBarWidget(),
       ),

@@ -1,11 +1,9 @@
 class Helpers {
-  List<String> addElementBetweenItems(List<String> items, String element) {
-    final List<String> newList = [];
-    for (String item in items) {
-      newList.add(item + element);
+  static String createStringFromItemsList(List<String> list) {
+    String res = '';
+    for (String item in list) {
+      res += item;
     }
-    return newList;
+    return res;
   }
-
-  //TODO: доделать
 }
