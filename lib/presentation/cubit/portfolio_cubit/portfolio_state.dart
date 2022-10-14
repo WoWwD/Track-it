@@ -5,13 +5,10 @@ abstract class PortfolioState {}
 
 class PortfolioInitial extends PortfolioState {}
 class PortfolioLoading extends PortfolioState {}
-class PortfolioLoaded extends PortfolioState {
-  final List<Coin> listCoins;
+class PortfolioCreated extends PortfolioState {}
+class PortfolioDeleted extends PortfolioState {}
+class PortfolioReceived extends PortfolioState {
+  final Portfolio portfolio;
 
-  PortfolioLoaded(this.listCoins);
-}
-class PortfolioError extends PortfolioState {
-  final String error;
-
-  PortfolioError(this.error);
+  PortfolioReceived(this.portfolio);
 }

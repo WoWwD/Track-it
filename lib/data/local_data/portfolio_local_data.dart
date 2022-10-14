@@ -26,5 +26,8 @@ class PortfolioLocalData implements PortfolioLocalAction {
     return res;
   }
 
+  @override
+  Future<bool> portfolioStorageIsEmpty() async => await _openBox().then((value) => value.isEmpty);
+
   Future<Box> _openBox() async => await Hive.openBox(AppConstants.PORTFOLIOS_COLLECTION_HIVE);
 }

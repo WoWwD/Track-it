@@ -23,7 +23,7 @@ class CoinRemoteData extends BaseApi implements CoinRemoteAction {
   }
 
   @override
-  Future<List<Coin>> getListCoins(List<String> ids, {String currency = 'usd'}) async {
+  Future<List<Coin>> getListCoinsByIds(List<String> ids, {String currency = 'usd'}) async {
     final String idsFromList = Helpers.createStringFromItemsList(ids);
     List<Coin> listCoins = [];
     Response response =

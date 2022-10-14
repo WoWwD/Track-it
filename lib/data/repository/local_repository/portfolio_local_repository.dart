@@ -15,4 +15,7 @@ class PortfolioLocalRepository implements PortfolioLocalAction {
 
   @override
   Future<Portfolio> getPortfolio(String name) async => portfolioLocalData.getPortfolio(name);
+
+  @override
+  Future<bool> portfolioStorageIsEmpty() async => portfolioLocalData.portfolioStorageIsEmpty();
 }
