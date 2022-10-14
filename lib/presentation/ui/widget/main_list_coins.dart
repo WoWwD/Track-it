@@ -11,7 +11,7 @@ class MainListCoins extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH_CARD_COIN),
+      constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
       child: ListView.builder(
         itemCount: coins.length,
         itemBuilder: (context, index) {
