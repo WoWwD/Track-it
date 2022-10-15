@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:track_it/data/model/coin_model.dart';
 
-class CardCoinWidget extends StatelessWidget {
+class CardCoin extends StatelessWidget {
   final Coin coinModel;
 
-  const CardCoinWidget({Key? key, required this.coinModel}) : super(key: key);
+  const CardCoin({Key? key, required this.coinModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

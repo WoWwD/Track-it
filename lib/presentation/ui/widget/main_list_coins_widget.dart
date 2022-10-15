@@ -15,7 +15,7 @@ class MainListCoins extends StatelessWidget {
       child: ListView.builder(
         itemCount: coins.length,
         itemBuilder: (context, index) {
-          return CardCoinWidget(coinModel: coins[index]);
+          return CardCoin(coinModel: coins[index]);
         }
       ),
     );

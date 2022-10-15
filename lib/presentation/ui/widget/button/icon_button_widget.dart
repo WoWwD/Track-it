@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class IconButtonWidget extends StatelessWidget {
+class IconButtonV2 extends StatelessWidget {
   final VoidCallback onPressed;
   final Widget icon;
 
-  const IconButtonWidget({
+  const IconButtonV2({
     Key? key,
     required this.onPressed,
     required this.icon
