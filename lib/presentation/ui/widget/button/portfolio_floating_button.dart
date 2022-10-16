@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../../service/constant/app_constants_size.dart';
-import '../add_transaction/transaction_tab_bar_widget.dart';
+import '../search/search_coin_widget.dart';
 import 'icon_button_widget.dart';
 
-class StartAddTransactionButton extends StatelessWidget {
-  const StartAddTransactionButton({Key? key}) : super(key: key);
+class PortfolioFloatingButton extends StatelessWidget {
+  const PortfolioFloatingButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +12,9 @@ class StartAddTransactionButton extends StatelessWidget {
       child: const Icon(Icons.add),
       onPressed: () {
         showModalBottomSheet<void>(
+          isScrollControlled: true,
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16.0))),
-          constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
+          constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH, maxHeight: AppConstantsSize.MAX_HEIGHT),
           context: context,
           builder: (BuildContext context) {
             return Column(
@@ -25,7 +26,9 @@ class StartAddTransactionButton extends StatelessWidget {
                     onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close),
                   ),
                 ),
-                const Expanded(child: TransactionTabBar())
+                const Expanded(
+                  child: SearchCoinWidget()
+                )
               ],
             );
           },
