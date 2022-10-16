@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import '../../../data/model/coin_model.dart';
+import '../../../data/model/coin/coin_model.dart';
 import '../../../data/repository/remote_repository/coin_remote_repository.dart';
 
 part 'coin_state.dart';

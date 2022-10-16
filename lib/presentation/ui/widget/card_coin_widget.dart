@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:track_it/data/model/coin_model.dart';
+import 'package:track_it/data/model/coin/coin_model.dart';
 
 class CardCoin extends StatelessWidget {
   final Coin coinModel;
