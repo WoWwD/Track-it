@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TextFieldTransaction extends StatelessWidget {
+  final ValueChanged<String>? onChanged;
   final String? labelText;
 
-  const TextFieldTransaction({Key? key, this.labelText}) : super(key: key);
+  const TextFieldTransaction({Key? key, this.labelText, this.onChanged}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +13,7 @@ class TextFieldTransaction extends StatelessWidget {
         border: const OutlineInputBorder(),
         labelText: labelText
       ),
+      onChanged: onChanged
     );
   }
 }
