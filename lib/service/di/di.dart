@@ -5,6 +5,7 @@ import 'package:track_it/data/repository/remote_repository/coin_remote_repositor
 import 'package:track_it/presentation/cubit/coin_cubit/coin_cubit.dart';
 import 'package:track_it/presentation/cubit/error_cubit/error_cubit.dart';
 import 'package:track_it/presentation/cubit/portfolio_cubit/portfolio_cubit.dart';
+import 'package:track_it/presentation/cubit/search_cubit/search_cubit.dart';
 import '../../data/remote_data/coin_remote_data.dart';
 import '../../data/repository/local_repository/portfolio_local_repository.dart';
 
@@ -25,4 +26,5 @@ Future<void> init() async {
   getIt.registerLazySingleton<PortfolioCubit>(() => PortfolioCubit(portfolioLocalRepository: getIt.call()));
   getIt.registerLazySingleton<CoinCubit>(() => CoinCubit(coinRepository: getIt.call()));
   getIt.registerLazySingleton<ErrorCubit>(() => ErrorCubit());
+  getIt.registerLazySingleton<SearchCubit>(() => SearchCubit(coinRemoteRepository: getIt.call()));
 }
