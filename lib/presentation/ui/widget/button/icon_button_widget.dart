@@ -16,7 +16,7 @@ class IconButtonV2 extends StatelessWidget {
       onPressed: onPressed,
       icon: icon,
       padding: EdgeInsets.zero,
-      constraints: const BoxConstraints(),
+      constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
     );
   }
 }

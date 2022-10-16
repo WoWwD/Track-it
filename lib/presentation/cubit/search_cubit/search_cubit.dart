@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:track_it/data/model/coin/search_coin_model.dart';
 import 'package:track_it/data/repository/remote_repository/coin_remote_repository.dart';
+import 'package:track_it/service/extension/string_extension.dart';
 
 part 'search_state.dart';
 
@@ -14,14 +15,20 @@ class SearchCubit extends Cubit<SearchState> {
 
   Future<void> init() async {
     //TODO: проверка на наличие интернета
-    if (state is! SearchCompleted){
-      emit(SearchCompleted(const []));
-    }
+    emit(FirstLaunch());
   }
 
   Future<void> searchCoinByName(String name) async {
-    emit(SearchProcess());
-    final List<SearchCoin> listCoins = await coinRemoteRepository.searchCoinByName(name);
-    emit(SearchCompleted(listCoins));
+    final validName = name.toValidForSearch();
+    if(validName.isNotEmpty) {
+      emit(SearchProcess());
+      final ListSearchCoin listSearchCoinModel = await coinRemoteRepository.searchCoinByName(validName);
+      if(listSearchCoinModel.searchCoins.isNotEmpty){
+        emit(SearchCompleted(listSearchCoinModel.searchCoins));
+      }
+      else{
+        emit(NothingFound());
+      }
+    }
   }
 }

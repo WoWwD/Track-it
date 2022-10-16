@@ -16,5 +16,5 @@ class CoinRemoteRepository implements CoinRemoteAction {
     => await coinRemoteData.getListCoinsByIds(ids);
 
   @override
-  Future<List<SearchCoin>> searchCoinByName(String name) async => await coinRemoteData.searchCoinByName(name);
+  Future<ListSearchCoin> searchCoinByName(String name) async => await coinRemoteData.searchCoinByName(name);
 }

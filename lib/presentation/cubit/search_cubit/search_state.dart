@@ -5,6 +5,8 @@ abstract class SearchState {}
 
 class SearchInitial extends SearchState {}
 class SearchProcess extends SearchState {}
+class FirstLaunch extends SearchState {}
+class NothingFound extends SearchState {}
 class SearchCompleted extends SearchState {
   final List<SearchCoin> listCoins;
 

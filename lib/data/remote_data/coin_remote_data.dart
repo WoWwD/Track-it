@@ -41,15 +41,10 @@ class CoinRemoteData extends BaseApi implements CoinRemoteAction {
   }
 
   @override
-  Future<List<SearchCoin>> searchCoinByName(String name) async {
-    List<SearchCoin> listCoins = [];
+  Future<ListSearchCoin> searchCoinByName(String name) async {
     Response response =  await dio.get('${super.baseUrl}/search?query=$name');
     if (response.statusCode == 200) {
-      for (var item in response.data) {
-        //TODO: Доделать
-        //listCoins.add(ListSearchCoin(searchCoins: searchCoins.));
-      }
-      return listCoins;
+      return ListSearchCoin.fromJson(response.data);
     }
     else {
       throw ApiException(response.data.toString(), response.statusCode ?? 0);

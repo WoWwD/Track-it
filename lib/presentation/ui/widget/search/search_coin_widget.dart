@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:track_it/data/model/coin/search_coin_model.dart';
 import 'package:track_it/presentation/cubit/search_cubit/search_cubit.dart';
@@ -21,34 +21,56 @@ class SearchCoinWidget extends StatelessWidget {
             child: Column(
               children: [
                 TextFieldTransaction(
-                  labelText: 'Найти',
+                  labelText: 'Поиск',
                   onChanged: (String value) => context.read<SearchCubit>().searchCoinByName(value)
                 ),
-                const SizedBox(height: 24),
-                if (state is SearchCompleted) ...[
-                  Expanded(
-                    child: ListView.separated(
-                      itemCount: state.listCoins.length,
-                      separatorBuilder: (context, index) => const SizedBox(height: 16),
-                      itemBuilder: (context, index) {
-                        return SearchCoinCard(
-                          searchCoinModel: SearchCoin(
-                            id: '',
-                            name: '',
-                            apiSymbol: '',
-                            symbol: '',
-                            marketCapRank: index,
-                            thumb: '',
-                            large: '',
-                          )
-                        );
-                      }
-                    ),
+                const SizedBox(height: 8),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (state is FirstLaunch) _firstLaunch(),
+                      if (state is SearchCompleted) _searchCompleted(state),
+                      if (state is SearchProcess) _searchProcess(),
+                      if (state is NothingFound) _nothingFound()
+                    ],
                   ),
-                ],
-                if (state is SearchProcess) const Loader()
+                )
               ],
             ),
+          );
+        }
+      ),
+    );
+  }
+
+  Widget _nothingFound() {
+    return const Text('Ничего не найдено');
+  }
+
+  Widget _searchProcess() {
+    return const Loader();
+  }
+
+  Widget _firstLaunch() {
+    return const Text('Введите название монеты');
+  }
+
+  Widget _searchCompleted(SearchCompleted state) {
+    return Expanded(
+      child: ListView.separated(
+        itemCount: state.listCoins.length,
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+        separatorBuilder: (context, index) => const Divider(height: 4),
+        itemBuilder: (context, index) {
+          return SearchCoinCard(
+            searchCoinModel: SearchCoin(
+              id: state.listCoins[index].id,
+              name: state.listCoins[index].name,
+              symbol: state.listCoins[index].symbol,
+              large: state.listCoins[index].large,
+            ),
+            onTap: () => print('test'),
           );
         }
       ),

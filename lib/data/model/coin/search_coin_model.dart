@@ -25,19 +25,13 @@ class ListSearchCoin {
 class SearchCoin {
   final String id;
   final String name;
-  final String apiSymbol;
   final String symbol;
-  final int marketCapRank;
-  final String thumb;
   final String large;
 
   SearchCoin({
     required this.id,
     required this.name,
-    required this.apiSymbol,
     required this.symbol,
-    required this.marketCapRank,
-    required this.thumb,
     required this.large,
   });
 
@@ -45,10 +39,7 @@ class SearchCoin {
     return SearchCoin(
       id: json['id'],
       name: json['name'],
-      apiSymbol: json['apiSymbol'],
       symbol: json['symbol'],
-      marketCapRank: json['marketCapRank'],
-      thumb: json['thumb'],
       large: json['large'],
     );
   }
@@ -57,10 +48,7 @@ class SearchCoin {
     final Map<String, dynamic> data = <String, dynamic> {};
     data['id'] = id;
     data['name'] = name;
-    data['apiSymbol'] = apiSymbol;
     data['symbol'] = symbol;
-    data['marketCapRank'] = marketCapRank;
-    data['thumb'] = thumb;
     data['large'] = large;
     return data;
   }

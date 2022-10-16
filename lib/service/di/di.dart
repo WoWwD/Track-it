@@ -26,5 +26,5 @@ Future<void> init() async {
   getIt.registerLazySingleton<PortfolioCubit>(() => PortfolioCubit(portfolioLocalRepository: getIt.call()));
   getIt.registerLazySingleton<CoinCubit>(() => CoinCubit(coinRepository: getIt.call()));
   getIt.registerLazySingleton<ErrorCubit>(() => ErrorCubit());
-  getIt.registerLazySingleton<SearchCubit>(() => SearchCubit(coinRemoteRepository: getIt.call()));
+  getIt.registerFactory(() => SearchCubit(coinRemoteRepository: getIt.call()));
 }
