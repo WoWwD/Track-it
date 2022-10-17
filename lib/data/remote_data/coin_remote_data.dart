@@ -8,12 +8,12 @@ import 'api/base_api.dart';
 
 class CoinRemoteData extends BaseApi implements CoinRemoteAction {
   final Dio dio;
+  final String currency = 'usd';
 
   CoinRemoteData(this.dio);
 
   @override
   Future<Coin> getCoinById(String id) async {
-    //TODO: Переделать
     Response response = await dio.get('${super.baseUrl}/coins/$id');
     if (response.statusCode == 200) {
       return Coin.fromJson(response.data);
@@ -24,7 +24,8 @@ class CoinRemoteData extends BaseApi implements CoinRemoteAction {
   }
 
   @override
-  Future<List<Coin>> getListCoinsByIds(List<String> ids, {String currency = 'usd'}) async {
+  Future<List<Coin>> getListCoinsByIds(List<String> ids) async {
+    //TODO: переделать модель монеты
     final String idsFromList = Helpers.createStringFromItemsList(ids);
     List<Coin> listCoins = [];
     Response response =
