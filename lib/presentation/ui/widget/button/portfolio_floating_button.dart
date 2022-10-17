@@ -26,9 +26,7 @@ class PortfolioFloatingButton extends StatelessWidget {
                     onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close),
                   ),
                 ),
-                const Expanded(
-                  child: SearchCoinWidget()
-                )
+                const Expanded(child: SearchCoinWidget())
               ],
             );
           },

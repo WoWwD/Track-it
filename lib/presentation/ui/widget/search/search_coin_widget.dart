@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:track_it/data/model/coin/search_coin_model.dart';
 import 'package:track_it/presentation/cubit/search_cubit/search_cubit.dart';
+import 'package:track_it/presentation/ui/screen/add_transaction_screen.dart';
 import 'package:track_it/presentation/ui/widget/loader_widget.dart';
 import 'package:track_it/presentation/ui/widget/search_coin_card_widget.dart';
 import 'package:track_it/presentation/ui/widget/text_field_transaction_widget.dart';
@@ -70,7 +71,14 @@ class SearchCoinWidget extends StatelessWidget {
               symbol: state.listCoins[index].symbol,
               large: state.listCoins[index].large,
             ),
-            onTap: () => print('test'),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddTransactionScreen(
+                  idCoin: state.listCoins[index].id
+                )
+              )
+            ),
           );
         }
       ),

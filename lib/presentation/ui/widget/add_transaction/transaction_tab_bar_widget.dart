@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:track_it/presentation/cubit/transaction_cubit/transaction_cubit.dart';
 import 'package:track_it/presentation/ui/widget/add_transaction/buy_transaction_widget.dart';
 import 'package:track_it/presentation/ui/widget/add_transaction/sell_transaction_widget.dart';
 import 'package:track_it/presentation/ui/widget/add_transaction/transfer_in_transaction_widget.dart';
 import 'package:track_it/presentation/ui/widget/add_transaction/transfer_out_transaction_widget.dart';
 import 'package:track_it/presentation/ui/widget/button/add_transaction_button_widget.dart';
+import 'package:track_it/service/constant/app_constants_size.dart';
 
 class TransactionTabBar extends StatefulWidget {
-  const TransactionTabBar({Key? key}) : super(key: key);
+  final String idCoin;
+
+  const TransactionTabBar({Key? key, required this.idCoin}) : super(key: key);
 
   @override
   State<TransactionTabBar> createState() => _TransactionTabBarState();
@@ -45,12 +46,12 @@ class _TransactionTabBarState extends State<TransactionTabBar> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TransactionCubit(),
-      child: DefaultTabController(
-        length: _tabLength,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 16),
+    return DefaultTabController(
+      length: _tabLength,
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
           child: Column(
             children: [
               TabBar(

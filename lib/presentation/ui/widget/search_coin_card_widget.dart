@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:track_it/data/model/coin/search_coin_model.dart';
-import 'package:track_it/presentation/ui/widget/cached_image_widget.dart';
+import 'package:track_it/presentation/ui/widget/briefly_info_coin_widget.dart';
 
 class SearchCoinCard extends StatelessWidget {
   final SearchCoin searchCoinModel;
@@ -21,25 +21,7 @@ class SearchCoinCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         child: Row(
           children: [
-            CachedImage(imageUrl: searchCoinModel.large, typeCachedImage: TypeCachedImage.medium36),
-            const SizedBox(width: 16),
-            Row(
-              //TODO: Проблема с длинным названием
-              children: [
-                Text(searchCoinModel.name),
-                const SizedBox(width: 6),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      searchCoinModel.symbol,
-                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 16)
-                  ],
-                )
-              ],
-            ),
+            BrieflyInfoCoin(imageUrl: searchCoinModel.large, name: searchCoinModel.name, symbol: searchCoinModel.symbol),
             const Spacer(),
             const Icon(Icons.arrow_forward_ios, size: 18),
           ],
