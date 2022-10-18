@@ -15,6 +15,7 @@ class TransactionCubit extends Cubit<TransactionState> {
   }) : super(TransactionInitial());
 
   Future<void> init(String idCoin) async {
+    emit(TransactionLoading());
     final coinModel = await coinRemoteRepository.getCoinById(idCoin);
     emit(TransactionStart(coinModel));
   }
