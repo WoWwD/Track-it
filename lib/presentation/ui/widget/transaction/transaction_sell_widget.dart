@@ -17,12 +17,20 @@ class TransactionSell extends StatelessWidget {
           children: [
             const SizedBox(height: 24),
             TextFieldTransactionAmount(
-              onChanged: (value) => model.setAmount(double.parse(value)),
+              onChanged: (value) {
+                if (value.isNotEmpty) {
+                  model.setAmount(double.parse(value));
+                }
+              },
               initialValue: model.amount.toString(),
             ),
             const SizedBox(height: 24),
             TextFieldTransactionPrice(
-              onChanged: (value) => model.setPrice(double.parse(value)),
+              onChanged: (value) {
+                if (value.isNotEmpty) {
+                  model.setPrice(double.parse(value));
+                }
+              },
               initialValue: model.price.toString(),
             ),
             const SizedBox(height: 24),
