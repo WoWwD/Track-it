@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:track_it/presentation/cubit/search_cubit/search_cubit.dart';
 import 'package:track_it/presentation/ui/screen/add_transaction_screen.dart';
-import 'package:track_it/presentation/ui/widget/search_coin_card_widget.dart';
-import 'package:track_it/presentation/ui/widget/text_field_transaction_widget.dart';
+import 'package:track_it/presentation/ui/widget/search/search_coin_card_widget.dart';
 import 'package:track_it/service/di/di.dart' as di;
+import '../primary_text_field.dart';
 
 class SearchCoinWidget extends StatelessWidget {
   const SearchCoinWidget({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class SearchCoinWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Column(
               children: [
-                TextFieldTransaction(
+                PrimaryTextField(
                   labelText: 'Поиск',
                   onChanged: (String value) => context.read<SearchCubit>().searchCoinByName(value)
                 ),
@@ -50,13 +50,8 @@ class SearchCoinWidget extends StatelessWidget {
     );
   }
 
-  Widget _nothingFound() {
-    return const Text('Ничего не найдено');
-  }
-
-  Widget _firstLaunch() {
-    return const Text('Введите название монеты');
-  }
+  Widget _nothingFound() => const Text('Ничего не найдено');
+  Widget _firstLaunch() => const Text('Введите название монеты');
 
   Widget _content(SearchCompleted state) {
     return ListView.builder(
@@ -71,7 +66,10 @@ class SearchCoinWidget extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => AddTransactionScreen(
-                idCoin: state.listCoins[index].id
+                name: state.listCoins[index].name,
+                symbol: state.listCoins[index].symbol,
+                imageUrl: state.listCoins[index].large,
+                idCoin: state.listCoins[index].id,
               )
             )
           ),
