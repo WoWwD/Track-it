@@ -22,7 +22,7 @@ class TransactionBuy extends StatelessWidget {
                   model.setAmount(double.parse(value));
                 }
               },
-              initialValue: model.amount.toString(),
+              initialValue: model.amount == 0.0? '': model.amount,
             ),
             const SizedBox(height: 24),
             TextFieldTransactionPrice(
@@ -31,7 +31,7 @@ class TransactionBuy extends StatelessWidget {
                   model.setPrice(double.parse(value));
                 }
               },
-              initialValue: model.price.toString(),
+              initialValue: model.price == 0.0? '': model.price,
             ),
             const SizedBox(height: 24),
             const TextFieldTransaction(labelText: 'Дата'),

@@ -17,7 +17,7 @@ class TransactionTransferOut extends StatelessWidget {
             const SizedBox(height: 24),
             TextFieldTransactionAmount(
               onChanged: (value) => model.setAmount(double.parse(value)),
-              initialValue: model.amount.toString(),
+              initialValue: model.amount == 0.0? '': model.amount,
             ),
             const SizedBox(height: 24),
             const TextFieldTransaction(labelText: 'Дата'),
