@@ -9,15 +9,15 @@ class Transaction {
   final Coin coin;
   final DateTime dateTime;
   final String? note;
-  final double? amount;
-  final double? price;
+  final double amount;
+  final double price;
 
   Transaction({
     required this.typeOfTransaction,
     required this.coin,
     required this.dateTime,
     this.note,
-    this.amount,
-    this.price
+    required this.amount,
+    required this.price
   });
 }
