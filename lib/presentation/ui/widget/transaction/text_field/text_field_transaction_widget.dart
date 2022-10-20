@@ -17,7 +17,7 @@ class TextFieldTransaction extends StatelessWidget {
     this.labelText,
     this.onChanged,
     this.initialValue,
-    this.textInputType,
+    this.textInputType = TextInputType.number,
     this.onTap,
     this.readOnly = false,
     this.suffixIcon
