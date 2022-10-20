@@ -5,8 +5,7 @@ abstract class PortfolioState {}
 
 class PortfolioInitial extends PortfolioState {}
 class PortfolioLoading extends PortfolioState {}
-class PortfolioCreated extends PortfolioState {}
-class PortfolioDeleted extends PortfolioState {}
+
 class PortfolioReceived extends PortfolioState {
   final Portfolio portfolio;
 

@@ -1,5 +1,6 @@
 import 'package:track_it/data/local_data/portfolio_local_data.dart';
 import 'package:track_it/data/model/portfolio_model.dart';
+import 'package:track_it/data/model/transaction_model.dart';
 import 'package:track_it/service/interface/portfolio_local_action_interface.dart';
 
 class PortfolioLocalRepository implements PortfolioLocalAction {
@@ -8,14 +9,15 @@ class PortfolioLocalRepository implements PortfolioLocalAction {
   PortfolioLocalRepository(this.portfolioLocalData);
 
   @override
-  Future<void> addPortfolio(Portfolio portfolio) async => portfolioLocalData.addPortfolio(portfolio);
+  Future<void> addTransaction(String namePortfolio, Transaction transactionModel) async
+    => await portfolioLocalData.addTransaction(namePortfolio, transactionModel);
 
   @override
-  Future<void> deletePortfolio(String name) async => portfolioLocalData.deletePortfolio(name);
+  Future<void> createPortfolio(Portfolio portfolio) async => await portfolioLocalData.createPortfolio(portfolio);
 
   @override
-  Future<Portfolio> getPortfolio(String name) async => portfolioLocalData.getPortfolio(name);
+  Future<bool> portfolioStorageIsEmpty() async => await portfolioLocalData.portfolioStorageIsEmpty();
 
   @override
-  Future<bool> portfolioStorageIsEmpty() async => portfolioLocalData.portfolioStorageIsEmpty();
+  Future<Portfolio> getPortfolio(String namePortfolio) async => await portfolioLocalData.getPortfolio(namePortfolio);
 }
