@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:track_it/presentation/ui/widget/transaction/text_field/text_field_transaction_amount_widget.dart';
 import 'package:track_it/presentation/ui/widget/transaction/transaction_general_widget.dart';
 import '../../../provider/transaction_provider/transaction_sell_model.dart';
+import 'date_picker_transaction_widget.dart';
 import 'text_field/text_field_transaction_price_widget.dart';
-import 'text_field/text_field_transaction_widget.dart';
+import 'package:track_it/service/extension/string_extension.dart';
 
 class TransactionSell extends StatelessWidget {
   const TransactionSell({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class TransactionSell extends StatelessWidget {
                   model.setAmount(double.parse(value));
                 }
               },
-              initialValue: model.amount == 0.0? '': model.amount,
+              initialValue: model.amount == 0.0? '': model.amount.toString(),
             ),
             const SizedBox(height: 24),
             TextFieldTransactionPrice(
@@ -31,10 +32,13 @@ class TransactionSell extends StatelessWidget {
                   model.setPrice(double.parse(value));
                 }
               },
-              initialValue: model.price == 0.0? '': model.price,
+              initialValue: model.price == 0.0? '': model.price.toString(),
             ),
             const SizedBox(height: 24),
-            const TextFieldTransaction(labelText: 'Дата'),
+            DatePickerTransaction(
+              initialDate: model.dateTime,
+              onSaved: (value) => model.setDateTime(value?.toDateTime() ?? model.dateTime),
+            ),
             const SizedBox(height: 24),
             const Text('Примечание'),
           ]

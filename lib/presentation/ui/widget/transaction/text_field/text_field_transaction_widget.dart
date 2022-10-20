@@ -8,6 +8,9 @@ class TextFieldTransaction extends StatelessWidget {
   final String? labelText;
   final String? initialValue;
   final TextInputType? textInputType;
+  final GestureTapCallback? onTap;
+  final bool readOnly;
+  final Widget? suffixIcon;
 
   const TextFieldTransaction({
     Key? key,
@@ -15,11 +18,16 @@ class TextFieldTransaction extends StatelessWidget {
     this.onChanged,
     this.initialValue,
     this.textInputType,
+    this.onTap,
+    this.readOnly = false,
+    this.suffixIcon
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: readOnly,
+      onTap: onTap,
       keyboardType: textInputType,
       initialValue: initialValue,
       inputFormatters: [
@@ -27,7 +35,8 @@ class TextFieldTransaction extends StatelessWidget {
       ],
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
-        labelText: labelText
+        labelText: labelText,
+        suffixIcon: suffixIcon
       ),
       onChanged: onChanged,
       validator: (value) {
