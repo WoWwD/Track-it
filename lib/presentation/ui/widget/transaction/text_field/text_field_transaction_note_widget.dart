@@ -25,10 +25,7 @@ class TextFieldTransactionNote extends StatelessWidget {
       ),
       onChanged: onChanged,
       validator: (value) {
-        if (value!.isEmpty || value.noSpace().isEmpty) {
-          return InputError.empty;
-        }
-        if (value.noSpace().isMaxLengthText()){
+        if (value!.noSpace().isMaxLengthText()){
           return InputError.maxLength;
         }
         return null;
