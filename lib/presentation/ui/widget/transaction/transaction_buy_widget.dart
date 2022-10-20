@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:track_it/presentation/provider/transaction_provider/transaction_buy_model.dart';
 import 'package:track_it/presentation/ui/widget/transaction/date_picker_transaction_widget.dart';
+import 'package:track_it/presentation/ui/widget/transaction/text_field/text_field_transaction_note_widget.dart';
 import 'package:track_it/presentation/ui/widget/transaction/transaction_general_widget.dart';
 import 'package:track_it/service/extension/string_extension.dart';
 import 'text_field/text_field_transaction_widget.dart';
@@ -43,7 +44,14 @@ class TransactionBuy extends StatelessWidget {
               onSaved: (value) => model.setDateTime(value?.toDateTime() ?? model.dateTime),
             ),
             const SizedBox(height: 24),
-            const Text('Примечание'),
+            TextFieldTransactionNote(
+              initialValue: model.note,
+              onChanged: (value) {
+                if (value.isNotEmpty) {
+                  model.setNote(value);
+                }
+              },
+            )
           ]
         );
       }

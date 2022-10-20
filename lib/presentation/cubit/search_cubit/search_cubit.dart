@@ -19,7 +19,7 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   Future<void> searchCoinByName(String name) async {
-    final validName = name.toValidForSearch();
+    final validName = name.noSpace();
     if(validName.isNotEmpty) {
       emit(SearchProcess());
       final ListSearchCoin listSearchCoinModel = await coinRemoteRepository.searchCoinByName(validName);
