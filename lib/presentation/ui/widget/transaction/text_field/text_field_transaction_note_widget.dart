@@ -21,7 +21,7 @@ class TextFieldTransactionNote extends StatelessWidget {
       maxLength: 100,
       decoration: const InputDecoration(
         border: OutlineInputBorder(),
-        labelText: 'Примечание (не обязательно)',
+        labelText: 'Заметки (не обязательно)',
       ),
       onChanged: onChanged,
       validator: (value) {
