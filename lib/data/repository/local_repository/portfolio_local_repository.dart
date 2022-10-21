@@ -2,6 +2,7 @@ import 'package:track_it/data/local_data/portfolio_local_data.dart';
 import 'package:track_it/data/model/portfolio_model.dart';
 import 'package:track_it/data/model/transaction_model.dart';
 import 'package:track_it/service/interface/portfolio_local_action_interface.dart';
+import '../../model/coin/coin_model.dart';
 
 class PortfolioLocalRepository implements PortfolioLocalAction {
   final PortfolioLocalData portfolioLocalData;
@@ -9,8 +10,8 @@ class PortfolioLocalRepository implements PortfolioLocalAction {
   PortfolioLocalRepository(this.portfolioLocalData);
 
   @override
-  Future<void> addTransaction(String namePortfolio, Transaction transactionModel) async
-    => await portfolioLocalData.addTransaction(namePortfolio, transactionModel);
+  Future<void> addTransaction(String namePortfolio, Coin coinModel, Transaction transactionModel) async
+    => await portfolioLocalData.addTransaction(namePortfolio, coinModel, transactionModel);
 
   @override
   Future<void> createPortfolio(Portfolio portfolio) async => await portfolioLocalData.createPortfolio(portfolio);
