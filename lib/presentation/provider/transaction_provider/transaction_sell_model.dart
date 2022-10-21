@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:track_it/service/interface/transaction_action_interface.dart';
+import '../../../data/model/coin/coin_model.dart';
 
 class TransactionSellModel extends ChangeNotifier implements TransactionAction {
   double _amount = 0.0;
@@ -37,7 +38,7 @@ class TransactionSellModel extends ChangeNotifier implements TransactionAction {
   }
 
   @override
-  void addTransaction() {
+  Future<void> addTransaction(String namePortfolio, Coin coinModel) async {
     // TODO: implement addTransaction
   }
 }

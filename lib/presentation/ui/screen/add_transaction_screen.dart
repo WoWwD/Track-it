@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:track_it/data/model/coin/coin_model.dart';
 import 'package:track_it/presentation/provider/transaction_provider/transaction_sell_model.dart';
 import 'package:track_it/presentation/provider/transaction_provider/transaction_transfer_in_model.dart';
 import 'package:track_it/presentation/ui/widget/transaction/transaction_sell_widget.dart';
 import 'package:track_it/presentation/ui/widget/transaction/transaction_transfer_in_widget.dart';
 import 'package:track_it/presentation/ui/widget/transaction/transaction_transfer_out_widget.dart';
+import '../../../service/constant/app_constants.dart';
 import '../../../service/constant/app_constants_size.dart';
 import '../../provider/transaction_provider/transaction_buy_model.dart';
 import '../../provider/transaction_provider/transaction_transfer_out_model.dart';
 import '../widget/button/add_transaction_button_widget.dart';
 import '../widget/transaction/transaction_buy_widget.dart';
+import 'package:track_it/service/di/di.dart' as di;
 
 class AddTransactionScreen extends StatefulWidget {
   final String name;
@@ -17,7 +20,7 @@ class AddTransactionScreen extends StatefulWidget {
   final String imageUrl;
   final String idCoin;
 
-  const AddTransactionScreen({
+  AddTransactionScreen({
     Key? key,
     required this.name,
     required this.symbol,
@@ -65,64 +68,79 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
       ),
       body: MultiProvider(
         providers: [
-          ChangeNotifierProvider<TransactionBuyModel>(create: (_) => TransactionBuyModel()),
+          ChangeNotifierProvider<TransactionBuyModel>(create: (_) => TransactionBuyModel(di.getIt())),
           ChangeNotifierProvider<TransactionSellModel>(create: (_) => TransactionSellModel()),
           ChangeNotifierProvider<TransactionTransferInModel>(create: (_) => TransactionTransferInModel()),
           ChangeNotifierProvider<TransactionTransferOutModel>(create: (_) => TransactionTransferOutModel()),
         ],
-        child: DefaultTabController(
-          length: _tabLength,
-          child: Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
-              child: Column(
-                children: [
-                  TabBar(
-                    padding: EdgeInsets.zero,
-                    labelPadding: EdgeInsets.zero,
-                    controller: _tabController,
-                    tabs: _tabs,
-                  ),
-                  Form(
-                    key: _formKey,
-                    child: Expanded(
-                      child: TabBarView(
-                          controller: _tabController,
-                          children: const [
-                            TransactionBuy(),
-                            TransactionSell(),
-                            TransactionTransferIn(),
-                            TransactionTransferOut()
-                          ]
+        builder: (context, child) {
+          return DefaultTabController(
+            length: _tabLength,
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
+                child: Column(
+                  children: [
+                    TabBar(
+                      padding: EdgeInsets.zero,
+                      labelPadding: EdgeInsets.zero,
+                      controller: _tabController,
+                      tabs: _tabs,
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: Expanded(
+                        child: TabBarView(
+                            controller: _tabController,
+                            children: const [
+                              TransactionBuy(),
+                              TransactionSell(),
+                              TransactionTransferIn(),
+                              TransactionTransferOut()
+                            ]
+                        ),
                       ),
                     ),
-                  ),
-                  AddTransactionButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        switch (_tabController.index) {
-                          case 0:
-                            print('купил');
-                            break;
-                          case 1:
-                            print('продал');
-                            break;
-                          case 2:
-                            print('ти');
-                            break;
-                          case 3:
-                            print('то');
-                            break;
+                    AddTransactionButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          switch (_tabController.index) {
+                            case 0:
+                              print('купил');
+                              context.read<TransactionBuyModel>().addTransaction(
+                                  AppConstants.MAIN_PORTFOLIO,
+                                  Coin(
+                                      id: 'test',
+                                      symbol: 'test',
+                                      name: 'test',
+                                      imageCoin: ImageCoin(thumb: '', small: '', large: ''),
+                                      marketDataCoin: MarketDataCoin(
+                                          currentPriceCoin: CurrentPriceCoin(usd: 1),
+                                          marketCapCoin: MarketCapCoin(usd: 1)
+                                      )
+                                  )
+                              );
+                              break;
+                            case 1:
+                              print('продал');
+                              break;
+                            case 2:
+                              print('ти');
+                              break;
+                            case 3:
+                              print('то');
+                              break;
+                          }
                         }
-                      }
-                    },
-                  )
-                ],
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       )
     );
   }
