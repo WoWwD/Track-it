@@ -15,11 +15,11 @@ class Coin {
 
   factory Coin.fromJson(Map<String, dynamic> json) {
     return Coin(
-        id: json['id'],
-        symbol: json['symbol'],
-        name: json['name'],
-        imageCoin: ImageCoin.fromJson(json['image']),
-        marketDataCoin: MarketDataCoin.fromJson(json['market_data'])
+      id: json['id'],
+      symbol: json['symbol'],
+      name: json['name'],
+      imageCoin: ImageCoin.fromJson(json['image']),
+      marketDataCoin: MarketDataCoin.fromJson(json['market_data'])
     );
   }
 

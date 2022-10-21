@@ -7,8 +7,8 @@ class ListSearchCoin {
 
   factory ListSearchCoin.fromJson(Map<String, dynamic> json) {
     final List<SearchCoin> searchCoins = [];
-    json['coins'].forEach((v) {
-      searchCoins.add(SearchCoin.fromJson(v));
+    json['coins'].forEach((item) {
+      searchCoins.add(SearchCoin.fromJson(item));
     });
     return ListSearchCoin(
       searchCoins: searchCoins
@@ -17,7 +17,7 @@ class ListSearchCoin {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic> {};
-    data['coins'] = searchCoins.map((v) => v.toJson()).toList();
+    data['coins'] = searchCoins.map((item) => item.toJson()).toList();
     return data;
   }
 }
