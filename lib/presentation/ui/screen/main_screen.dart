@@ -32,7 +32,7 @@ class _MainScreen extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar(
         items: _items,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

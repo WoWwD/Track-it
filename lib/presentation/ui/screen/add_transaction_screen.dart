@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:track_it/data/model/coin/coin_model.dart';
 import 'package:track_it/presentation/provider/transaction_provider/transaction_sell_model.dart';
 import 'package:track_it/presentation/provider/transaction_provider/transaction_transfer_in_model.dart';
 import 'package:track_it/presentation/ui/widget/transaction/transaction_sell_widget.dart';
@@ -20,7 +19,7 @@ class AddTransactionScreen extends StatefulWidget {
   final String imageUrl;
   final String idCoin;
 
-  AddTransactionScreen({
+  const AddTransactionScreen({
     Key? key,
     required this.name,
     required this.symbol,
@@ -35,12 +34,17 @@ class AddTransactionScreen extends StatefulWidget {
 class _AddTransactionScreenState extends State<AddTransactionScreen> with TickerProviderStateMixin {
   static const _tabLength = 4;
   late TabController _tabController;
-  static const _colorTabText = Colors.black;
+  final List<Widget> _tabsName = const [
+    Tab(child: Text('Покупка', style: TextStyle(color: Colors.black))),
+    Tab(child: Text('Продажа', style: TextStyle(color: Colors.black))),
+    Tab(child: Text('Ввод', style: TextStyle(color: Colors.black))),
+    Tab(child: Text('Вывод', style: TextStyle(color: Colors.black))),
+  ];
   final List<Widget> _tabs = const [
-    Tab(child: Text('Покупка', style: TextStyle(color: _colorTabText))),
-    Tab(child: Text('Продажа', style: TextStyle(color: _colorTabText))),
-    Tab(child: Text('Ввод', style: TextStyle(color: _colorTabText))),
-    Tab(child: Text('Вывод', style: TextStyle(color: _colorTabText))),
+    TransactionBuy(),
+    TransactionSell(),
+    TransactionTransferIn(),
+    TransactionTransferOut()
   ];
   final _formKey = GlobalKey<FormState>();
 
@@ -68,12 +72,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
       ),
       body: MultiProvider(
         providers: [
-          ChangeNotifierProvider<TransactionBuyModel>(create: (_) => TransactionBuyModel(di.getIt())),
-          ChangeNotifierProvider<TransactionSellModel>(create: (_) => TransactionSellModel()),
-          ChangeNotifierProvider<TransactionTransferInModel>(create: (_) => TransactionTransferInModel()),
-          ChangeNotifierProvider<TransactionTransferOutModel>(create: (_) => TransactionTransferOutModel()),
+          ChangeNotifierProvider<TransactionBuyModel>(create: (_) => di.getIt()),
+          ChangeNotifierProvider<TransactionSellModel>(create: (_) => di.getIt()),
+          ChangeNotifierProvider<TransactionTransferInModel>(create: (_) => di.getIt()),
+          ChangeNotifierProvider<TransactionTransferOutModel>(create: (_) => di.getIt()),
         ],
-        builder: (context, child) {
+        builder: (contextProvider, child) {
           return DefaultTabController(
             length: _tabLength,
             child: Center(
@@ -86,55 +90,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
                       padding: EdgeInsets.zero,
                       labelPadding: EdgeInsets.zero,
                       controller: _tabController,
-                      tabs: _tabs,
+                      tabs: _tabsName,
                     ),
                     Form(
                       key: _formKey,
-                      child: Expanded(
-                        child: TabBarView(
-                            controller: _tabController,
-                            children: const [
-                              TransactionBuy(),
-                              TransactionSell(),
-                              TransactionTransferIn(),
-                              TransactionTransferOut()
-                            ]
-                        ),
-                      ),
+                      child: Expanded(child: TabBarView(controller: _tabController, children: _tabs)),
                     ),
-                    AddTransactionButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          switch (_tabController.index) {
-                            case 0:
-                              print('купил');
-                              context.read<TransactionBuyModel>().addTransaction(
-                                  AppConstants.MAIN_PORTFOLIO,
-                                  Coin(
-                                      id: 'test',
-                                      symbol: 'test',
-                                      name: 'test',
-                                      imageCoin: ImageCoin(thumb: '', small: '', large: ''),
-                                      marketDataCoin: MarketDataCoin(
-                                          currentPriceCoin: CurrentPriceCoin(usd: 1),
-                                          marketCapCoin: MarketCapCoin(usd: 1)
-                                      )
-                                  )
-                              );
-                              break;
-                            case 1:
-                              print('продал');
-                              break;
-                            case 2:
-                              print('ти');
-                              break;
-                            case 3:
-                              print('то');
-                              break;
-                          }
-                        }
-                      },
-                    )
+                    AddTransactionButton(onPressed: _onPressed(contextProvider))
                   ],
                 ),
               ),
@@ -143,5 +105,38 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
         },
       )
     );
+  }
+
+  VoidCallback _onPressed(BuildContext contextProvider) {
+    return () {
+      if(_formKey.currentState!.validate()) {
+        switch (_tabController.index) {
+          case 0:
+            contextProvider.read<TransactionBuyModel>()
+              .addTransaction(AppConstants.MAIN_PORTFOLIO, widget.idCoin);
+            print('купил');
+            Navigator.pop(context);
+            break;
+          case 1:
+            contextProvider.read<TransactionSellModel>()
+              .addTransaction(AppConstants.MAIN_PORTFOLIO, widget.idCoin);
+            print('продал');
+            Navigator.pop(context);
+            break;
+          case 2:
+            contextProvider.read<TransactionTransferInModel>()
+              .addTransaction(AppConstants.MAIN_PORTFOLIO, widget.idCoin);
+            print('ти');
+            Navigator.pop(context);
+            break;
+          case 3:
+            contextProvider.read<TransactionTransferOutModel>()
+              .addTransaction(AppConstants.MAIN_PORTFOLIO, widget.idCoin);
+            print('то');
+            Navigator.pop(context);
+            break;
+        }
+      }
+    };
   }
 }

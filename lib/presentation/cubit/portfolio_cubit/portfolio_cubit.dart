@@ -3,7 +3,6 @@ import 'package:meta/meta.dart';
 import 'package:track_it/data/model/portfolio_model.dart';
 import 'package:track_it/data/model/transaction_model.dart';
 import 'package:track_it/service/constant/app_constants.dart';
-import '../../../data/model/coin/coin_model.dart';
 import '../../../data/repository/local_repository/portfolio_local_repository.dart';
 
 part 'portfolio_state.dart';
@@ -15,13 +14,24 @@ class PortfolioCubit extends Cubit<PortfolioState> {
     required this.portfolioLocalRepository
   }) : super(PortfolioInitial());
 
-  Future<void> firstLaunch() async {
+  Future<void> firstLaunch(String namePortfolio) async {
+    emit(PortfolioLoading());
     if (await portfolioLocalRepository.portfolioStorageIsEmpty()) {
       final Portfolio portfolio = Portfolio(name: AppConstants.MAIN_PORTFOLIO, listAssets: []);
       await portfolioLocalRepository.createPortfolio(portfolio);
     }
+    final Portfolio portfolio = await portfolioLocalRepository.getPortfolio(namePortfolio);
+    if(portfolio.listAssets.isEmpty) {
+      emit(PortfolioFirstLaunch());
+    }
+    else {
+      emit(PortfolioReceived(portfolio));
+    }
   }
 
-  Future<void> addTransaction(String namePortfolio, Coin coinModel, Transaction transactionModel) async
-    => await portfolioLocalRepository.addTransaction(namePortfolio, coinModel, transactionModel);
+  Future<void> addTransaction(String namePortfolio, String idCoin, Transaction transactionModel) async
+  => await portfolioLocalRepository.addTransaction(namePortfolio, idCoin, transactionModel);
+
+  Future<void> getPortfolio(String namePortfolio) async
+    => await portfolioLocalRepository.getPortfolio(namePortfolio);
 }

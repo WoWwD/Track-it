@@ -6,8 +6,12 @@ import 'package:track_it/presentation/cubit/coin_cubit/coin_cubit.dart';
 import 'package:track_it/presentation/cubit/error_cubit/error_cubit.dart';
 import 'package:track_it/presentation/cubit/portfolio_cubit/portfolio_cubit.dart';
 import 'package:track_it/presentation/cubit/search_cubit/search_cubit.dart';
+import 'package:track_it/presentation/provider/transaction_provider/transaction_buy_model.dart';
+import 'package:track_it/presentation/provider/transaction_provider/transaction_sell_model.dart';
+import 'package:track_it/presentation/provider/transaction_provider/transaction_transfer_in_model.dart';
 import '../../data/remote_data/coin_remote_data.dart';
 import '../../data/repository/local_repository/portfolio_local_repository.dart';
+import '../../presentation/provider/transaction_provider/transaction_transfer_out_model.dart';
 
 final getIt = GetIt.instance;
 
@@ -22,8 +26,15 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => coinRemoteRepository);
   getIt.registerLazySingleton(() => portfolioLocalRepository);
 
+  //region Provider
+  getIt.registerFactory(() => TransactionBuyModel(portfolioLocalRepository: getIt.call()));
+  getIt.registerFactory(() => TransactionSellModel(portfolioLocalRepository: getIt.call()));
+  getIt.registerFactory(() => TransactionTransferInModel(portfolioLocalRepository: getIt.call()));
+  getIt.registerFactory(() => TransactionTransferOutModel(portfolioLocalRepository: getIt.call()));
+
+
   //region Cubit
-  getIt.registerLazySingleton<PortfolioCubit>(() => PortfolioCubit(portfolioLocalRepository: getIt.call()));
+  getIt.registerFactory<PortfolioCubit>(() => PortfolioCubit(portfolioLocalRepository: getIt.call()));
   getIt.registerLazySingleton<CoinCubit>(() => CoinCubit(coinRepository: getIt.call()));
   getIt.registerLazySingleton<ErrorCubit>(() => ErrorCubit());
   getIt.registerFactory(() => SearchCubit(coinRemoteRepository: getIt.call()));

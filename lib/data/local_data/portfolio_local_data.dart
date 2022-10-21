@@ -5,7 +5,6 @@ import 'package:track_it/service/constant/app_constants.dart';
 import 'package:track_it/service/interface/portfolio_local_action_interface.dart';
 import '../model/asset_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../model/coin/coin_model.dart';
 
 class PortfolioLocalData implements PortfolioLocalAction {
 
@@ -23,22 +22,22 @@ class PortfolioLocalData implements PortfolioLocalAction {
   }
 
   @override
-  Future<void> addTransaction(String namePortfolio, Coin coinModel, Transaction transactionModel) async {
+  Future<void> addTransaction(String namePortfolio, String idCoin, Transaction transactionModel) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     final Portfolio portfolio = Portfolio.fromJson(json.decode(sp.getString(AppConstants.PORTFOLIOS_COLLECTION)!));
     if(portfolio.listAssets.isEmpty) {
-      final asset = Asset(coin: coinModel, listTransactions: [transactionModel]);
+      final asset = Asset(idCoin: idCoin, listTransactions: [transactionModel]);
       portfolio.listAssets.add(asset);
     }
     else {
       for(Asset asset in portfolio.listAssets) {
         /// Если монета есть в портфолио
-        if(asset.coin.id == coinModel.id) {
+        if(asset.idCoin == idCoin) {
           asset.listTransactions.add(transactionModel);
         }
         /// Если монеты нет в портфолио (первая транзакция)
         else {
-          final asset = Asset(coin: coinModel, listTransactions: [transactionModel]);
+          final asset = Asset(idCoin: idCoin, listTransactions: [transactionModel]);
           portfolio.listAssets.add(asset);
         }
       }
