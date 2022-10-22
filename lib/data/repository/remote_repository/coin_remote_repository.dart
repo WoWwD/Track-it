@@ -1,6 +1,7 @@
 import 'package:track_it/data/model/coin/coin_model.dart';
 import 'package:track_it/data/model/coin/search_coin_model.dart';
 import 'package:track_it/service/interface/coin_remote_action_interface.dart';
+import '../../model/coin/market_coin_model.dart';
 import '../../remote_data/coin_remote_data.dart';
 
 class CoinRemoteRepository implements CoinRemoteAction {
@@ -12,7 +13,7 @@ class CoinRemoteRepository implements CoinRemoteAction {
   Future<Coin> getCoinById(String id) async => await coinRemoteData.getCoinById(id);
 
   @override
-  Future<List<Coin>> getListCoinsByIds(List<String> ids, {String currency = 'usd'}) async
+  Future<List<MarketCoin>> getListCoinsByIds(List<String> ids) async
     => await coinRemoteData.getListCoinsByIds(ids);
 
   @override

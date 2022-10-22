@@ -4,6 +4,7 @@ import 'package:track_it/data/model/coin/search_coin_model.dart';
 import 'package:track_it/service/exception/api_exception.dart';
 import 'package:track_it/service/helpers.dart';
 import 'package:track_it/service/interface/coin_remote_action_interface.dart';
+import '../model/coin/market_coin_model.dart';
 import 'api/base_api.dart';
 
 class CoinRemoteData extends BaseApi implements CoinRemoteAction {
@@ -24,15 +25,15 @@ class CoinRemoteData extends BaseApi implements CoinRemoteAction {
   }
 
   @override
-  Future<List<Coin>> getListCoinsByIds(List<String> ids) async {
-    //TODO: переделать модель монеты
+  Future<List<MarketCoin>> getListCoinsByIds(List<String> ids) async {
     final String idsFromList = Helpers.createStringFromItemsList(ids);
-    List<Coin> listCoins = [];
+    print(idsFromList);
+    List<MarketCoin> listCoins = [];
     Response response =
       await dio.get('${super.baseUrl}/coins/markets?vs_currency=$currency&ids=$idsFromList&order=market_cap_desc&per_page=100&page=1&sparkline=false');
     if (response.statusCode == 200) {
       for (var item in response.data) {
-        listCoins.add(Coin.fromJson(item));
+        listCoins.add(MarketCoin.fromJson(item));
       }
       return listCoins;
     }
