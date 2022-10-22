@@ -27,7 +27,6 @@ class CoinRemoteData extends BaseApi implements CoinRemoteAction {
   @override
   Future<List<MarketCoin>> getListCoinsByIds(List<String> ids) async {
     final String idsFromList = Helpers.createStringFromItemsList(ids);
-    print(idsFromList);
     List<MarketCoin> listCoins = [];
     Response response =
       await dio.get('${super.baseUrl}/coins/markets?vs_currency=$currency&ids=$idsFromList&order=market_cap_desc&per_page=100&page=1&sparkline=false');

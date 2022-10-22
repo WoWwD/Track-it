@@ -5,15 +5,16 @@ class CardCoin extends StatelessWidget {
   final String imageUrl;
   final String name;
   final String symbol;
+  final double price;
   final VoidCallback? onTap;
   static const double _iconCoinSize = 36;
-  static const double _iconArrowSize = 18;
 
   const CardCoin({
     Key? key,
     this.imageUrl = '',
     this.name = '',
     this.symbol = '',
+    this.price = 0.0,
     this.onTap,
   }) : super(key: key);
 
@@ -23,8 +24,8 @@ class CardCoin extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       leading: SizedBox(width: _iconCoinSize, height: _iconCoinSize, child: Image.network(imageUrl)),
       title: Text(name),
-      subtitle: Text(symbol, style: const TextStyle(fontSize: 10)),
-      trailing: const Icon(Icons.arrow_forward_ios, size: _iconArrowSize),
+      subtitle: Text(symbol.toUpperCase(), style: const TextStyle(fontSize: 10)),
+      trailing: Text('\$${price.toString()}'),
       onTap: onTap,
     );
   }

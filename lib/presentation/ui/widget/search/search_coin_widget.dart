@@ -5,6 +5,7 @@ import 'package:track_it/presentation/cubit/search_cubit/search_cubit.dart';
 import 'package:track_it/presentation/ui/screen/add_transaction_screen.dart';
 import 'package:track_it/presentation/ui/widget/search/search_coin_card_widget.dart';
 import 'package:track_it/service/di/di.dart' as di;
+import '../../../../theme/app_styles.dart';
 import '../primary_text_field.dart';
 
 class SearchCoinWidget extends StatelessWidget {
@@ -56,7 +57,7 @@ class SearchCoinWidget extends StatelessWidget {
   Widget _content(SearchCompleted state) {
     return ListView.builder(
       itemCount: state.listCoins.length,
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      padding: AppStyles.paddingListView,
       itemBuilder: (context, index) {
         return SearchCoinCard(
           imageUrl: state.listCoins[index].large,

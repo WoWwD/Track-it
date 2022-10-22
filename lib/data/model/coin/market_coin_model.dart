@@ -5,7 +5,7 @@ class MarketCoin {
   final String image;
   final double currentPrice;
   final double marketCap;
-  final double marketCapRank;
+  final int marketCapRank;
   final double high24h;
   final double low24h;
   final double priceChangePercentage24h;
@@ -44,13 +44,13 @@ class MarketCoin {
       name: json['name'],
       image: json['image'],
       currentPrice: json['current_price'],
-      marketCap: json['market_cap'],
-      marketCapRank: json['market_cap_rank'],
+      marketCap: json['market_cap'].toDouble(),
+      marketCapRank: json['market_cap_rank'] ?? 0,
       high24h: json['high_24h'],
       low24h: json['low_24h'],
       priceChangePercentage24h: json['price_change_percentage_24h'],
       marketCapChangePercentage24h: json['market_cap_change_percentage_24h'],
-      ath: double.parse(json['ath'].toString()),
+      ath: json['ath'].toDouble(),
       athChangePercentage: json['ath_change_percentage'],
       athDate: json['ath_date'],
       atl: json['atl'],
