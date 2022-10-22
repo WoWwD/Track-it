@@ -9,6 +9,7 @@ class PortfolioFirstLaunch extends PortfolioState {}
 
 class PortfolioReceived extends PortfolioState {
   final Portfolio portfolio;
+  final List<MarketCoin> listCoins;
 
-  PortfolioReceived(this.portfolio);
+  PortfolioReceived(this.portfolio, this.listCoins);
 }

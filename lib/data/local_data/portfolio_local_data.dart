@@ -30,15 +30,17 @@ class PortfolioLocalData implements PortfolioLocalAction {
       portfolio.listAssets.add(asset);
     }
     else {
-      for(Asset asset in portfolio.listAssets) {
+      for(int i = 0; i < portfolio.listAssets.length; i++) {
         /// Если монета есть в портфолио
-        if(asset.idCoin == idCoin) {
-          asset.listTransactions.add(transactionModel);
+        if(portfolio.listAssets[i].idCoin == idCoin) {
+          portfolio.listAssets[i].listTransactions.add(transactionModel);
+          break;
         }
         /// Если монеты нет в портфолио (первая транзакция)
         else {
           final asset = Asset(idCoin: idCoin, listTransactions: [transactionModel]);
           portfolio.listAssets.add(asset);
+          break;
         }
       }
     }

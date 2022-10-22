@@ -114,25 +114,21 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
           case 0:
             contextProvider.read<TransactionBuyModel>()
               .addTransaction(AppConstants.MAIN_PORTFOLIO, widget.idCoin);
-            print('купил');
             Navigator.pop(context);
             break;
           case 1:
             contextProvider.read<TransactionSellModel>()
               .addTransaction(AppConstants.MAIN_PORTFOLIO, widget.idCoin);
-            print('продал');
             Navigator.pop(context);
             break;
           case 2:
             contextProvider.read<TransactionTransferInModel>()
               .addTransaction(AppConstants.MAIN_PORTFOLIO, widget.idCoin);
-            print('ти');
             Navigator.pop(context);
             break;
           case 3:
             contextProvider.read<TransactionTransferOutModel>()
               .addTransaction(AppConstants.MAIN_PORTFOLIO, widget.idCoin);
-            print('то');
             Navigator.pop(context);
             break;
         }
