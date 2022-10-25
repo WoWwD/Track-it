@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:track_it/presentation/ui/widget/transaction/transaction_general_widget.dart';
-import '../../../provider/transaction_provider/transaction_buy_model.dart';
+import '../../../provider/transaction_provider/transaction_sell_model.dart';
 import '../text_field/text_field_transaction_note_widget.dart';
 import '../text_field/text_field_transaction_widget.dart';
 import 'date_picker_transaction_widget.dart';
@@ -12,7 +12,7 @@ class TransactionSell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TransactionBuyModel>(
+    return Consumer<TransactionSellModel>(
       builder: (context, model, child) {
         return TransactionGeneralWidget(
           textFieldAmount: TextFieldTransaction(
