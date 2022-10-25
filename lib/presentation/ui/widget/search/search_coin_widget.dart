@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:track_it/presentation/cubit/search_cubit/search_cubit.dart';
 import 'package:track_it/presentation/ui/screen/add_transaction_screen.dart';
-import 'package:track_it/presentation/ui/widget/search/search_coin_card_widget.dart';
+import 'package:track_it/presentation/ui/widget/card/search_coin_card_widget.dart';
 import 'package:track_it/service/di/di.dart' as di;
 import '../../../../theme/app_styles.dart';
-import '../primary_text_field.dart';
+import '../text_field/primary_text_field.dart';
 
 class SearchCoinWidget extends StatelessWidget {
   const SearchCoinWidget({Key? key}) : super(key: key);
