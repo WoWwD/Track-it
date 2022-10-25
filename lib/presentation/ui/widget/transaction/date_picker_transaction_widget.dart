@@ -24,7 +24,7 @@ class DatePickerTransaction extends StatelessWidget {
       initialValue: initialDate.dateTimeToString(),
       firstDate: DateTime(2008, 08, 01),
       lastDate: initialDate,
-      onSaved: onSaved,
+      onChanged: onSaved,
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:track_it/data/model/coin/market_coin_model.dart';
-import 'package:track_it/presentation/ui/widget/transaction/transaction_card_widget.dart';
+import 'package:track_it/presentation/ui/widget/card/transaction_card_widget.dart';
 import 'package:track_it/service/constant/app_constants_size.dart';
 import '../../../data/model/transaction_model.dart';
 import '../../../theme/app_styles.dart';
@@ -39,7 +39,10 @@ class InfoAssetScreen extends StatelessWidget {
                   padding: AppStyles.paddingListView,
                   itemCount: listTransactions.length,
                   itemBuilder: (context, index) {
-                    return TransactionCard(transactionModel: listTransactions[index]);
+                    return TransactionCard(
+                      transactionModel: listTransactions[index],
+                      onPressed: (BuildContext context) => print('удалил'),
+                    );
                   },
                 ),
               ),

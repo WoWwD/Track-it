@@ -25,24 +25,18 @@ class PortfolioScreen extends StatelessWidget {
         child: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
-            child: Column(
-              children: [
-                BlocBuilder<PortfolioCubit, PortfolioState>(
-                  builder: (context, state) {
-                    if(state is PortfolioReceived || state is PortfolioLoading) {
-                      return Expanded(
-                        child: Skeleton(
-                          isLoading: state is PortfolioLoading,
-                          skeleton: const CardCoin().buildSkeleton(context),
-                          child: state is PortfolioReceived? _content(state): const SizedBox()
-                        )
-                      );
-                    }
-                    if(state is PortfolioFirstLaunch) return const Center(child: FirstLaunchWidget());
-                    return const SizedBox();
-                  },
-                ),
-              ],
+            child: BlocBuilder<PortfolioCubit, PortfolioState>(
+              builder: (context, state) {
+                if(state is PortfolioReceived || state is PortfolioLoading) {
+                  return Skeleton(
+                    isLoading: state is PortfolioLoading,
+                    skeleton: const CardCoin().buildSkeleton(context),
+                    child: state is PortfolioReceived? _content(state): const SizedBox()
+                  );
+                }
+                if(state is PortfolioFirstLaunch) return const FirstLaunchWidget();
+                return const SizedBox();
+              },
             ),
           ),
         ),

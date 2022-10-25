@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skeletons/skeletons.dart';
+import 'package:track_it/service/extension/double_extension.dart';
 import '../../../../theme/app_styles.dart';
 
 class CardCoin extends StatelessWidget {
@@ -26,7 +27,7 @@ class CardCoin extends StatelessWidget {
       leading: SizedBox(width: _iconCoinSize, height: _iconCoinSize, child: Image.network(imageUrl)),
       title: Text(name),
       subtitle: Text(symbol.toUpperCase(), style: const TextStyle(fontSize: 10)),
-      trailing: Text('\$${price.toString()}'),
+      trailing: Text('\$${price.noZero()}'),
       onTap: onTap,
     );
   }

@@ -11,7 +11,7 @@ class PortfolioLocalData implements PortfolioLocalAction {
   @override
   Future<bool> portfolioStorageIsEmpty() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    /// если будет функционал с несколькими портфолио, то использовать setStringList
+    /// если будет функционал с несколькими портфолио, то использовать getStringList
     final result = sp.getString(AppConstants.PORTFOLIOS_COLLECTION);
     if(result == null || result.isEmpty) {
       return true;
@@ -25,7 +25,7 @@ class PortfolioLocalData implements PortfolioLocalAction {
   Future<void> addTransaction(String namePortfolio, String idCoin, Transaction transactionModel) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     final Portfolio portfolio = Portfolio.fromJson(json.decode(sp.getString(AppConstants.PORTFOLIOS_COLLECTION)!));
-    if(portfolio.listAssets.isEmpty) {
+    if (portfolio.listAssets.isEmpty) {
       final asset = Asset(idCoin: idCoin, listTransactions: [transactionModel]);
       portfolio.listAssets.add(asset);
     }
@@ -36,13 +36,10 @@ class PortfolioLocalData implements PortfolioLocalAction {
           portfolio.listAssets[i].listTransactions.add(transactionModel);
           break;
         }
-        /// Если монеты нет в портфолио (первая транзакция)
-        else {
-          final asset = Asset(idCoin: idCoin, listTransactions: [transactionModel]);
-          portfolio.listAssets.add(asset);
-          break;
-        }
       }
+      /// Если монеты нет в портфолио
+      final asset = Asset(idCoin: idCoin, listTransactions: [transactionModel]);
+      portfolio.listAssets.add(asset);
     }
     await sp.setString(AppConstants.PORTFOLIOS_COLLECTION, json.encode(portfolio.toJson()));
   }
