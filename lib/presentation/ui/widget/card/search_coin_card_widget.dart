@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:skeletons/skeletons.dart';
 
+import '../../../../theme/app_styles.dart';
+
 class SearchCoinCard extends StatelessWidget {
   final String imageUrl;
   final String name;
@@ -20,7 +22,7 @@ class SearchCoinCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp)),
       leading: SizedBox(width: _iconCoinSize, height: _iconCoinSize, child: Image.network(imageUrl)),
       title: Text(name),
       subtitle: Text(symbol, style: const TextStyle(fontSize: 10)),

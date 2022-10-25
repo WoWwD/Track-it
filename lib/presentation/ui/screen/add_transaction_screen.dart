@@ -5,6 +5,7 @@ import 'package:track_it/presentation/provider/transaction_provider/transaction_
 import 'package:track_it/presentation/ui/widget/transaction/transaction_sell_widget.dart';
 import 'package:track_it/presentation/ui/widget/transaction/transaction_transfer_in_widget.dart';
 import 'package:track_it/presentation/ui/widget/transaction/transaction_transfer_out_widget.dart';
+import 'package:track_it/theme/app_styles.dart';
 import '../../../service/constant/app_constants.dart';
 import '../../../service/constant/app_constants_size.dart';
 import '../../provider/transaction_provider/transaction_buy_model.dart';
@@ -82,7 +83,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
             length: _tabLength,
             child: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: AppStyles.paddingScreen,
                 constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
                 child: Column(
                   children: [

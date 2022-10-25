@@ -27,7 +27,7 @@ class InfoAssetScreen extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
+          padding: AppStyles.paddingScreen,
           constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
           child: Column(
             children: [

@@ -8,6 +8,9 @@ class AddTransactionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16)
+      ),
       onPressed: onPressed,
       child: const Text('Добавить'),
     );

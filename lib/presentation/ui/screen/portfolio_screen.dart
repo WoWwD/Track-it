@@ -24,16 +24,9 @@ class PortfolioScreen extends StatelessWidget {
         create: (_) => di.getIt<PortfolioCubit>()..firstLaunch(AppConstants.MAIN_PORTFOLIO),
         child: Center(
           child: Container(
-            padding: const EdgeInsets.only(top: 24),
             constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
             child: Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 24),
-                  height: 100,
-                  width: 300,
-                ),
-                const SizedBox(height: 24),
                 BlocBuilder<PortfolioCubit, PortfolioState>(
                   builder: (context, state) {
                     if(state is PortfolioReceived || state is PortfolioLoading) {
