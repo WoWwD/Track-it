@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:track_it/data/model/portfolio_model.dart';
 import 'package:track_it/data/model/transaction_model.dart';
-import 'package:track_it/service/constant/app_constants.dart';
 import 'package:track_it/service/interface/portfolio_local_action_interface.dart';
 import '../model/asset_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,10 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PortfolioLocalData implements PortfolioLocalAction {
 
   @override
-  Future<bool> portfolioStorageIsEmpty() async {
+  Future<bool> portfolioStorageIsEmpty(String namePortfolio) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    /// если будет функционал с несколькими портфолио, то использовать getStringList
-    final result = sp.getString(AppConstants.PORTFOLIOS_COLLECTION);
+    final result = sp.getString(namePortfolio);
     if(result == null || result.isEmpty) {
       return true;
     }
@@ -24,7 +22,7 @@ class PortfolioLocalData implements PortfolioLocalAction {
   @override
   Future<void> addTransaction(String namePortfolio, String idCoin, Transaction transactionModel) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    final Portfolio portfolio = Portfolio.fromJson(json.decode(sp.getString(AppConstants.PORTFOLIOS_COLLECTION)!));
+    final Portfolio portfolio = Portfolio.fromJson(json.decode(sp.getString(namePortfolio)!));
     if (portfolio.listAssets.isEmpty) {
       final asset = Asset(idCoin: idCoin, listTransactions: [transactionModel]);
       portfolio.listAssets.add(asset);
@@ -41,19 +39,45 @@ class PortfolioLocalData implements PortfolioLocalAction {
       final asset = Asset(idCoin: idCoin, listTransactions: [transactionModel]);
       portfolio.listAssets.add(asset);
     }
-    await sp.setString(AppConstants.PORTFOLIOS_COLLECTION, json.encode(portfolio.toJson()));
+    await sp.setString(namePortfolio, json.encode(portfolio.toJson()));
   }
 
   @override
   Future<Portfolio> getPortfolio(String namePortfolio) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    return Portfolio.fromJson(json.decode(sp.getString(AppConstants.PORTFOLIOS_COLLECTION)!));
+    return Portfolio.fromJson(json.decode(sp.getString(namePortfolio)!));
   }
 
   @override
-  Future<void> createPortfolio(Portfolio portfolio) async {
+  Future<void> createPortfolio(String namePortfolio) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    /// если будет функционал с несколькими портфолио, то использовать setStringList
-    await sp.setString(AppConstants.PORTFOLIOS_COLLECTION, json.encode(portfolio.toJson()));
+    final Portfolio portfolio = Portfolio(name: namePortfolio, listAssets: []);
+    await sp.setString(namePortfolio, json.encode(portfolio.toJson()));
+  }
+
+  @override
+  Future<void> deleteTransactionByIndex(String namePortfolio, String idCoin, int indexTransaction) async {
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    final Portfolio portfolio = Portfolio.fromJson(json.decode(sp.getString(namePortfolio)!));
+    for(int i = 0; i < portfolio.listAssets.length; i++) {
+      if(portfolio.listAssets[i].idCoin == idCoin) {
+        portfolio.listAssets[i].listTransactions.removeAt(indexTransaction);
+        break;
+      }
+    }
+    await sp.setString(namePortfolio, json.encode(portfolio.toJson()));
+  }
+
+  @override
+  Future<void> deleteAssetById(String namePortfolio, String idAsset) async {
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    final Portfolio portfolio = Portfolio.fromJson(json.decode(sp.getString(namePortfolio)!));
+    for(int i = 0; i < portfolio.listAssets.length; i++) {
+      if(portfolio.listAssets[i].idCoin == idAsset) {
+        portfolio.listAssets.removeAt(i);
+        break;
+      }
+    }
+    await sp.setString(namePortfolio, json.encode(portfolio.toJson()));
   }
 }

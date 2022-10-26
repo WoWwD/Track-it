@@ -9,7 +9,9 @@ import '../../../../theme/app_styles.dart';
 import '../text_field/primary_text_field.dart';
 
 class SearchCoinWidget extends StatelessWidget {
-  const SearchCoinWidget({Key? key}) : super(key: key);
+  final Function refreshState;
+
+  const SearchCoinWidget({Key? key, required this.refreshState}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,14 +68,16 @@ class SearchCoinWidget extends StatelessWidget {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddTransactionScreen(
-                name: state.listCoins[index].name,
-                symbol: state.listCoins[index].symbol,
-                imageUrl: state.listCoins[index].large,
-                idCoin: state.listCoins[index].id,
-              )
+              builder: (context) {
+                return AddTransactionScreen(
+                  name: state.listCoins[index].name,
+                  symbol: state.listCoins[index].symbol,
+                  imageUrl: state.listCoins[index].large,
+                  idCoin: state.listCoins[index].id,
+                );
+              }
             )
-          ),
+          ).then((value) {refreshState();})
         );
       }
     );

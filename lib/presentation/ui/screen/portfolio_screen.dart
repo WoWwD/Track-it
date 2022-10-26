@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletons/skeletons.dart';
-import 'package:track_it/data/model/transaction_model.dart';
 import 'package:track_it/presentation/cubit/portfolio_cubit/portfolio_cubit.dart';
 import 'package:track_it/presentation/ui/screen/info_asset_screen.dart';
 import 'package:track_it/presentation/ui/widget/button/portfolio_floating_button.dart';
@@ -17,34 +16,36 @@ class PortfolioScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: const PortfolioFloatingButton(),
-      appBar: AppBar(title: const Text('Портфолио')),
-      body: BlocProvider(
-        create: (_) => di.getIt<PortfolioCubit>()..firstLaunch(AppConstants.MAIN_PORTFOLIO),
-        child: Center(
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
-            child: BlocBuilder<PortfolioCubit, PortfolioState>(
-              builder: (context, state) {
-                if(state is PortfolioReceived || state is PortfolioLoading) {
-                  return Skeleton(
+    return BlocProvider(
+      create: (_) => di.getIt<PortfolioCubit>()..getPortolio(AppConstants.MAIN_PORTFOLIO),
+      child: BlocBuilder<PortfolioCubit, PortfolioState>(
+        builder: (context, state) {
+          if (state is PortfolioCoins || state is PortfolioLoading) {
+            return Scaffold(
+              floatingActionButton: PortfolioFloatingButton(
+                refreshState: () => context.read<PortfolioCubit>().getPortolio(AppConstants.MAIN_PORTFOLIO)
+              ),
+              appBar: AppBar(title: const Text('Портфолио')),
+              body: Center(
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
+                  child: Skeleton(
                     isLoading: state is PortfolioLoading,
                     skeleton: const CardCoin().buildSkeleton(context),
-                    child: state is PortfolioReceived? _content(state): const SizedBox()
-                  );
-                }
-                if(state is PortfolioFirstLaunch) return const FirstLaunchWidget();
-                return const SizedBox();
-              },
-            ),
-          ),
-        ),
-      )
+                    child: state is PortfolioCoins ? _content(state) : const SizedBox()
+                  )
+                ),
+              )
+            );
+          }
+          if (state is PortfolioFirstLaunch) return const FirstLaunchWidget();
+          return const SizedBox();
+        },
+      ),
     );
   }
 
-  Widget _content(PortfolioReceived state) {
+  Widget _content(PortfolioCoins state) {
     return ListView.builder(
       itemCount: state.listCoins.length,
       padding: AppStyles.paddingListView,
@@ -55,17 +56,13 @@ class PortfolioScreen extends StatelessWidget {
           symbol: state.listCoins[index].symbol,
           price: state.listCoins[index].currentPrice,
           onTap: () {
-            final List<Transaction> listTransaction =
-              context.read<PortfolioCubit>().getListTransactionsById(state, state.listCoins[index].id);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => InfoAssetScreen(
-                  marketCoinModel: state.listCoins[index],
-                  listTransactions: listTransaction
-                )
+                builder: (context) =>
+                  InfoAssetScreen(marketCoinModel: state.listCoins[index], portfolioModel: state.portfolio)
               )
-            );
+            ).then((value) => context.read<PortfolioCubit>().getPortolio(AppConstants.MAIN_PORTFOLIO));
           }
         );
       }

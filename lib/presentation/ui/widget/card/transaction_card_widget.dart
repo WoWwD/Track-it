@@ -7,12 +7,14 @@ import '../../../../theme/app_styles.dart';
 
 class TransactionCard extends StatelessWidget {
   final Transaction transactionModel;
-  final Function(BuildContext) onPressed;
+  final Function(BuildContext) onPressedDelete;
+  final Function(BuildContext) onPressedEdit;
 
   const TransactionCard({
     Key? key,
     required this.transactionModel,
-    required this.onPressed
+    required this.onPressedDelete,
+    required this.onPressedEdit
   }) : super(key: key);
 
   @override
@@ -21,19 +23,21 @@ class TransactionCard extends StatelessWidget {
       key: const ValueKey(0),
       endActionPane: ActionPane(
         dragDismissible: false,
-        motion: const BehindMotion(),
-        dismissible: DismissiblePane(onDismissed: () {}),
+        motion: const DrawerMotion(),
         children: [
           SlidableAction(
-            onPressed: onPressed,
+            onPressed: onPressedEdit,
+            backgroundColor: const Color(0xFF49B0FE),
+            foregroundColor: Colors.white,
+            icon: Icons.edit,
+            label: 'Изменить',
+          ),
+          SlidableAction(
+            onPressed: onPressedDelete,
             backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,
             label: 'Удалить',
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(AppStyles.borderRadiusApp),
-              bottomRight: Radius.circular(AppStyles.borderRadiusApp)
-            ),
           ),
         ],
       ),

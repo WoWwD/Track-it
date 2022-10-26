@@ -13,11 +13,20 @@ class PortfolioLocalRepository implements PortfolioLocalAction {
     => await portfolioLocalData.addTransaction(namePortfolio, idCoin, transactionModel);
 
   @override
-  Future<void> createPortfolio(Portfolio portfolio) async => await portfolioLocalData.createPortfolio(portfolio);
+  Future<void> createPortfolio(String namePortfolio) async => await portfolioLocalData.createPortfolio(namePortfolio);
 
   @override
-  Future<bool> portfolioStorageIsEmpty() async => await portfolioLocalData.portfolioStorageIsEmpty();
+  Future<bool> portfolioStorageIsEmpty(String namePortfolio) async
+    => await portfolioLocalData.portfolioStorageIsEmpty(namePortfolio);
 
   @override
   Future<Portfolio> getPortfolio(String namePortfolio) async => await portfolioLocalData.getPortfolio(namePortfolio);
+
+  @override
+  Future<void> deleteTransactionByIndex(String namePortfolio, String idCoin, int indexTransaction) async
+    => await portfolioLocalData.deleteTransactionByIndex(namePortfolio, idCoin, indexTransaction);
+
+  @override
+  Future<void> deleteAssetById(String namePortfolio, String idAsset) async
+    => await portfolioLocalData.deleteAssetById(namePortfolio, idAsset);
 }

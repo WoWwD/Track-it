@@ -1,7 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
 class AppConstants {
-  static const PORTFOLIOS_COLLECTION = 'PORTFOLIOS_COLLECTION';
   static const MAIN_PORTFOLIO = 'Main';
   static const BUY_TYPE_TRANSACTION = 'Buy';
   static const SELL_TYPE_TRANSACTION = 'Sell';

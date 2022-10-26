@@ -4,7 +4,9 @@ import '../search/search_coin_widget.dart';
 import 'icon_button_widget.dart';
 
 class PortfolioFloatingButton extends StatelessWidget {
-  const PortfolioFloatingButton({Key? key}) : super(key: key);
+  final Function refreshState;
+
+  const PortfolioFloatingButton({Key? key, required this.refreshState}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class PortfolioFloatingButton extends StatelessWidget {
                     onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close),
                   ),
                 ),
-                const Expanded(child: SearchCoinWidget())
+                Expanded(child: SearchCoinWidget(refreshState: refreshState))
               ],
             );
           },
