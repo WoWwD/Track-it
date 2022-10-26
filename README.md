@@ -1,6 +1,7 @@
 # track_it
 
 A new Flutter project.
+Платформы: Windows
 
 ## Getting Started
 
