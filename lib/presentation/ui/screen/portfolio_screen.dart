@@ -17,13 +17,13 @@ class PortfolioScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => di.getIt<PortfolioCubit>()..getPortolio(AppConstants.MAIN_PORTFOLIO),
+      create: (_) => di.getIt<PortfolioCubit>()..getPortfolio(AppConstants.MAIN_PORTFOLIO),
       child: BlocBuilder<PortfolioCubit, PortfolioState>(
         builder: (context, state) {
           if (state is PortfolioCoins || state is PortfolioLoading) {
             return Scaffold(
               floatingActionButton: PortfolioFloatingButton(
-                refreshState: () => context.read<PortfolioCubit>().getPortolio(AppConstants.MAIN_PORTFOLIO)
+                refreshState: () => context.read<PortfolioCubit>().getPortfolio(AppConstants.MAIN_PORTFOLIO)
               ),
               appBar: AppBar(title: const Text('Портфолио')),
               body: Center(
@@ -38,7 +38,15 @@ class PortfolioScreen extends StatelessWidget {
               )
             );
           }
-          if (state is PortfolioFirstLaunch) return const FirstLaunchWidget();
+          if (state is PortfolioFirstLaunch) {
+            return Scaffold(
+              floatingActionButton: PortfolioFloatingButton(
+                refreshState: () => context.read<PortfolioCubit>().getPortfolio(AppConstants.MAIN_PORTFOLIO)
+              ),
+              appBar: AppBar(title: const Text('Портфолио')),
+              body: const Center(child: FirstLaunchWidget())
+            );
+          }
           return const SizedBox();
         },
       ),
@@ -62,7 +70,7 @@ class PortfolioScreen extends StatelessWidget {
                 builder: (context) =>
                   InfoAssetScreen(marketCoinModel: state.listCoins[index], portfolioModel: state.portfolio)
               )
-            ).then((value) => context.read<PortfolioCubit>().getPortolio(AppConstants.MAIN_PORTFOLIO));
+            ).then((value) => context.read<PortfolioCubit>().getPortfolio(AppConstants.MAIN_PORTFOLIO));
           }
         );
       }

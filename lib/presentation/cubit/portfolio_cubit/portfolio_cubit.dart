@@ -17,7 +17,7 @@ class PortfolioCubit extends Cubit<PortfolioState> {
     required this.coinRemoteRepository
   }) : super(PortfolioInitial());
 
-  Future<void> getPortolio(String namePortfolio) async {
+  Future<void> getPortfolio(String namePortfolio) async {
     emit(PortfolioLoading());
     if (await portfolioLocalRepository.portfolioStorageIsEmpty(namePortfolio)) {
       await portfolioLocalRepository.createPortfolio(namePortfolio);
