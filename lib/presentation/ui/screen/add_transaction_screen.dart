@@ -36,10 +36,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
   static const _tabLength = 4;
   late TabController _tabController;
   final List<Widget> _tabsName = const [
-    Tab(child: Text('Покупка', style: TextStyle(color: Colors.black))),
-    Tab(child: Text('Продажа', style: TextStyle(color: Colors.black))),
-    Tab(child: Text('Ввод', style: TextStyle(color: Colors.black))),
-    Tab(child: Text('Вывод', style: TextStyle(color: Colors.black))),
+    Tab(child: Text('Покупка')),
+    Tab(child: Text('Продажа')),
+    Tab(child: Text('Ввод')),
+    Tab(child: Text('Вывод')),
   ];
   final List<Widget> _tabs = const [
     TransactionBuy(),

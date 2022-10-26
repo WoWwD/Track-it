@@ -6,4 +6,5 @@ class AppConstants {
   static const SELL_TYPE_TRANSACTION = 'Sell';
   static const TRANSFER_IN_TYPE_TRANSACTION = 'Transfer In';
   static const TRANSFER_OUT_TYPE_TRANSACTION = 'Transfer Out';
+  static const THEME_MODE_STORAGE = 'Theme mode';
 }
