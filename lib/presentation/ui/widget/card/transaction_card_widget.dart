@@ -9,13 +9,11 @@ import '../../../../theme/app_styles.dart';
 class TransactionCard extends StatelessWidget {
   final Transaction transactionModel;
   final Function(BuildContext) onPressedDelete;
-  final Function(BuildContext) onPressedEdit;
 
   const TransactionCard({
     Key? key,
     required this.transactionModel,
     required this.onPressedDelete,
-    required this.onPressedEdit
   }) : super(key: key);
 
   @override

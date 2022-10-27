@@ -22,7 +22,7 @@ class TransactionGeneralWidget extends StatelessWidget {
         children: [
           const SizedBox(height: 24),
           textFieldAmount,
-          textFieldPrice == null? const SizedBox(height: 0): Column(
+          textFieldPrice == null? const SizedBox(): Column(
             children: [
               const SizedBox(height: 24),
               textFieldPrice!,
