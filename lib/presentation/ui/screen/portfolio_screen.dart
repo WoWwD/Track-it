@@ -20,7 +20,7 @@ class PortfolioScreen extends StatelessWidget {
       create: (_) => di.getIt<PortfolioCubit>()..getPortfolio(AppConstants.MAIN_PORTFOLIO),
       child: BlocBuilder<PortfolioCubit, PortfolioState>(
         builder: (context, state) {
-          if (state is PortfolioCoins || state is PortfolioLoading) {
+          if (state is PortfolioInit || state is PortfolioLoading) {
             return Scaffold(
               floatingActionButton: PortfolioFloatingButton(
                 refreshState: () => context.read<PortfolioCubit>().getPortfolio(AppConstants.MAIN_PORTFOLIO)
@@ -32,7 +32,7 @@ class PortfolioScreen extends StatelessWidget {
                   child: Skeleton(
                     isLoading: state is PortfolioLoading,
                     skeleton: const CardCoin().buildSkeleton(context),
-                    child: state is PortfolioCoins ? _content(state) : const SizedBox()
+                    child: state is PortfolioInit ? _content(state) : const SizedBox()
                   )
                 ),
               )
@@ -53,7 +53,7 @@ class PortfolioScreen extends StatelessWidget {
     );
   }
 
-  Widget _content(PortfolioCoins state) {
+  Widget _content(PortfolioInit state) {
     return ListView.builder(
       itemCount: state.listCoins.length,
       padding: AppStyles.mainPadding,
@@ -67,8 +67,13 @@ class PortfolioScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                  InfoAssetScreen(marketCoinModel: state.listCoins[index], portfolioModel: state.portfolio)
+                builder: (context) {
+                  return InfoAssetScreen(
+                    idCoin: state.listCoins[index].id,
+                    marketCoinModel: state.listCoins[index],
+                    portfolioName: state.portfolio.name,
+                  );
+                }
               )
             ).then((value) => context.read<PortfolioCubit>().getPortfolio(AppConstants.MAIN_PORTFOLIO));
           }
