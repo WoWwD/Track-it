@@ -11,6 +11,7 @@ class TextFieldTransaction extends StatelessWidget {
   final GestureTapCallback? onTap;
   final bool readOnly;
   final Widget? suffixIcon;
+  final TextEditingController? controller;
 
   const TextFieldTransaction({
     Key? key,
@@ -20,12 +21,14 @@ class TextFieldTransaction extends StatelessWidget {
     this.textInputType = TextInputType.number,
     this.onTap,
     this.readOnly = false,
-    this.suffixIcon
+    this.suffixIcon,
+    this.controller
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       readOnly: readOnly,
       onTap: onTap,
       keyboardType: textInputType,

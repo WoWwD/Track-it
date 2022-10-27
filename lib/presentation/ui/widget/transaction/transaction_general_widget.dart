@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 class TransactionGeneralWidget extends StatelessWidget {
   final Widget textFieldAmount;
   final Widget? textFieldPrice;
+  final Widget? textFieldCost;
   final Widget textFieldDatePicker;
   final Widget textFieldNote;
 
@@ -10,6 +11,7 @@ class TransactionGeneralWidget extends StatelessWidget {
     Key? key,
     required this.textFieldAmount,
     this.textFieldPrice,
+    this.textFieldCost,
     required this.textFieldDatePicker,
     required this.textFieldNote
   }) : super(key: key);
@@ -22,10 +24,12 @@ class TransactionGeneralWidget extends StatelessWidget {
         children: [
           const SizedBox(height: 24),
           textFieldAmount,
-          textFieldPrice == null? const SizedBox(): Column(
+          textFieldPrice == null && textFieldCost == null? const SizedBox(): Column(
             children: [
               const SizedBox(height: 24),
               textFieldPrice!,
+              const SizedBox(height: 24),
+              textFieldCost!
             ],
           ),
           const SizedBox(height: 24),

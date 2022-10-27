@@ -7,13 +7,21 @@ import '../text_field/text_field_transaction_widget.dart';
 import 'date_picker_transaction_widget.dart';
 import 'package:track_it/service/extension/string_extension.dart';
 
-class TransactionSell extends StatelessWidget {
+class TransactionSell extends StatefulWidget {
   const TransactionSell({Key? key}) : super(key: key);
 
+  @override
+  State<TransactionSell> createState() => _TransactionSellState();
+}
+
+class _TransactionSellState extends State<TransactionSell> {
   @override
   Widget build(BuildContext context) {
     return Consumer<TransactionSellModel>(
       builder: (context, model, child) {
+        final TextEditingController textEditingController
+          = TextEditingController(text: model.price * model.amount == 0.0? '': '\$${(model.price * model.amount)}');
+
         return TransactionGeneralWidget(
           textFieldAmount: TextFieldTransaction(
             textInputType: TextInputType.number,
@@ -34,6 +42,12 @@ class TransactionSell extends StatelessWidget {
             },
             initialValue: model.price == 0.0? '': model.price.toString(),
           ),
+          textFieldCost: TextFieldTransaction(
+            readOnly: true,
+            textInputType: TextInputType.number,
+            labelText: 'Общая стоимость',
+            controller: textEditingController,
+          ),
           textFieldDatePicker: DatePickerTransaction(
             initialDate: model.dateTime,
             onSaved: (value) => model.setDateTime(value?.toDateTime() ?? model.dateTime),
@@ -49,5 +63,17 @@ class TransactionSell extends StatelessWidget {
         );
       },
     );
+  }
+
+  void setCost(TextEditingController tec, TransactionSellModel model) {
+    setState(() {
+      if(model.price * model.amount == 0.0) {
+        tec.text = '';
+      }
+      else {
+        model.setCost(model.price * model.amount);
+        tec.text = '\$${(model.price * model.amount)}';
+      }
+    });
   }
 }

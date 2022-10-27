@@ -42,11 +42,15 @@ class TransactionTransferOutModel extends ChangeNotifier implements TransactionA
       dateTime: dateTime.toString(),
       note: note,
       amount: amount,
-      price: 0.0
+      price: 0.0,
+      cost: 0.0
     );
     await portfolioLocalRepository.addTransaction(namePortfolio, idCoin, transactionModel);
   }
 
   @override
   void setPrice(double price) => throw AppException('Цена не нужна');
+
+  @override
+  void setCost(double cost) => throw AppException('Общая стоимость не нужна');
 }

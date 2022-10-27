@@ -4,13 +4,15 @@ class Transaction {
   final String? note;
   final double amount;
   final double price;
+  final double cost;
 
   Transaction({
     required this.typeOfTransaction,
     required this.dateTime,
     required this.note,
     required this.amount,
-    required this.price
+    required this.price,
+    required this.cost
   });
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
@@ -19,7 +21,8 @@ class Transaction {
       dateTime: json['dateTime'],
       note: json['note'],
       amount: json['amount'],
-      price: json['price']
+      price: json['price'],
+      cost: json['cost']
     );
   }
 
@@ -30,6 +33,7 @@ class Transaction {
     data['note'] = note;
     data['amount'] = amount;
     data['price'] = price;
+    data['cost'] = cost;
     return data;
   }
 }

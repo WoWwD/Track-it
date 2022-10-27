@@ -8,6 +8,7 @@ class TransactionSellModel extends ChangeNotifier implements TransactionAction {
   final PortfolioLocalRepository portfolioLocalRepository;
   double _amount = 0.0;
   double _price = 0.0;
+  double _cost = 0.0;
   DateTime _dateTime = DateTime.now();
   String _note = '';
 
@@ -15,6 +16,7 @@ class TransactionSellModel extends ChangeNotifier implements TransactionAction {
 
   get amount => _amount;
   get price => _price;
+  get cost => _cost;
   get dateTime => _dateTime;
   get note => _note;
 
@@ -27,6 +29,12 @@ class TransactionSellModel extends ChangeNotifier implements TransactionAction {
   @override
   void setPrice(double price) {
     _price = price;
+    notifyListeners();
+  }
+
+  @override
+  void setCost(double cost) {
+    _cost = cost;
     notifyListeners();
   }
 
@@ -49,7 +57,8 @@ class TransactionSellModel extends ChangeNotifier implements TransactionAction {
       dateTime: dateTime.toString(),
       note: note,
       amount: amount,
-      price: price
+      price: price,
+      cost: cost
     );
     await portfolioLocalRepository.addTransaction(namePortfolio, idCoin, transactionModel);
   }
