@@ -34,7 +34,7 @@ class CardCoin extends StatelessWidget {
 
   Widget buildSkeleton(BuildContext context) {
     return SkeletonListView(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      padding: AppStyles.mainPaddingSkeleton,
       item: SkeletonListTile(
         contentSpacing: 16,
         leadingStyle: const SkeletonAvatarStyle(width: _iconCoinSize + 4, height: _iconCoinSize + 4),

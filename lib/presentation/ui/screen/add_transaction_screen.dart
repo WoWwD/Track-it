@@ -36,10 +36,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
   static const _tabLength = 4;
   late TabController _tabController;
   final List<Widget> _tabsName = const [
-    Tab(child: Text('Покупка')),
-    Tab(child: Text('Продажа')),
-    Tab(child: Text('Ввод')),
-    Tab(child: Text('Вывод')),
+    Tab(text: 'Покупка'),
+    Tab(text: 'Продажа'),
+    Tab(text: 'Ввод'),
+    Tab(text: 'Вывод'),
   ];
   final List<Widget> _tabs = const [
     TransactionBuy(),
@@ -83,19 +83,22 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
             length: _tabLength,
             child: Center(
               child: Container(
-                padding: AppStyles.paddingScreen,
+                padding: AppStyles.mainPadding,
                 constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
                 child: Column(
                   children: [
                     TabBar(
+                      labelColor: Colors.blue,
                       padding: EdgeInsets.zero,
                       labelPadding: EdgeInsets.zero,
                       controller: _tabController,
                       tabs: _tabsName,
                     ),
-                    Form(
-                      key: _formKey,
-                      child: Expanded(child: TabBarView(controller: _tabController, children: _tabs)),
+                    Expanded(
+                      child: Form(
+                        key: _formKey,
+                        child: TabBarView(controller: _tabController, children: _tabs),
+                      ),
                     ),
                     AddTransactionButton(onPressed: _onPressed(contextProvider))
                   ],

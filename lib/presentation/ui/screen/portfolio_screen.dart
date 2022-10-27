@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:track_it/presentation/cubit/portfolio_cubit/portfolio_cubit.dart';
-import 'package:track_it/presentation/ui/screen/info_asset_screen.dart';
+import 'package:track_it/presentation/ui/screen/info_asset_screens/info_asset_screen.dart';
 import 'package:track_it/presentation/ui/widget/button/portfolio_floating_button.dart';
 import 'package:track_it/presentation/ui/widget/card/card_coin_widget.dart';
 import 'package:track_it/service/constant/app_constants_size.dart';
@@ -56,7 +56,7 @@ class PortfolioScreen extends StatelessWidget {
   Widget _content(PortfolioCoins state) {
     return ListView.builder(
       itemCount: state.listCoins.length,
-      padding: AppStyles.paddingListView,
+      padding: AppStyles.mainPadding,
       itemBuilder: (context, index) {
         return CardCoin(
           imageUrl: state.listCoins[index].image,
