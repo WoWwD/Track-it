@@ -28,16 +28,14 @@ class PortfolioLocalData implements PortfolioLocalAction {
       portfolio.listAssets.add(asset);
     }
     else {
-      for(int i = 0; i < portfolio.listAssets.length; i++) {
-        /// Если монета есть в портфолио
-        if(portfolio.listAssets[i].idCoin == idCoin) {
-          portfolio.listAssets[i].listTransactions.add(transactionModel);
-          break;
-        }
+      final int indexAsset = portfolio.listAssets.indexWhere((element) => element.idCoin == idCoin);
+      if(indexAsset != -1) {
+        portfolio.listAssets[indexAsset].listTransactions.add(transactionModel);
+      } else {
+        /// Если монеты нет в портфолио
+        final asset = Asset(idCoin: idCoin, listTransactions: [transactionModel]);
+        portfolio.listAssets.add(asset);
       }
-      /// Если монеты нет в портфолио
-      final asset = Asset(idCoin: idCoin, listTransactions: [transactionModel]);
-      portfolio.listAssets.add(asset);
     }
     await sp.setString(namePortfolio, json.encode(portfolio.toJson()));
   }
@@ -59,12 +57,8 @@ class PortfolioLocalData implements PortfolioLocalAction {
   Future<void> deleteTransactionByIndex(String namePortfolio, String idCoin, int indexTransaction) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     final Portfolio portfolio = Portfolio.fromJson(json.decode(sp.getString(namePortfolio)!));
-    for(int i = 0; i < portfolio.listAssets.length; i++) {
-      if(portfolio.listAssets[i].idCoin == idCoin) {
-        portfolio.listAssets[i].listTransactions.removeAt(indexTransaction);
-        break;
-      }
-    }
+    final int indexAsset = portfolio.listAssets.indexWhere((element) => element.idCoin == idCoin);
+    portfolio.listAssets[indexAsset].listTransactions.removeAt(indexTransaction);
     await sp.setString(namePortfolio, json.encode(portfolio.toJson()));
   }
 
@@ -72,12 +66,8 @@ class PortfolioLocalData implements PortfolioLocalAction {
   Future<void> deleteAssetById(String namePortfolio, String idAsset) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     final Portfolio portfolio = Portfolio.fromJson(json.decode(sp.getString(namePortfolio)!));
-    for(int i = 0; i < portfolio.listAssets.length; i++) {
-      if(portfolio.listAssets[i].idCoin == idAsset) {
-        portfolio.listAssets.removeAt(i);
-        break;
-      }
-    }
+    final Asset assetModel = portfolio.listAssets.firstWhere((element) => element.idCoin == idAsset);
+    portfolio.listAssets.remove(assetModel);
     await sp.setString(namePortfolio, json.encode(portfolio.toJson()));
   }
 }
