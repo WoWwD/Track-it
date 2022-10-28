@@ -31,7 +31,7 @@ Future<void> init() async {
   getIt.registerFactory(() => TransactionSellModel(portfolioLocalRepository: getIt.call()));
   getIt.registerFactory(() => TransactionTransferInModel(portfolioLocalRepository: getIt.call()));
   getIt.registerFactory(() => TransactionTransferOutModel(portfolioLocalRepository: getIt.call()));
-  getIt.registerLazySingleton(() => SettingsModel());
+  getIt.registerLazySingleton(() => SettingsModel(portfolioLocalRepository: getIt.call()));
 
   //region Cubit
   getIt.registerFactory<PortfolioCubit>(

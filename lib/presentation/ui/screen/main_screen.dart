@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:track_it/presentation/ui/screen/portfolio_screen.dart';
-import 'package:track_it/presentation/ui/screen/settings_screen.dart';
+import 'package:track_it/presentation/ui/screen/settings/settings_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);

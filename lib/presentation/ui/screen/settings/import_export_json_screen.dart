@@ -1,0 +1,105 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:track_it/presentation/provider/settings_provider.dart';
+import 'package:track_it/service/constant/app_constants.dart';
+import 'package:track_it/service/constant/app_constants_size.dart';
+import 'package:track_it/theme/app_styles.dart';
+
+class ImportExportJsonScreen extends StatelessWidget {
+  final String portfolioName = AppConstants.MAIN_PORTFOLIO;
+
+  const ImportExportJsonScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Импорт / экспорт портфеля')),
+      body: Consumer<SettingsModel>(
+        builder: (context, model, child) {
+          return Center(
+            child: Container(
+              padding: AppStyles.mainPadding,
+              constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
+              child: Column(
+                children: [
+                  _card(
+                    context,
+                    'Импортировать JSON из буфера обмена',
+                      () => _toJson(context, model)
+                    ),
+                  const SizedBox(height: 16),
+                  _card(
+                    context,
+                    'Экспортировать в виде JSON',
+                    () async => await showDialog(context: context,builder: (context) => _dialog(context, model))
+                  ),
+                ],
+              )
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _card(BuildContext context, String text, Function() onTap) {
+    return ListTile(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp)),
+      contentPadding: EdgeInsets.zero,
+      onTap: onTap,
+      title: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: 60,
+        child: Center(child: Text(text)),
+      ),
+    );
+  }
+
+  Widget _dialogButton(Function() onPressed, String text) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: Text(text)
+    );
+  }
+
+  Widget _dialog(BuildContext context, SettingsModel model) {
+    return AlertDialog(
+      title: const Text('Добавить новый портфель?'),
+      content: const Text('Текущий портфель будет удалён'),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _dialogButton(
+              () {
+                Navigator.pop(context);
+                _fromJson(context, model);
+              },
+              'Да'
+            ),
+            const SizedBox(width: 24),
+            _dialogButton(() => Navigator.pop(context), 'Нет'),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Future<void> _toJson(BuildContext context, SettingsModel model) async {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('JSON скопирован в буфер обмена')));
+    await Clipboard.setData(ClipboardData(text: await model.portfolioToJson(portfolioName)));
+  }
+
+  Future<void> _fromJson(BuildContext context, SettingsModel model, [bool mounted = true]) async {
+    try {
+      final String? json = await Clipboard.getData(Clipboard.kTextPlain).then((value) => value?.text);
+      await model.portfolioFromJson(json ?? '', portfolioName);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Портфель добавлен')));
+    }
+    on FormatException {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Неверный формат')));
+    }
+  }
+}
