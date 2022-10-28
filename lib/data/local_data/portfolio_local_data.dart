@@ -47,10 +47,21 @@ class PortfolioLocalData implements PortfolioLocalAction {
   }
 
   @override
-  Future<void> createPortfolio(String namePortfolio) async {
+  Future<void> createPortfolio(String namePortfolio, [Portfolio? portfolioModel]) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    final Portfolio portfolio = Portfolio(name: namePortfolio, listAssets: []);
-    await sp.setString(namePortfolio, json.encode(portfolio.toJson()));
+    if (portfolioModel != null) {
+      await sp.setString(namePortfolio, json.encode(portfolioModel.toJson()));
+    }
+    else {
+      final Portfolio portfolio = Portfolio(name: namePortfolio, listAssets: []);
+      await sp.setString(namePortfolio, json.encode(portfolio.toJson()));
+    }
+  }
+
+  @override
+  Future<void> deletePortfolio(String namePortfolio) async {
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    await sp.remove(namePortfolio);
   }
 
   @override
