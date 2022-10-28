@@ -4,8 +4,9 @@ import 'package:skeletons/skeletons.dart';
 import 'package:track_it/presentation/cubit/search_cubit/search_cubit.dart';
 import 'package:track_it/presentation/ui/screen/add_transaction_screen.dart';
 import 'package:track_it/presentation/ui/widget/card/search_coin_card_widget.dart';
-import 'package:track_it/service/di/di.dart' as di;
-import '../../../theme/app_styles.dart';
+import 'package:track_it/presentation/ui/widget/custom_list_view_widget.dart';
+import 'package:track_it/service/di.dart' as di;
+import 'skeletons/list_view_skeleton_widget.dart';
 import 'text_field/primary_text_field.dart';
 
 class SearchCoinWidget extends StatelessWidget {
@@ -39,7 +40,7 @@ class SearchCoinWidget extends StatelessWidget {
                       Expanded(
                         child: Skeleton(
                           isLoading: state is SearchProcess,
-                          skeleton: const SearchCoinCard().buildSkeleton(context),
+                          skeleton: const ListViewSkeleton(),
                           child: state is SearchCompleted? _content(state): const SizedBox()
                         )
                       )
@@ -57,29 +58,28 @@ class SearchCoinWidget extends StatelessWidget {
   Widget _firstLaunch() => const Text('Введите название монеты');
 
   Widget _content(SearchCompleted state) {
-    return ListView.builder(
+    return CustomListView(
       itemCount: state.listCoins.length,
-      padding: AppStyles.mainPadding,
-      itemBuilder: (context, index) {
-        return SearchCoinCard(
-          imageUrl: state.listCoins[index].large,
-          name: state.listCoins[index].name,
-          symbol: state.listCoins[index].symbol,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return AddTransactionScreen(
-                  name: state.listCoins[index].name,
-                  symbol: state.listCoins[index].symbol,
-                  imageUrl: state.listCoins[index].large,
-                  idCoin: state.listCoins[index].id,
-                );
-              }
-            )
-          ).then((value) {refreshState();})
-        );
-      }
+        itemBuilder: (context, index) {
+          return SearchCoinCard(
+            imageUrl: state.listCoins[index].large,
+            name: state.listCoins[index].name,
+            symbol: state.listCoins[index].symbol,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return AddTransactionScreen(
+                    name: state.listCoins[index].name,
+                    symbol: state.listCoins[index].symbol,
+                    imageUrl: state.listCoins[index].large,
+                    idCoin: state.listCoins[index].id,
+                  );
+                }
+              )
+            ).then((value) {refreshState();})
+          );
+        }
     );
   }
 }
