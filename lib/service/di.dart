@@ -9,9 +9,9 @@ import 'package:track_it/presentation/provider/settings_provider.dart';
 import 'package:track_it/presentation/provider/transaction_provider/transaction_buy_model.dart';
 import 'package:track_it/presentation/provider/transaction_provider/transaction_sell_model.dart';
 import 'package:track_it/presentation/provider/transaction_provider/transaction_transfer_in_model.dart';
-import '../../data/remote_data/coin_remote_data.dart';
-import '../../data/repository/local_repository/portfolio_local_repository.dart';
-import '../../presentation/provider/transaction_provider/transaction_transfer_out_model.dart';
+import '../data/remote_data/coin_remote_data.dart';
+import '../data/repository/local_repository/portfolio_local_repository.dart';
+import '../presentation/provider/transaction_provider/transaction_transfer_out_model.dart';
 
 final getIt = GetIt.instance;
 
@@ -38,5 +38,5 @@ Future<void> init() async {
     () => PortfolioCubit(portfolioLocalRepository: getIt.call(), coinRemoteRepository: getIt.call())
   );
   getIt.registerFactory<StatisticsCubit>(() => StatisticsCubit(portfolioLocalRepository: getIt.call()));
-  getIt.registerFactory(() => SearchCubit(coinRemoteRepository: getIt.call()));
+  getIt.registerFactory<SearchCubit>(() => SearchCubit(coinRemoteRepository: getIt.call()));
 }
