@@ -43,7 +43,7 @@ class PortfolioScreen extends StatelessWidget {
               floatingActionButton: PortfolioFloatingButton(
                 refreshState: () => context.read<PortfolioCubit>().getPortfolio(AppConstants.MAIN_PORTFOLIO)
               ),
-              appBar: AppBar(title: const Text('Портфолио')),
+              appBar: AppBar(title: const Text('Портфель')),
               body: const Center(child: FirstLaunchWidget())
             );
           }
