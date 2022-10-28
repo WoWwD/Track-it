@@ -2,7 +2,7 @@
 
 A new Flutter project.
 
-Платформы: Windows
+Платформы: Windows, Android
 
 ## Getting Started
 
