@@ -10,7 +10,7 @@ class ThemeSwitcher extends StatelessWidget{
     return Consumer<SettingsModel>(
       builder: (context, model, child) {
         return ListTile(
-          title: Text('Тема'),
+          title: const Text('Тема'),
           trailing: Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [

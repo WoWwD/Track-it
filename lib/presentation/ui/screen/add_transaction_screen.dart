@@ -12,7 +12,7 @@ import '../../provider/transaction_provider/transaction_buy_model.dart';
 import '../../provider/transaction_provider/transaction_transfer_out_model.dart';
 import '../widget/button/add_transaction_button_widget.dart';
 import '../widget/transaction/transaction_buy_widget.dart';
-import 'package:track_it/service/di/di.dart' as di;
+import 'package:track_it/service/di.dart' as di;
 
 class AddTransactionScreen extends StatefulWidget {
   final String name;

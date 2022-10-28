@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:track_it/presentation/provider/settings_provider.dart';
-import 'package:track_it/service/di/di.dart' as di;
+import 'package:track_it/service/di.dart' as di;
 import 'app.dart';
 
 Future<void> main() async {

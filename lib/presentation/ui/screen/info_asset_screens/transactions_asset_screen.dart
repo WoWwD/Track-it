@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:track_it/service/di/di.dart' as di;
+import 'package:track_it/service/di.dart' as di;
 import '../../../../service/constant/app_constants_size.dart';
 import '../../../../theme/app_styles.dart';
 import '../../../cubit/portfolio_cubit/portfolio_cubit.dart';

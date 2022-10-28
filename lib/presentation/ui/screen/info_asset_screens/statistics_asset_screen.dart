@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:track_it/presentation/cubit/statistics_cubit/statistics_cubit.dart';
 import 'package:track_it/service/constant/app_constants_size.dart';
-import 'package:track_it/service/di/di.dart' as di;
+import 'package:track_it/service/di.dart' as di;
 import 'package:track_it/service/extension/double_extension.dart';
 import 'package:track_it/theme/app_styles.dart';
 
