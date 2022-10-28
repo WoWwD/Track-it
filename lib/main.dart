@@ -9,7 +9,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<SettingsModel>(create: (_) => di.getIt()..getValue())
+        ChangeNotifierProvider<SettingsModel>(create: (_) => di.getIt()..getValueTheme())
       ],
       child: const App()
     )

@@ -9,17 +9,19 @@ class ThemeSwitcher extends StatelessWidget{
   Widget build(BuildContext context) {
     return Consumer<SettingsModel>(
       builder: (context, model, child) {
-        return Row(
-          children: [
-            const Text('Тема'),
-            const Spacer(),
-            const Icon(Icons.light_mode_outlined),
-            Switch(
-              value: model.darkMode,
-              onChanged: (value) async => await model.setDarkMode(!model.darkMode)
-            ),
-            const Icon(Icons.dark_mode_outlined),
-          ],
+        return ListTile(
+          title: Text('Тема'),
+          trailing: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              const Icon(Icons.light_mode_outlined),
+              Switch(
+                value: model.darkMode,
+                onChanged: (value) async => await model.setDarkMode(!model.darkMode)
+              ),
+              const Icon(Icons.dark_mode_outlined),
+            ],
+          ),
         );
       },
     );
