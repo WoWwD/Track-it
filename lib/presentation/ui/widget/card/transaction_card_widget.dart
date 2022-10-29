@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:track_it/data/model/transaction_model.dart';
-import 'package:track_it/service/extension/date_time_extension.dart';
 import 'package:track_it/service/extension/double_extension.dart';
-import '../../../../service/constant/app_constants.dart';
+import 'package:track_it/service/helpers.dart';
 import '../../../../service/constant/app_styles.dart';
 
 class TransactionCard extends StatelessWidget {
@@ -44,25 +43,11 @@ class TransactionCard extends StatelessWidget {
           ],
         ),
         subtitle: Text(
-          'Дата и время: ${DateTime.parse(transactionModel.dateTime).dateTimeToString()}',
+          'Дата и время: ${transactionModel.dateTime}',
           style: const TextStyle(fontSize: 12)
         ),
-        trailing: Text(_getTypeTransaction(transactionModel.typeOfTransaction)),
+        trailing: Text(Helpers.getTypeTransactionFromModel(transactionModel.typeOfTransaction)),
       ),
     );
-  }
-
-  String _getTypeTransaction(String typeOfTransaction) {
-    switch (typeOfTransaction) {
-      case AppConstants.buyTypeTransaction:
-        return 'Покупка';
-      case AppConstants.sellTypeTransaction:
-        return 'Продажа';
-      case AppConstants.transferInTypeTransaction:
-        return 'Ввод';
-      case AppConstants.transferOutTypeTransaction:
-        return 'Вывод';
-    }
-    return '';
   }
 }
