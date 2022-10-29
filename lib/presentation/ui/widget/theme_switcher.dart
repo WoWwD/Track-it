@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:track_it/presentation/provider/settings_provider.dart';
+import 'package:track_it/presentation/provider/settings_model.dart';
 
 class ThemeSwitcher extends StatelessWidget{
   const ThemeSwitcher({Key? key}) : super(key: key);

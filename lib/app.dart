@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:track_it/app_routes.dart';
-import 'package:track_it/presentation/provider/settings_provider.dart';
+import 'package:track_it/presentation/provider/settings_model.dart';
 import 'package:track_it/presentation/ui/screen/main_screen.dart';
 
 class App extends StatelessWidget {

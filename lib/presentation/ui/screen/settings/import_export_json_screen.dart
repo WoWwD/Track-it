@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:track_it/presentation/provider/settings_provider.dart';
+import 'package:track_it/presentation/provider/settings_model.dart';
 import 'package:track_it/service/constant/app_constants.dart';
 import 'package:track_it/service/constant/app_styles.dart';
 

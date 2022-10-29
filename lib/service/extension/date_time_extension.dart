@@ -1,6 +1,6 @@
-// ignore: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
 extension DateTimeExtension on DateTime {
-  String dateTimeToString() => DateFormat('dd.MM.yyyy - HH:mm').format(this);
+  String dateTimeFormatToString() => DateFormat('dd.MM.yyyy - HH:mm').format(this);
 }

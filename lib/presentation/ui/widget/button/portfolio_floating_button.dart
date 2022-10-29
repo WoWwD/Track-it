@@ -16,7 +16,7 @@ class PortfolioFloatingButton extends StatelessWidget {
         showModalBottomSheet<void>(
           isScrollControlled: true,
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16.0))),
-          constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
+          constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth, maxHeight: 600),
           context: context,
           builder: (BuildContext context) {
             return Column(
