@@ -21,7 +21,7 @@ class Helpers {
     return '';
   }
 
-  static String setTypeTransactionToModel(TransactionType transactionType) {
+  static String getTypeTransactionToModel(TransactionType transactionType) {
     switch(transactionType) {
       case TransactionType.buy: return AppConstants.buyTypeTransaction;
       case TransactionType.sell: return AppConstants.sellTypeTransaction;

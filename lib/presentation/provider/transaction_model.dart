@@ -48,7 +48,7 @@ class TransactionModel extends ChangeNotifier {
 
   Future<void> addTransaction(String namePortfolio, String idCoin, TransactionType transactionType) async {
     final Transaction transactionModel = Transaction(
-      typeOfTransaction: Helpers.setTypeTransactionToModel(transactionType),
+      typeOfTransaction: Helpers.getTypeTransactionToModel(transactionType),
       dateTime: _dateTime.dateTimeFormatToString(),
       note: _note,
       amount: _amount,

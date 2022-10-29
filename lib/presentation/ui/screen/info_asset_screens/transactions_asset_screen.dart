@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:track_it/data/model/coin/market_coin_model.dart';
 import 'package:track_it/service/constant/app_styles.dart';
 import 'package:track_it/service/di.dart' as di;
 import '../../../cubit/portfolio_cubit/portfolio_cubit.dart';
@@ -7,18 +8,18 @@ import '../../widget/card/transaction_card_widget.dart';
 
 class TransactionsAssetScreen extends StatelessWidget {
   final String portfolioName;
-  final String idCoin;
+  final MarketCoin marketCoinModel;
 
   const TransactionsAssetScreen({
     Key? key,
     required this.portfolioName,
-    required this.idCoin
+    required this.marketCoinModel
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => di.getIt<PortfolioCubit>()..emitToPortfolioTransactionsState(portfolioName, idCoin),
+      create: (_) => di.getIt<PortfolioCubit>()..emitToPortfolioTransactionsState(portfolioName, marketCoinModel.id),
       child: BlocBuilder<PortfolioCubit, PortfolioState>(
         builder: (context, state) {
           if(state is PortfolioTransactions) {
@@ -32,9 +33,10 @@ class TransactionsAssetScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return TransactionCard(
                       transactionModel: state.listTransactions[index],
+                      marketCoinModel: marketCoinModel,
                       onPressedDelete: (BuildContext context) =>
                         context.read<PortfolioCubit>()
-                          .deleteTransactionByIndex(state.listTransactions.length, portfolioName, idCoin, index)
+                          .deleteTransactionByIndex(state.listTransactions.length, portfolioName, marketCoinModel.id, index)
                           .then((value) => state.listTransactions.length == 1? Navigator.pop(context): null),
                     );
                   },

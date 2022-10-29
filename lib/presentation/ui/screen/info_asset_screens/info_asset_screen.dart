@@ -64,7 +64,7 @@ class _InfoAssetScreenState extends State<InfoAssetScreen> with TickerProviderSt
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  TransactionsAssetScreen(portfolioName: widget.portfolioName, idCoin: widget.idCoin),
+                  TransactionsAssetScreen(portfolioName: widget.portfolioName, marketCoinModel: widget.marketCoinModel),
                   StatisticsAssetScreen(portfolioName: widget.portfolioName, idCoin: widget.idCoin)
                 ]
               )
