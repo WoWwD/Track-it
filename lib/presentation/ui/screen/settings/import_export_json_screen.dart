@@ -3,11 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:track_it/presentation/provider/settings_provider.dart';
 import 'package:track_it/service/constant/app_constants.dart';
-import 'package:track_it/service/constant/app_constants_size.dart';
-import 'package:track_it/theme/app_styles.dart';
+import 'package:track_it/service/constant/app_styles.dart';
 
 class ImportExportJsonScreen extends StatelessWidget {
-  final String portfolioName = AppConstants.MAIN_PORTFOLIO;
+  final String portfolioName = AppConstants.mainPortfolioStorage;
 
   const ImportExportJsonScreen({Key? key}) : super(key: key);
 
@@ -20,7 +19,7 @@ class ImportExportJsonScreen extends StatelessWidget {
           return Center(
             child: Container(
               padding: AppStyles.mainPadding,
-              constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
+              constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
               child: Column(
                 children: [
                   _card(

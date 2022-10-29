@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:track_it/presentation/ui/screen/portfolio_screen.dart';
 import 'package:track_it/presentation/ui/screen/settings/settings_screen.dart';
@@ -13,21 +11,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreen extends State<MainScreen> {
   int _selectedIndex = 0;
-  late StreamSubscription subscription;
-
-  @override
-  initState() {
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      //ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Нет интернета!')));
-    });
-    super.initState();
-  }
-
-  @override
-  dispose() {
-    subscription.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

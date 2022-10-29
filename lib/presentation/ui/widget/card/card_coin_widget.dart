@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:track_it/service/extension/double_extension.dart';
-import '../../../../theme/app_styles.dart';
+import '../../../../service/constant/app_styles.dart';
 
 class CardCoin extends StatelessWidget {
   final String imageUrl;

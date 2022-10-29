@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:track_it/data/model/portfolio_model.dart';
-import 'package:track_it/data/repository/local_repository/portfolio_local_repository.dart';
 import 'package:track_it/service/constant/app_constants.dart';
+import '../../domain/repository/local_repository/portfolio_local_repository.dart';
 
 class SettingsModel extends ChangeNotifier {
   final PortfolioLocalRepository portfolioLocalRepository;
@@ -16,13 +16,13 @@ class SettingsModel extends ChangeNotifier {
   Future<void> setDarkMode(bool darkMode) async {
     _darkMode = darkMode;
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    await sp.setBool(AppConstants.THEME_MODE_STORAGE, darkMode);
+    await sp.setBool(AppConstants.themeModeStorage, darkMode);
     notifyListeners();
   }
 
   Future<void> getValueTheme() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    final bool? result = sp.getBool(AppConstants.THEME_MODE_STORAGE);
+    final bool? result = sp.getBool(AppConstants.themeModeStorage);
     await setDarkMode(result ?? false);
     notifyListeners();
   }

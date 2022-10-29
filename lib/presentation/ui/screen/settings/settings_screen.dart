@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:track_it/presentation/ui/widget/theme_switcher.dart';
-import 'package:track_it/service/constant/app_constants_size.dart';
-import '../../../../theme/app_styles.dart';
+import 'package:track_it/service/constant/app_styles.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -12,7 +11,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Настройки')),
       body: Center(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
+          constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
           child: ListView(
             padding: AppStyles.mainPadding,
             children: [

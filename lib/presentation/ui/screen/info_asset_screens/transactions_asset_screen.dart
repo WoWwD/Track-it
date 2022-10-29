@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:track_it/service/constant/app_styles.dart';
 import 'package:track_it/service/di.dart' as di;
-import '../../../../service/constant/app_constants_size.dart';
-import '../../../../theme/app_styles.dart';
 import '../../../cubit/portfolio_cubit/portfolio_cubit.dart';
 import '../../widget/card/transaction_card_widget.dart';
 
@@ -25,7 +24,7 @@ class TransactionsAssetScreen extends StatelessWidget {
           if(state is PortfolioTransactions) {
             return Center(
               child: Container(
-                constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
+                constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
                 child: ListView.separated(
                   separatorBuilder: (context, index) => const SizedBox(height: 16),
                   padding: AppStyles.mainPadding,

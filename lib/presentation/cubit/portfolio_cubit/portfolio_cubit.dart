@@ -4,8 +4,8 @@ import 'package:track_it/data/model/coin/market_coin_model.dart';
 import 'package:track_it/data/model/portfolio_model.dart';
 import 'package:track_it/data/model/transaction_model.dart';
 import '../../../data/model/asset_model.dart';
-import '../../../data/repository/local_repository/portfolio_local_repository.dart';
-import '../../../data/repository/remote_repository/coin_remote_repository.dart';
+import '../../../domain/repository/local_repository/portfolio_local_repository.dart';
+import '../../../domain/repository/remote_repository/coin_remote_repository.dart';
 
 part 'portfolio_state.dart';
 

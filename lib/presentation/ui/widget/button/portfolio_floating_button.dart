@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../service/constant/app_constants_size.dart';
+import '../../../../service/constant/app_styles.dart';
 import '../search_coin_widget.dart';
 import 'icon_button_widget.dart';
 
@@ -16,7 +16,7 @@ class PortfolioFloatingButton extends StatelessWidget {
         showModalBottomSheet<void>(
           isScrollControlled: true,
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16.0))),
-          constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH, maxHeight: AppConstantsSize.MAX_HEIGHT),
+          constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
           context: context,
           builder: (BuildContext context) {
             return Column(

@@ -1,10 +1,8 @@
-// ignore_for_file: constant_identifier_names
-
 class AppConstants {
-  static const MAIN_PORTFOLIO = 'Main';
-  static const BUY_TYPE_TRANSACTION = 'Buy';
-  static const SELL_TYPE_TRANSACTION = 'Sell';
-  static const TRANSFER_IN_TYPE_TRANSACTION = 'Transfer In';
-  static const TRANSFER_OUT_TYPE_TRANSACTION = 'Transfer Out';
-  static const THEME_MODE_STORAGE = 'Theme mode';
+  static const mainPortfolioStorage = 'Main';
+  static const buyTypeTransaction = 'Buy';
+  static const sellTypeTransaction = 'Sell';
+  static const transferInTypeTransaction = 'Transfer In';
+  static const transferOutTypeTransaction = 'Transfer Out';
+  static const themeModeStorage = 'Theme mode';
 }

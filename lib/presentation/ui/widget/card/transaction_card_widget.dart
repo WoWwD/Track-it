@@ -4,7 +4,7 @@ import 'package:track_it/data/model/transaction_model.dart';
 import 'package:track_it/service/extension/date_time_extension.dart';
 import 'package:track_it/service/extension/double_extension.dart';
 import '../../../../service/constant/app_constants.dart';
-import '../../../../theme/app_styles.dart';
+import '../../../../service/constant/app_styles.dart';
 
 class TransactionCard extends StatelessWidget {
   final Transaction transactionModel;
@@ -54,13 +54,13 @@ class TransactionCard extends StatelessWidget {
 
   String _getTypeTransaction(String typeOfTransaction) {
     switch (typeOfTransaction) {
-      case AppConstants.BUY_TYPE_TRANSACTION:
+      case AppConstants.buyTypeTransaction:
         return 'Покупка';
-      case AppConstants.SELL_TYPE_TRANSACTION:
+      case AppConstants.sellTypeTransaction:
         return 'Продажа';
-      case AppConstants.TRANSFER_IN_TYPE_TRANSACTION:
+      case AppConstants.transferInTypeTransaction:
         return 'Ввод';
-      case AppConstants.TRANSFER_OUT_TYPE_TRANSACTION:
+      case AppConstants.transferOutTypeTransaction:
         return 'Вывод';
     }
     return '';

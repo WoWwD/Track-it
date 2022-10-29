@@ -13,7 +13,7 @@ class StatisticsSingleCoin extends StatisticsState {
   double getAllCost() {
     double allCost = 0.0;
     for(int i = 0; i < listTransactions.length; i++) {
-      if(listTransactions[i].typeOfTransaction == AppConstants.BUY_TYPE_TRANSACTION) {
+      if(listTransactions[i].typeOfTransaction == AppConstants.buyTypeTransaction) {
         allCost += listTransactions[i].cost;
       }
     }
@@ -32,7 +32,7 @@ class StatisticsSingleCoin extends StatisticsState {
     double allAmount = 0.0;
     double allCost = 0.0;
     for(int i = 0; i < listTransactions.length; i++) {
-      if(listTransactions[i].typeOfTransaction == AppConstants.BUY_TYPE_TRANSACTION) {
+      if(listTransactions[i].typeOfTransaction == AppConstants.buyTypeTransaction) {
         allAmount += listTransactions[i].amount;
         allCost += listTransactions[i].cost;
       }

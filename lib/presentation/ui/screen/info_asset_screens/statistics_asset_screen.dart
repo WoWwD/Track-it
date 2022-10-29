@@ -1,10 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:track_it/presentation/cubit/statistics_cubit/statistics_cubit.dart';
-import 'package:track_it/service/constant/app_constants_size.dart';
 import 'package:track_it/service/di.dart' as di;
 import 'package:track_it/service/extension/double_extension.dart';
-import 'package:track_it/theme/app_styles.dart';
+import '../../../../service/constant/app_styles.dart';
 
 class StatisticsAssetScreen extends StatelessWidget {
   final String portfolioName;
@@ -25,7 +24,7 @@ class StatisticsAssetScreen extends StatelessWidget {
           if(state is StatisticsSingleCoin) {
             return Center(
               child: Container(
-                constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
+                constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
                 child: ListView(
                   padding: AppStyles.mainPadding,
                   children: [

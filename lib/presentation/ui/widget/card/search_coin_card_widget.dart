@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../theme/app_styles.dart';
+import '../../../../service/constant/app_styles.dart';
 
 class SearchCoinCard extends StatelessWidget {
   final String imageUrl;

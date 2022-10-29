@@ -5,9 +5,8 @@ import 'package:track_it/presentation/provider/transaction_provider/transaction_
 import 'package:track_it/presentation/ui/widget/transaction/transaction_sell_widget.dart';
 import 'package:track_it/presentation/ui/widget/transaction/transaction_transfer_in_widget.dart';
 import 'package:track_it/presentation/ui/widget/transaction/transaction_transfer_out_widget.dart';
-import 'package:track_it/theme/app_styles.dart';
 import '../../../service/constant/app_constants.dart';
-import '../../../service/constant/app_constants_size.dart';
+import '../../../service/constant/app_styles.dart';
 import '../../provider/transaction_provider/transaction_buy_model.dart';
 import '../../provider/transaction_provider/transaction_transfer_out_model.dart';
 import '../widget/button/add_transaction_button_widget.dart';
@@ -84,7 +83,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
             child: Center(
               child: Container(
                 padding: AppStyles.mainPadding,
-                constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
+                constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
                 child: Column(
                   children: [
                     TabBar(
@@ -117,22 +116,22 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
         switch (_tabController.index) {
           case 0:
             contextProvider.read<TransactionBuyModel>()
-              .addTransaction(AppConstants.MAIN_PORTFOLIO, widget.idCoin);
+              .addTransaction(AppConstants.mainPortfolioStorage, widget.idCoin);
             Navigator.pop(context);
             break;
           case 1:
             contextProvider.read<TransactionSellModel>()
-              .addTransaction(AppConstants.MAIN_PORTFOLIO, widget.idCoin);
+              .addTransaction(AppConstants.mainPortfolioStorage, widget.idCoin);
             Navigator.pop(context);
             break;
           case 2:
             contextProvider.read<TransactionTransferInModel>()
-              .addTransaction(AppConstants.MAIN_PORTFOLIO, widget.idCoin);
+              .addTransaction(AppConstants.mainPortfolioStorage, widget.idCoin);
             Navigator.pop(context);
             break;
           case 3:
             contextProvider.read<TransactionTransferOutModel>()
-              .addTransaction(AppConstants.MAIN_PORTFOLIO, widget.idCoin);
+              .addTransaction(AppConstants.mainPortfolioStorage, widget.idCoin);
             Navigator.pop(context);
             break;
         }

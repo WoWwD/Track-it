@@ -7,9 +7,9 @@ import 'package:track_it/presentation/ui/widget/button/portfolio_floating_button
 import 'package:track_it/presentation/ui/widget/card/card_coin_widget.dart';
 import 'package:track_it/presentation/ui/widget/custom_list_view_widget.dart';
 import 'package:track_it/presentation/ui/widget/skeletons/list_view_skeleton_widget.dart';
-import 'package:track_it/service/constant/app_constants_size.dart';
 import 'package:track_it/service/di.dart' as di;
 import '../../../service/constant/app_constants.dart';
+import '../../../service/constant/app_styles.dart';
 
 class PortfolioScreen extends StatelessWidget {
   const PortfolioScreen({Key? key}) : super(key: key);
@@ -17,19 +17,19 @@ class PortfolioScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => di.getIt<PortfolioCubit>()..getPortfolio(AppConstants.MAIN_PORTFOLIO),
+      create: (_) => di.getIt<PortfolioCubit>()..getPortfolio(AppConstants.mainPortfolioStorage),
       child: BlocBuilder<PortfolioCubit, PortfolioState>(
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(title: const Text('Портфель')),
             floatingActionButton: PortfolioFloatingButton(
-              refreshState: () => context.read<PortfolioCubit>().getPortfolio(AppConstants.MAIN_PORTFOLIO)
+              refreshState: () => context.read<PortfolioCubit>().getPortfolio(AppConstants.mainPortfolioStorage)
             ),
             body: Center(
               child: state is PortfolioFirstLaunch
                 ? _firstLaunch()
                 : Container(
-                    constraints: const BoxConstraints(maxWidth: AppConstantsSize.MAX_WIDTH),
+                    constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
                     child: Skeleton(
                       isLoading: state is PortfolioLoading,
                       skeleton: const ListViewSkeleton(),
@@ -67,7 +67,7 @@ class PortfolioScreen extends StatelessWidget {
                         );
                       }
                     )
-                  ).then((value) => context.read<PortfolioCubit>().getPortfolio(AppConstants.MAIN_PORTFOLIO));
+                  ).then((value) => context.read<PortfolioCubit>().getPortfolio(AppConstants.mainPortfolioStorage));
                 }
               ),
             ],
