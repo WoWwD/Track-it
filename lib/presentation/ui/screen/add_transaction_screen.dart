@@ -6,7 +6,6 @@ import '../../../service/constant/app_constants.dart';
 import '../../../service/constant/app_styles.dart';
 import '../../provider/transaction_model.dart';
 import 'package:track_it/service/di.dart' as di;
-
 import '../widget/button/add_transaction_button_widget.dart';
 
 class AddTransactionScreen extends StatefulWidget {
@@ -37,6 +36,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
     Tab(text: 'Вывод'),
   ];
   final _formKey = GlobalKey<FormState>();
+  late TransactionModel modelBuy;
+  late TransactionModel modelSell;
+  late TransactionModel modelTransferIn;
+  late TransactionModel modelTransferOut;
 
   @override
   void initState() {
@@ -72,10 +75,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
                   return ChangeNotifierProvider<TransactionModel>(
                     create: (_) => TransactionModel(portfolioLocalRepository: di.getIt()),
                     builder: (contextTransferOut, child) {
-                      final modelBuy = Provider.of<TransactionModel>(contextBuy);
-                      final modelSell = Provider.of<TransactionModel>(contextSell);
-                      final modelTransferIn = Provider.of<TransactionModel>(contextTransferIn);
-                      final modelTransferOut = Provider.of<TransactionModel>(contextTransferOut);
+                      modelBuy = Provider.of<TransactionModel>(contextBuy);
+                      modelSell = Provider.of<TransactionModel>(contextSell);
+                      modelTransferIn = Provider.of<TransactionModel>(contextTransferIn);
+                      modelTransferOut = Provider.of<TransactionModel>(contextTransferOut);
 
                       return DefaultTabController(
                         length: _tabLength,
@@ -98,10 +101,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
                                     child: TabBarView(
                                         controller: _tabController,
                                         children: [
-                                        TransactionWidget(model: modelBuy, transactionType: TransactionType.buy),
-                                        TransactionWidget(model: modelSell, transactionType: TransactionType.sell),
-                                        TransactionWidget(model: modelTransferIn, transactionType: TransactionType.transferIn),
-                                        TransactionWidget(model: modelTransferOut, transactionType: TransactionType.transferOut),
+                                          TransactionWidget(model: modelBuy, transactionType: TransactionType.buy),
+                                          TransactionWidget(model: modelSell, transactionType: TransactionType.sell),
+                                          TransactionWidget(model: modelTransferIn, transactionType: TransactionType.transferIn),
+                                          TransactionWidget(model: modelTransferOut, transactionType: TransactionType.transferOut),
                                         ]
                                     ),
                                   ),
@@ -109,40 +112,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
                                 AddTransactionButton(
                                   onPressed: () {
                                     if(_formKey.currentState!.validate()) {
-                                      switch (_tabController.index) {
-                                        case 0:
-                                          modelBuy.addTransaction(
-                                            AppConstants.mainPortfolioStorage,
-                                            widget.idCoin,
-                                            TransactionType.buy
-                                          );
-                                          Navigator.pop(context);
-                                          break;
-                                        case 1:
-                                          modelSell.addTransaction(
-                                            AppConstants.mainPortfolioStorage,
-                                            widget.idCoin,
-                                            TransactionType.sell
-                                          );
-                                          Navigator.pop(context);
-                                          break;
-                                        case 2:
-                                          modelTransferIn.addTransaction(
-                                            AppConstants.mainPortfolioStorage,
-                                            widget.idCoin,
-                                            TransactionType.transferIn
-                                          );
-                                          Navigator.pop(context);
-                                          break;
-                                        case 3:
-                                          modelTransferOut.addTransaction(
-                                            AppConstants.mainPortfolioStorage,
-                                            widget.idCoin,
-                                            TransactionType.transferOut
-                                          );
-                                          Navigator.pop(context);
-                                          break;
-                                      }
+                                      _getModel()!.addTransaction(
+                                        AppConstants.mainPortfolioStorage,
+                                        widget.idCoin,
+                                        _getTypeTransaction()!
+                                      );
+                                      Navigator.pop(context);
                                     }
                                   }
                                 )
@@ -160,5 +135,25 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> with Ticker
         },
       )
     );
+  }
+
+  TransactionModel? _getModel() {
+    switch (_tabController.index) {
+      case 0: return modelBuy;
+      case 1: return modelSell;
+      case 2: return modelTransferIn;
+      case 3: return modelTransferOut;
+    }
+    return null;
+  }
+
+  TransactionType? _getTypeTransaction() {
+    switch (_tabController.index) {
+      case 0: return TransactionType.buy;
+      case 1: return TransactionType.sell;
+      case 2: return TransactionType.transferIn;
+      case 3: return TransactionType.transferOut;
+    }
+    return null;
   }
 }

@@ -19,6 +19,10 @@ Future<void> init() async {
   final CoinRemoteRepository coinRemoteRepository = CoinRemoteRepository(coinRemoteData);
   final PortfolioLocalRepository portfolioLocalRepository = PortfolioLocalRepository(portfolioLocalData);
 
+  //region Data
+  getIt.registerLazySingleton(() => coinRemoteData);
+  getIt.registerLazySingleton(() => portfolioLocalData);
+
   //region Repository
   getIt.registerLazySingleton(() => coinRemoteRepository);
   getIt.registerLazySingleton(() => portfolioLocalRepository);
