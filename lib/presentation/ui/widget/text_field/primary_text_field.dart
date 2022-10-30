@@ -8,6 +8,7 @@ class PrimaryTextField extends StatelessWidget {
   final String? initialValue;
   final TextInputType? textInputType;
   final FormFieldValidator<String>? validator;
+  final Widget? suffixIcon;
 
   const PrimaryTextField({
     Key? key,
@@ -16,7 +17,8 @@ class PrimaryTextField extends StatelessWidget {
     this.inputFormatters,
     this.initialValue,
     this.textInputType,
-    this.validator
+    this.validator,
+    this.suffixIcon
   }) : super(key: key);
 
   @override
@@ -28,7 +30,8 @@ class PrimaryTextField extends StatelessWidget {
       inputFormatters: inputFormatters,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
-        labelText: labelText
+        labelText: labelText,
+        suffixIcon: suffixIcon
       ),
       onChanged: onChanged
     );

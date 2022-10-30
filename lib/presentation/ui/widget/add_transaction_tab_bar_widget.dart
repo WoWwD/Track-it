@@ -5,7 +5,7 @@ import 'package:track_it/service/transaction_type_enum.dart';
 import '../../../service/constant/app_styles.dart';
 import '../../provider/transaction_model.dart';
 import 'package:track_it/service/di.dart' as di;
-import 'button/add_transaction_button_widget.dart';
+import 'button/primary_button_widget.dart';
 
 class AddTransactionTabBar extends StatefulWidget {
   final String name;
@@ -110,7 +110,8 @@ class _AddTransactionTabBarState extends State<AddTransactionTabBar> with Ticker
                                     ),
                                   ),
                                 ),
-                                AddTransactionButton(
+                                PrimaryButton(
+                                  text: 'Добавить',
                                   onPressed: () {
                                     if(_formKey.currentState!.validate()) {
                                       _getModel()!.addTransaction(

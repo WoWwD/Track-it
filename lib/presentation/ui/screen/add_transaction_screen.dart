@@ -2,7 +2,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:track_it/data/model/transaction_model.dart';
 import 'package:track_it/presentation/provider/transaction_model.dart';
-import 'package:track_it/presentation/ui/widget/button/add_transaction_button_widget.dart';
+import 'package:track_it/presentation/ui/widget/button/primary_button_widget.dart';
 import 'package:track_it/service/constant/app_styles.dart';
 import 'package:track_it/service/extension/date_time_extension.dart';
 import '../../../service/transaction_type_enum.dart';
@@ -57,7 +57,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             child: Column(
               children: [
                 Expanded(child: Form(key: _formKey, child: _mainWidget())),
-                AddTransactionButton(
+                PrimaryButton(
+                  text: 'Изменить',
                   onPressed: () {
                     if(_formKey.currentState!.validate()){
                       widget.model.editTransaction(
