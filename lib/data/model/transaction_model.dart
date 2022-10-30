@@ -1,4 +1,5 @@
 class Transaction {
+  final String idCoin;
   final String typeOfTransaction;
   final String dateTime;
   final String? note;
@@ -7,6 +8,7 @@ class Transaction {
   final double cost;
 
   Transaction({
+    required this.idCoin,
     required this.typeOfTransaction,
     required this.dateTime,
     required this.note,
@@ -17,6 +19,7 @@ class Transaction {
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
+      idCoin: json['idCoin'],
       typeOfTransaction: json['typeOfTransaction'],
       dateTime: json['dateTime'],
       note: json['note'],
@@ -28,6 +31,7 @@ class Transaction {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['idCoin'] = idCoin;
     data['typeOfTransaction'] = typeOfTransaction;
     data['dateTime'] = dateTime.toString();
     data['note'] = note;

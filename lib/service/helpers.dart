@@ -11,8 +11,8 @@ class Helpers {
     return res;
   }
 
-  static String getTypeTransactionFromModel(String typeOfTransaction) {
-    switch (typeOfTransaction) {
+  static String getTypeTransactionFromModel(String transactionType) {
+    switch (transactionType) {
       case AppConstants.buyTypeTransaction: return 'Покупка';
       case AppConstants.sellTypeTransaction: return 'Продажа';
       case AppConstants.transferInTypeTransaction: return 'Ввод';
@@ -28,5 +28,15 @@ class Helpers {
       case TransactionType.transferIn: return AppConstants.transferInTypeTransaction;
       case TransactionType.transferOut: return AppConstants.transferOutTypeTransaction;
     }
+  }
+
+  static TransactionType getEnumTypeTransaction(String transactionType) {
+    switch(transactionType) {
+      case AppConstants.buyTypeTransaction: return TransactionType.buy;
+      case AppConstants.sellTypeTransaction: return TransactionType.sell;
+      case AppConstants.transferInTypeTransaction: return TransactionType.transferIn;
+      case AppConstants.transferOutTypeTransaction: return TransactionType.transferOut;
+    }
+    return TransactionType.buy;
   }
 }

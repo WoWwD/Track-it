@@ -9,8 +9,8 @@ class PortfolioLocalRepository implements PortfolioLocalAction {
   PortfolioLocalRepository(this.portfolioLocalData);
 
   @override
-  Future<void> addTransaction(String namePortfolio, String idCoin, Transaction transactionModel) async
-    => await portfolioLocalData.addTransaction(namePortfolio, idCoin, transactionModel);
+  Future<void> addTransaction(String namePortfolio, Transaction transactionModel) async
+    => await portfolioLocalData.addTransaction(namePortfolio, transactionModel);
 
   @override
   Future<void> createPortfolio(String namePortfolio, [Portfolio? portfolioModel]) async
@@ -24,13 +24,17 @@ class PortfolioLocalRepository implements PortfolioLocalAction {
   Future<Portfolio> getPortfolio(String namePortfolio) async => await portfolioLocalData.getPortfolio(namePortfolio);
 
   @override
-  Future<void> deleteTransactionByIndex(String namePortfolio, String idCoin, int indexTransaction) async
-    => await portfolioLocalData.deleteTransactionByIndex(namePortfolio, idCoin, indexTransaction);
-
-  @override
   Future<void> deleteAssetById(String namePortfolio, String idAsset) async
     => await portfolioLocalData.deleteAssetById(namePortfolio, idAsset);
 
   @override
   Future<void> deletePortfolio(String namePortfolio) async => await portfolioLocalData.deletePortfolio(namePortfolio);
+
+  @override
+  Future<void> deleteTransactionByIndex(String namePortfolio, int indexTransaction, String idCoin) async
+    => await portfolioLocalData.deleteTransactionByIndex(namePortfolio, indexTransaction, idCoin);
+
+  @override
+  Future<void> editTransactionByIndex(String namePortfolio, int indexTransaction, Transaction newTransactionModel) async
+    => portfolioLocalData.editTransactionByIndex(namePortfolio, indexTransaction, newTransactionModel);
 }

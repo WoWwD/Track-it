@@ -1,159 +1,176 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:track_it/presentation/ui/widget/transaction_widget.dart';
-import 'package:track_it/service/transaction_type_enum.dart';
-import '../../../service/constant/app_constants.dart';
-import '../../../service/constant/app_styles.dart';
-import '../../provider/transaction_model.dart';
-import 'package:track_it/service/di.dart' as di;
-import '../widget/button/add_transaction_button_widget.dart';
+import 'package:track_it/data/model/transaction_model.dart';
+import 'package:track_it/presentation/provider/transaction_model.dart';
+import 'package:track_it/presentation/ui/widget/button/add_transaction_button_widget.dart';
+import 'package:track_it/service/constant/app_styles.dart';
+import 'package:track_it/service/extension/date_time_extension.dart';
+import '../../../service/transaction_type_enum.dart';
+import '../widget/text_field/text_field_transaction_note_widget.dart';
+import '../widget/text_field/text_field_transaction_widget.dart';
+import 'package:track_it/service/extension/string_extension.dart';
 
 class AddTransactionScreen extends StatefulWidget {
-  final String name;
-  final String symbol;
-  final String imageUrl;
-  final String idCoin;
+  final String? portfolioName;
+  final int? indexTransaction;
+  final Transaction? oldTransactionModel;
+  final TransactionModel model;
+  final TransactionType transactionType;
+  final bool isEdit;
 
   const AddTransactionScreen({
     Key? key,
-    required this.name,
-    required this.symbol,
-    required this.imageUrl,
-    required this.idCoin,
+    required this.model,
+    required this.transactionType,
+    this.isEdit = false,
+    this.portfolioName,
+    this.indexTransaction,
+    this.oldTransactionModel
   }) : super(key: key);
 
   @override
   State<AddTransactionScreen> createState() => _AddTransactionScreenState();
 }
 
-class _AddTransactionScreenState extends State<AddTransactionScreen> with TickerProviderStateMixin {
-  static const _tabLength = 4;
-  late TabController _tabController;
-  final List<Widget> _tabsName = const [
-    Tab(text: 'Покупка'),
-    Tab(text: 'Продажа'),
-    Tab(text: 'Ввод'),
-    Tab(text: 'Вывод'),
-  ];
+class _AddTransactionScreenState extends State<AddTransactionScreen> {
+  TextEditingController? textEditingController;
   final _formKey = GlobalKey<FormState>();
-  late TransactionModel modelBuy;
-  late TransactionModel modelSell;
-  late TransactionModel modelTransferIn;
-  late TransactionModel modelTransferOut;
 
   @override
   void initState() {
-    _tabController = TabController(length: _tabLength, vsync: this);
+    if(_isBuyOrSell()) {
+      textEditingController = TextEditingController(
+        text: widget.model.price * widget.model.amount == 0.0? '': '\$${(widget.model.price * widget.model.amount)}'
+      );
+    }
     super.initState();
   }
 
   @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    if(widget.isEdit) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Редактирование')),
+        body: Center(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
+            child: Column(
+              children: [
+                Expanded(child: Form(key: _formKey, child: _mainWidget())),
+                AddTransactionButton(
+                  onPressed: () {
+                    if(_formKey.currentState!.validate()){
+                      widget.model.editTransaction(
+                        widget.portfolioName!,
+                        widget.indexTransaction!,
+                        widget.oldTransactionModel!
+                      );
+                      Navigator.pop(context);
+                    }
+                  }
+                ),
+                const SizedBox(height: 16)
+              ],
+            ),
+          )
+        )
+      );
+    }
+    else {
+      return _mainWidget();
+    }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: ListTile(
-          leading: Image.network(widget.imageUrl, width: 36, height: 36),
-          title: Text(widget.name),
-          subtitle: Text(widget.symbol, style: const TextStyle(fontSize: 10)),
-        )
-      ),
-      body: ChangeNotifierProvider<TransactionModel>(
-        create: (_) => TransactionModel(portfolioLocalRepository: di.getIt()),
-        builder: (contextBuy, child) {
-          return ChangeNotifierProvider<TransactionModel>(
-            create: (_) => TransactionModel(portfolioLocalRepository: di.getIt()),
-            builder: (contextSell, child) {
-              return ChangeNotifierProvider<TransactionModel>(
-                create: (_) => TransactionModel(portfolioLocalRepository: di.getIt()),
-                builder: (contextTransferIn, child) {
-                  return ChangeNotifierProvider<TransactionModel>(
-                    create: (_) => TransactionModel(portfolioLocalRepository: di.getIt()),
-                    builder: (contextTransferOut, child) {
-                      modelBuy = Provider.of<TransactionModel>(contextBuy);
-                      modelSell = Provider.of<TransactionModel>(contextSell);
-                      modelTransferIn = Provider.of<TransactionModel>(contextTransferIn);
-                      modelTransferOut = Provider.of<TransactionModel>(contextTransferOut);
-
-                      return DefaultTabController(
-                        length: _tabLength,
-                        child: Center(
-                          child: Container(
-                            padding: AppStyles.mainPadding,
-                            constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
-                            child: Column(
-                              children: [
-                                TabBar(
-                                  labelColor: Colors.blue,
-                                  padding: EdgeInsets.zero,
-                                  labelPadding: EdgeInsets.zero,
-                                  controller: _tabController,
-                                  tabs: _tabsName,
-                                ),
-                                Expanded(
-                                  child: Form(
-                                    key: _formKey,
-                                    child: TabBarView(
-                                        controller: _tabController,
-                                        children: [
-                                          TransactionWidget(model: modelBuy, transactionType: TransactionType.buy),
-                                          TransactionWidget(model: modelSell, transactionType: TransactionType.sell),
-                                          TransactionWidget(model: modelTransferIn, transactionType: TransactionType.transferIn),
-                                          TransactionWidget(model: modelTransferOut, transactionType: TransactionType.transferOut),
-                                        ]
-                                    ),
-                                  ),
-                                ),
-                                AddTransactionButton(
-                                  onPressed: () {
-                                    if(_formKey.currentState!.validate()) {
-                                      _getModel()!.addTransaction(
-                                        AppConstants.mainPortfolioStorage,
-                                        widget.idCoin,
-                                        _getTypeTransaction()!
-                                      );
-                                      Navigator.pop(context);
-                                    }
-                                  }
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              );
+  Widget _mainWidget() {
+    return Padding(
+      padding: AppStyles.mainPadding,
+      child: Column(
+        children: [
+          const SizedBox(height: 24),
+          TextFieldTransaction(
+            labelText: 'Количество',
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                widget.model.setAmount(double.parse(value));
+                _isBuyOrSell()? setCost(textEditingController!, widget.model): null;
+              }
             },
-          );
-        },
-      )
+            initialValue: widget.model.amount == 0.0? '': widget.model.amount.toString(),
+          ),
+          _isBuyOrSell()? _forTypeTransactionBuyAndSell(): const SizedBox(),
+          _forAllTypeTransactions()
+        ]
+      ),
     );
   }
 
-  TransactionModel? _getModel() {
-    switch (_tabController.index) {
-      case 0: return modelBuy;
-      case 1: return modelSell;
-      case 2: return modelTransferIn;
-      case 3: return modelTransferOut;
-    }
-    return null;
+  Widget _forAllTypeTransactions() {
+    return Column(
+      children: [
+        const SizedBox(height: 24),
+        DateTimePicker(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: 'Дата'
+          ),
+          type: DateTimePickerType.dateTime,
+          dateMask: 'dd.MM.yyyy - HH:mm',
+          initialValue: widget.model.dateTime.dateTimeFormatToString(),
+          firstDate: DateTime(2008, 08, 01),
+          lastDate: widget.model.dateTime,
+          onChanged: (value) => widget.model.setDateTime(value.toDateTime()),
+        ),
+        const SizedBox(height: 24),
+        TextFieldTransactionNote(
+          initialValue: widget.model.note,
+          onChanged: (value) {
+            if (value.isNotEmpty) {
+              widget.model.setNote(value);
+            }
+          },
+        )
+      ],
+    );
   }
 
-  TransactionType? _getTypeTransaction() {
-    switch (_tabController.index) {
-      case 0: return TransactionType.buy;
-      case 1: return TransactionType.sell;
-      case 2: return TransactionType.transferIn;
-      case 3: return TransactionType.transferOut;
-    }
-    return null;
+  Widget _forTypeTransactionBuyAndSell() {
+    return Column(
+      children: [
+        const SizedBox(height: 24),
+        TextFieldTransaction(
+          textInputType: TextInputType.number,
+          labelText: 'Цена',
+          onChanged: (value) {
+            if (value.isNotEmpty) {
+              widget.model.setPrice(double.parse(value));
+              setCost(textEditingController!, widget.model);
+            }
+          },
+          initialValue: widget.model.price == 0.0? '': widget.model.price.toString(),
+        ),
+        const SizedBox(height: 24),
+        TextFieldTransaction(
+          readOnly: true,
+          textInputType: TextInputType.number,
+          labelText: 'Общая стоимость',
+          controller: textEditingController,
+        ),
+      ],
+    );
+  }
+
+  bool _isBuyOrSell()
+    => widget.transactionType == TransactionType.buy || widget.transactionType == TransactionType.sell;
+
+  void setCost(TextEditingController tec, TransactionModel transactionModel) {
+    setState(() {
+      if(transactionModel.price * transactionModel.amount == 0.0) {
+        tec.text = '';
+      }
+      else {
+        transactionModel.setCost(transactionModel.price * transactionModel.amount);
+        tec.text = '\$${(transactionModel.price * transactionModel.amount)}';
+      }
+    });
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:track_it/presentation/cubit/search_cubit/search_cubit.dart';
-import 'package:track_it/presentation/ui/screen/add_transaction_screen.dart';
+import 'package:track_it/presentation/ui/widget/add_transaction_tab_bar_widget.dart';
 import 'package:track_it/presentation/ui/widget/card/search_coin_card_widget.dart';
 import 'package:track_it/presentation/ui/widget/custom_list_view_widget.dart';
 import 'package:track_it/service/di.dart' as di;
@@ -11,8 +11,13 @@ import 'text_field/primary_text_field.dart';
 
 class SearchCoinWidget extends StatelessWidget {
   final Function refreshState;
+  final String portfolioName;
 
-  const SearchCoinWidget({Key? key, required this.refreshState}) : super(key: key);
+  const SearchCoinWidget({
+    Key? key,
+    required this.refreshState,
+    required this.portfolioName
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,11 +74,12 @@ class SearchCoinWidget extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return AddTransactionScreen(
+                  return AddTransactionTabBar(
                     name: state.listCoins[index].name,
                     symbol: state.listCoins[index].symbol,
                     imageUrl: state.listCoins[index].large,
                     idCoin: state.listCoins[index].id,
+                    portfolioName: portfolioName,
                   );
                 }
               )

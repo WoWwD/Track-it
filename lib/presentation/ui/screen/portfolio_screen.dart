@@ -23,7 +23,8 @@ class PortfolioScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(title: const Text('Портфель')),
             floatingActionButton: PortfolioFloatingButton(
-              refreshState: () => context.read<PortfolioCubit>().getPortfolio(AppConstants.mainPortfolioStorage)
+              refreshState: () => context.read<PortfolioCubit>().getPortfolio(AppConstants.mainPortfolioStorage),
+              portfolioName: state is PortfolioInit? state.portfolio.name: '',
             ),
             body: Center(
               child: state is PortfolioFirstLaunch
@@ -33,7 +34,7 @@ class PortfolioScreen extends StatelessWidget {
                     child: Skeleton(
                       isLoading: state is PortfolioLoading,
                       skeleton: const ListViewSkeleton(),
-                      child: state is PortfolioInit ? _content(state) : const SizedBox()
+                      child: state is PortfolioInit? _content(state) : const SizedBox()
                     )
                   ),
             )

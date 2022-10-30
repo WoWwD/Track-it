@@ -10,12 +10,14 @@ import '../../../../service/constant/app_styles.dart';
 class TransactionCard extends StatelessWidget {
   final Transaction transactionModel;
   final MarketCoin marketCoinModel;
+  final Function(BuildContext) onPressedEdit;
   final Function(BuildContext) onPressedDelete;
 
   const TransactionCard({
     Key? key,
     required this.transactionModel,
     required this.marketCoinModel,
+    required this.onPressedEdit,
     required this.onPressedDelete,
   }) : super(key: key);
 
@@ -28,9 +30,14 @@ class TransactionCard extends StatelessWidget {
         motion: const DrawerMotion(),
         children: [
           SlidableAction(
+            onPressed: onPressedEdit,
+            backgroundColor: Colors.blueAccent,
+            icon: Icons.edit,
+            label: 'Изменить',
+          ),
+          SlidableAction(
             onPressed: onPressedDelete,
-            backgroundColor: const Color(0xFFFE4A49),
-            foregroundColor: Colors.white,
+            backgroundColor: Colors.redAccent,
             icon: Icons.delete,
             label: 'Удалить',
           ),

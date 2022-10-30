@@ -55,14 +55,20 @@ class PortfolioCubit extends Cubit<PortfolioState> {
     return listTransactions;
   }
 
-  Future<void> deleteTransactionByIndex(int listTransactionsLength, String portfolioName, String idCoin, int index) async {
+  Future<void> deleteTransactionByIndex(int listTransactionsLength, String portfolioName, int indexTransaction, String idCoin) async {
     emit(PortfolioLoading());
     if(listTransactionsLength == 1) {
       await portfolioLocalRepository.deleteAssetById(portfolioName, idCoin);
     }
     else{
-      await portfolioLocalRepository.deleteTransactionByIndex(portfolioName, idCoin, index);
+      await portfolioLocalRepository.deleteTransactionByIndex(portfolioName, indexTransaction, idCoin);
       emitToPortfolioTransactionsState(portfolioName, idCoin);
     }
+  }
+
+  Future<void> editTransaction(String namePortfolio, int indexTransaction, Transaction newTransactionModel) async {
+    emit(PortfolioLoading());
+    await portfolioLocalRepository.editTransactionByIndex(namePortfolio, indexTransaction, newTransactionModel);
+    emitToPortfolioTransactionsState(namePortfolio, newTransactionModel.idCoin);
   }
 }
