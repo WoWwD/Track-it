@@ -25,13 +25,15 @@ class ImportExportJsonScreen extends StatelessWidget {
                   _card(
                     context,
                     'Импортировать JSON из буфера обмена',
-                      () => _toJson(context, model)
-                    ),
+                    () async => await showDialog(context: context,builder: (context) => _dialog(context, model))
+                  ),
+
                   const SizedBox(height: 16),
                   _card(
                     context,
-                    'Экспортировать в виде JSON',
-                    () async => await showDialog(context: context,builder: (context) => _dialog(context, model))
+                    'Экспортировать JSON в буфер обмена',
+                    () => _toJson(context, model),
+                    false
                   ),
                 ],
               )
@@ -42,15 +44,19 @@ class ImportExportJsonScreen extends StatelessWidget {
     );
   }
 
-  Widget _card(BuildContext context, String text, Function() onTap) {
+  Widget _card(BuildContext context, String text, Function() onTap, [bool isImport = true]) {
     return ListTile(
+      leading: SizedBox(
+        height: double.infinity,
+        child: isImport? const Icon(Icons.download): const Icon(Icons.upload)
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp)),
-      contentPadding: EdgeInsets.zero,
       onTap: onTap,
-      title: SizedBox(
+      title: Container(
         width: MediaQuery.of(context).size.width,
         height: 60,
-        child: Center(child: Text(text)),
+        alignment: Alignment.centerLeft,
+        child: Text(text)
       ),
     );
   }
