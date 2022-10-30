@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
-class AddTransactionButton extends StatelessWidget {
+class PrimaryButton extends StatelessWidget {
+  final String text;
   final VoidCallback onPressed;
 
-  const AddTransactionButton({Key? key, required this.onPressed}) : super(key: key);
+  const PrimaryButton({
+    Key? key,
+    required this.onPressed,
+    required this.text
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +17,7 @@ class AddTransactionButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8)
       ),
       onPressed: onPressed,
-      child: const Text('Добавить'),
+      child: Text(text),
     );
   }
 }
