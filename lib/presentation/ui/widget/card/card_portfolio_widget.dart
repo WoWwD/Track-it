@@ -6,7 +6,7 @@ class CardPortfolio extends StatelessWidget {
   final int amountAssets;
   final bool isCurrent;
   final Function() deletePortfolio;
-  final ValueChanged<bool?>? onChanged;
+  final Function() onChanged;
 
   const CardPortfolio({
     Key? key,
@@ -27,45 +27,76 @@ class CardPortfolio extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _checkBox(),
-          const SizedBox(width: 12),
-          _deleteButton(context),
+          isCurrent
+            ? _button(context, onChanged, Colors.green, 'Текущий', Icons.check)
+            : _button(context, onChanged, Colors.grey, 'Выбрать', null),
+          _button(
+            context,
+            () => showDialog(context: context, builder: (context) => _dialog(context)),
+            Colors.redAccent,
+            'Удалить',
+            Icons.delete
+          ),
         ],
       ),
     );
   }
 
-  Widget _deleteButton(BuildContext context) {
+  Widget _button(BuildContext context, void Function()? onTap, Color color, String text, IconData? icon) {
+    final double borderRadius = color == Colors.redAccent? AppStyles.borderRadiusApp: 0.0;
+
     return GestureDetector(
-      onTap: deletePortfolio,
+      onTap: onTap,
       child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.redAccent,
+        decoration: BoxDecoration(
+          color: color,
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(AppStyles.borderRadiusApp),
-            bottomRight: Radius.circular(AppStyles.borderRadiusApp)
+            topRight: Radius.circular(borderRadius),
+            bottomRight: Radius.circular(borderRadius)
           )
         ),
         child: SizedBox(
           width: 64,
           height: MediaQuery.of(context).size.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.delete, color: Colors.white),
-              Text('Удалить', style: TextStyle(fontSize: 12, color: Colors.white))
-            ],
-          ),
+          child: icon == null
+            ? Center(child: Text(text, style: const TextStyle(fontSize: 12, color: Colors.white)))
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(icon, color: Colors.white),
+                  Text(text, style: const TextStyle(fontSize: 12, color: Colors.white))
+                ],
+              ),
         ),
       ),
     );
   }
 
-  Widget _checkBox() {
-    return Column(
-      children: [
-        Checkbox(value: isCurrent, onChanged: onChanged),
-        Text(isCurrent? 'Текущий': 'Выбрать', style: const TextStyle(fontSize: 12, color: Colors.white))
+  Widget _dialogButton(Function() onPressed, String text) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: Text(text)
+    );
+  }
+
+  Widget _dialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Удалить портфель?'),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _dialogButton(
+              () {
+                deletePortfolio();
+                Navigator.pop(context);
+              },
+              'Да'
+            ),
+            const SizedBox(width: 24),
+            _dialogButton(() => Navigator.pop(context), 'Нет'),
+          ],
+        ),
       ],
     );
   }

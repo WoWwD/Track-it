@@ -39,10 +39,10 @@ class ListPortfolioWidget extends StatelessWidget {
               return CardPortfolio(
                 portfolioName: state.listPortfolio[index].name,
                 amountAssets: state.listPortfolio[index].listAssets.length,
-                isCurrent: index == 2,
+                isCurrent: state.currentPortfolioName == state.listPortfolio[index].name,
                 deletePortfolio: () => context.read<PortfolioCubit>()
                   .deletePortfolioByName(state.listPortfolio[index].name),
-                onChanged: (bool? value) {  },
+                onChanged: () => context.read<PortfolioCubit>().setToCurrentPortfolio(state.listPortfolio[index].name)
               );
             }
           ),
@@ -56,7 +56,12 @@ class ListPortfolioWidget extends StatelessWidget {
     return Padding(
       padding: AppStyles.mainPadding,
       child: ListTile(
-        onTap: () async => await showPrimaryModalBottomSheet(context, CreatePortfolio(contextCubit: context), 150),
+        onTap: () async => await showPrimaryModalBottomSheet(
+          context: context,
+          content: CreatePortfolio(contextCubit: context),
+          maxHeight: 150,
+          title: 'Создание портфеля'
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp)),
         leading: const Icon(Icons.add),
         title: const Text('Добавить портфель'),

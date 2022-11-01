@@ -10,14 +10,9 @@ import '../skeletons/list_view_skeleton_widget.dart';
 import '../text_field/primary_text_field.dart';
 
 class SearchCoinWidget extends StatelessWidget {
-  final Function refreshState;
   final String portfolioName;
 
-  const SearchCoinWidget({
-    Key? key,
-    required this.refreshState,
-    required this.portfolioName
-  }) : super(key: key);
+  const SearchCoinWidget({Key? key, required this.portfolioName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +78,7 @@ class SearchCoinWidget extends StatelessWidget {
                   );
                 }
               )
-            ).then((value) {refreshState();})
+            )
           );
         }
     );
