@@ -6,7 +6,6 @@ import 'package:track_it/presentation/ui/widget/add_transaction_tab_bar_widget.d
 import 'package:track_it/presentation/ui/widget/card/search_coin_card_widget.dart';
 import 'package:track_it/presentation/ui/widget/custom_list_view_widget.dart';
 import 'package:track_it/service/di.dart' as di;
-import '../button/icon_button_widget.dart';
 import '../skeletons/list_view_skeleton_widget.dart';
 import '../text_field/primary_text_field.dart';
 
@@ -22,54 +21,41 @@ class SearchCoinWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          alignment: Alignment.centerRight,
-          padding: const EdgeInsets.only(right: 18, top: 18, bottom: 9),
-          child: IconButtonV2(
-            onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close),
-          ),
-        ),
-        Expanded(
-          child: BlocProvider(
-            create: (context) => di.getIt<SearchCubit>()..init(),
-            child: BlocBuilder<SearchCubit, SearchState>(
-              builder: (context, state) {
-                return Column(
+    return BlocProvider(
+      create: (context) => di.getIt<SearchCubit>()..init(),
+      child: BlocBuilder<SearchCubit, SearchState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: PrimaryTextField(
+                  labelText: 'Поиск',
+                  onChanged: (String value) => context.read<SearchCubit>().searchCoinByName(value)
+                ),
+              ),
+              const SizedBox(height: 8),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: PrimaryTextField(
-                        labelText: 'Поиск',
-                        onChanged: (String value) => context.read<SearchCubit>().searchCoinByName(value)
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (state is FirstLaunch) _firstLaunch(),
-                          if (state is NothingFound) _nothingFound(),
-                          if (state is SearchProcess || state is SearchCompleted)
-                            Expanded(
-                              child: Skeleton(
-                                isLoading: state is SearchProcess,
-                                skeleton: const ListViewSkeleton(),
-                                child: state is SearchCompleted? _content(state): const SizedBox()
-                              )
-                            )
-                        ],
-                      ),
-                    )
+                    if (state is FirstLaunch) _firstLaunch(),
+                    if (state is NothingFound) _nothingFound(),
+                    if (state is SearchProcess || state is SearchCompleted)
+                      Expanded(
+                        child: Skeleton(
+                          isLoading: state is SearchProcess,
+                          skeleton: const ListViewSkeleton(),
+                          child: state is SearchCompleted? _content(state): const SizedBox()
+                        )
+                      )
                   ],
-                );
-              }
-            ),
-          ),
-        ),
-      ],
+                ),
+              )
+            ],
+          );
+        }
+      ),
     );
   }
 

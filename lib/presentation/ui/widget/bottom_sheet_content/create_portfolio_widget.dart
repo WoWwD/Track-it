@@ -23,51 +23,38 @@ class _CreatePortfolioState extends State<CreatePortfolio> {
   Widget build(BuildContext context) {
     final portfolioCubit = BlocProvider.of<PortfolioCubit>(widget.contextCubit);
 
-    return Column(
-      children: [
-        Container(
-          alignment: Alignment.centerRight,
-          padding: const EdgeInsets.only(right: 18, top: 18, bottom: 9),
-          child: IconButtonV2(
-            onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Form(
+        key: _formKey,
+        child: PrimaryTextField(
+          labelText: 'Название',
+          onChanged: (value) => setState(() {
+            _textEditingController.text = value;
+          }),
+          validator: (value) {
+            if (value.toString().isEmpty) {
+              return InputError.empty;
+            }
+            if (value.toString().isMaxLength()) {
+              return InputError.maxLength;
+            }
+            return null;
+          },
+          suffixIcon: IconButtonV2(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                if(!await portfolioCubit.portfolioAlreadyExists(_textEditingController.text)) {
+                  await portfolioCubit.createPortfolio(_textEditingController.text);
+                  if (!mounted) return;
+                  Navigator.pop(context);
+                }
+              }
+            },
+            icon: const Icon(Icons.arrow_forward_ios),
           ),
         ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Form(
-              key: _formKey,
-              child: PrimaryTextField(
-                labelText: 'Название',
-                onChanged: (value) => setState(() {
-                  _textEditingController.text = value;
-                }),
-                validator: (value) {
-                  if (value.toString().isEmpty) {
-                    return InputError.empty;
-                  }
-                  if (value.toString().isMaxLength()) {
-                    return InputError.maxLength;
-                  }
-                  return null;
-                },
-                suffixIcon: IconButtonV2(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      if(!await portfolioCubit.portfolioAlreadyExists(_textEditingController.text)) {
-                        await portfolioCubit.createPortfolio(_textEditingController.text);
-                        if (!mounted) return;
-                        Navigator.pop(context);
-                      }
-                    }
-                  },
-                  icon: const Icon(Icons.arrow_forward_ios),
-                ),
-              ),
-            )
-          )
-        )
-      ],
+      )
     );
   }
 }
