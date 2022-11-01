@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PortfolioLocalData implements PortfolioLocalAction {
   final String _portfolioStorageKeys = AppConstants.portfolioStorageKeys;
+  final String _currentPortfolioStorage = AppConstants.currentPortfolioStorage;
 
   @override
   Future<bool> portfolioStorageIsEmpty() async {
@@ -22,7 +23,7 @@ class PortfolioLocalData implements PortfolioLocalAction {
   }
 
   @override
-  Future<Portfolio> getPortfolio(String portfolioName) async {
+  Future<Portfolio> getPortfolioByName(String portfolioName) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     return Portfolio.fromJson(json.decode(sp.getString(portfolioName) ?? ''));
   }
@@ -39,11 +40,10 @@ class PortfolioLocalData implements PortfolioLocalAction {
   }
 
   @override
-  Future<void> deletePortfolio(String portfolioName) async {
+  Future<void> deletePortfolioByName(String portfolioName) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     final List<String> portfolioListKeys = sp.getStringList(_portfolioStorageKeys) ?? [];
     portfolioListKeys.remove(portfolioName);
-
     await sp.remove(portfolioName);
     await sp.setStringList(_portfolioStorageKeys, portfolioListKeys);
   }
@@ -104,9 +104,14 @@ class PortfolioLocalData implements PortfolioLocalAction {
   }
 
   @override
-  Future<List<String>> getListPortfolioNames() async {
+  Future<List<Portfolio>> getListPortfolio() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    return sp.getStringList(_portfolioStorageKeys) ?? [];
+    final List<Portfolio> listPortfolio =  [];
+    final List<String> listPortfolioNames = sp.getStringList(_portfolioStorageKeys) ?? [];
+    for(int i = 0; i < listPortfolioNames.length; i++) {
+      listPortfolio.add(Portfolio.fromJson(json.decode(sp.getString(listPortfolioNames[i]) ?? '')));
+    }
+    return listPortfolio;
   }
 
   @override
@@ -126,5 +131,17 @@ class PortfolioLocalData implements PortfolioLocalAction {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     final List<String> listPortfolioKeys = sp.getStringList(_portfolioStorageKeys) ?? [];
     return listPortfolioKeys.contains(portfolioName);
+  }
+
+  @override
+  Future<Portfolio> getCurrentPortfolio() async {
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    return Portfolio.fromJson(json.decode(sp.getString(_currentPortfolioStorage)!));
+  }
+
+  @override
+  Future<void> setToCurrentPortfolio(String portfolioName) async {
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    await sp.setString(_currentPortfolioStorage, portfolioName);
   }
 }

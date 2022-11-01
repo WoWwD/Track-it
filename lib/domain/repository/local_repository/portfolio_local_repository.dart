@@ -19,14 +19,14 @@ class PortfolioLocalRepository implements PortfolioLocalAction {
   Future<bool> portfolioStorageIsEmpty() async => await portfolioLocalData.portfolioStorageIsEmpty();
 
   @override
-  Future<Portfolio> getPortfolio(String portfolioName) async => await portfolioLocalData.getPortfolio(portfolioName);
+  Future<Portfolio> getPortfolioByName(String portfolioName) async => await portfolioLocalData.getPortfolioByName(portfolioName);
 
   @override
   Future<void> deleteAssetById(String portfolioName, String idAsset) async
     => await portfolioLocalData.deleteAssetById(portfolioName, idAsset);
 
   @override
-  Future<void> deletePortfolio(String portfolioName) async => await portfolioLocalData.deletePortfolio(portfolioName);
+  Future<void> deletePortfolioByName(String portfolioName) async => await portfolioLocalData.deletePortfolioByName(portfolioName);
 
   @override
   Future<void> deleteTransactionByIndex(String portfolioName, int indexTransaction, String idCoin) async
@@ -41,7 +41,7 @@ class PortfolioLocalRepository implements PortfolioLocalAction {
     => portfolioLocalData.setPortfolio(portfolioName, portfolioModel);
 
   @override
-  Future<List<String>> getListPortfolioNames() async => await portfolioLocalData.getListPortfolioNames();
+  Future<List<Portfolio>> getListPortfolio() async => await portfolioLocalData.getListPortfolio();
 
   @override
   Future<bool> portfolioIsEmpty(String portfolioName) async => await portfolioLocalData.portfolioIsEmpty(portfolioName);
@@ -49,4 +49,11 @@ class PortfolioLocalRepository implements PortfolioLocalAction {
   @override
   Future<bool> portfolioAlreadyExists(String portfolioName) async
     => await portfolioLocalData.portfolioAlreadyExists(portfolioName);
+
+  @override
+  Future<Portfolio> getCurrentPortfolio() async => await portfolioLocalData.getCurrentPortfolio();
+
+  @override
+  Future<void> setToCurrentPortfolio(String portfolioName) async
+    => await portfolioLocalData.setToCurrentPortfolio(portfolioName);
 }
