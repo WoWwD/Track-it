@@ -35,7 +35,7 @@ Future<void> init() async {
   //region Provider
 
   getIt.registerFactory<TransactionModel>(() => TransactionModel(portfolioLocalRepository: getIt.call()));
-  getIt.registerLazySingleton(() => SettingsModel(portfolioLocalRepository: getIt.call()));
+  getIt.registerLazySingleton(() => SettingsModel());
 
   //#endregion
 

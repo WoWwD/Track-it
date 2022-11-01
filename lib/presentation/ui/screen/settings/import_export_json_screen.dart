@@ -1,46 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:track_it/presentation/provider/settings_model.dart';
-import 'package:track_it/service/constant/app_constants.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:track_it/presentation/cubit/portfolio_cubit/portfolio_cubit.dart';
 import 'package:track_it/service/constant/app_styles.dart';
 
 class ImportExportJsonScreen extends StatelessWidget {
-  final String portfolioName = AppConstants.mainPortfolioStorage;
-
   const ImportExportJsonScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final PortfolioCubit portfolioCubit = BlocProvider.of<PortfolioCubit>(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Импорт / экспорт портфеля')),
-      body: Consumer<SettingsModel>(
-        builder: (context, model, child) {
-          return Center(
-            child: Container(
-              padding: AppStyles.mainPadding,
-              constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
-              child: Column(
-                children: [
-                  _card(
-                    context,
-                    'Импортировать JSON из буфера обмена',
-                    () async => await showDialog(context: context,builder: (context) => _dialog(context, model))
-                  ),
+      body: Center(
+        child: Container(
+            padding: AppStyles.mainPadding,
+            constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
+            child: Column(
+              children: [
+                _card(
+                  context,
+                  'Импортировать JSON из буфера обмена',
+                  () async => await showDialog(context: context,builder: (context) => _dialog(context, portfolioCubit))
+                ),
 
-                  const SizedBox(height: 16),
-                  _card(
-                    context,
-                    'Экспортировать JSON в буфер обмена',
-                    () => _toJson(context, model),
-                    false
-                  ),
-                ],
-              )
-            ),
-          );
-        },
-      ),
+                const SizedBox(height: 16),
+                _card(
+                  context,
+                  'Экспортировать JSON в буфер обмена',
+                  () => _toJson(context, portfolioCubit),
+                  false
+                ),
+              ],
+            )
+        ),
+      )
     );
   }
 
@@ -68,10 +63,10 @@ class ImportExportJsonScreen extends StatelessWidget {
     );
   }
 
-  Widget _dialog(BuildContext context, SettingsModel model) {
+  Widget _dialog(BuildContext context, PortfolioCubit portfolioCubit) {
     return AlertDialog(
-      title: const Text('Добавить новый портфель?'),
-      content: const Text('Текущий портфель будет удалён'),
+      title: const Text('Добавить портфель?'),
+      content: const Text('Текущий портфель будет заменён'),
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -79,7 +74,7 @@ class ImportExportJsonScreen extends StatelessWidget {
             _dialogButton(
               () {
                 Navigator.pop(context);
-                _fromJson(context, model);
+                _fromJson(context, portfolioCubit);
               },
               'Да'
             ),
@@ -91,17 +86,29 @@ class ImportExportJsonScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _toJson(BuildContext context, SettingsModel model) async {
+  Future<void> _toJson(BuildContext context, PortfolioCubit portfolioCubit, [bool mounted = true]) async {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('JSON скопирован в буфер обмена')));
-    await Clipboard.setData(ClipboardData(text: await model.portfolioToJson(portfolioName)));
+    final String? portfolioName = await portfolioCubit.getCurrentPortfolioName();
+    if(portfolioName != null) {
+      await Clipboard.setData(ClipboardData(text: await portfolioCubit.portfolioToJson(portfolioName)));
+    }
+    else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Необходимо создать портфель')));
+    }
   }
 
-  Future<void> _fromJson(BuildContext context, SettingsModel model, [bool mounted = true]) async {
+  Future<void> _fromJson(BuildContext context, PortfolioCubit portfolioCubit, [bool mounted = true]) async {
     try {
       final String? json = await Clipboard.getData(Clipboard.kTextPlain).then((value) => value?.text);
-      await model.portfolioFromJson(json ?? '', portfolioName);
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Портфель добавлен')));
+      final String? portfolioName = await portfolioCubit.getCurrentPortfolioName();
+      if(portfolioName != null) {
+        await portfolioCubit.portfolioFromJson(json ?? '', portfolioName);
+      }
+      else {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Заменяемый портфель нужно сделать текущим')));
+      }
     }
     on FormatException {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Неверный формат')));
