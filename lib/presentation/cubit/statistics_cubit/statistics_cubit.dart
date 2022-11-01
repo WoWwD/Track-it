@@ -18,8 +18,8 @@ class StatisticsCubit extends Cubit<StatisticsState> {
 
   Future<void> emitToStatisticsSingleCoinState(String portfolioName, String idCoin) async {
     emit(StatisticsLoading());
-    final Portfolio portfolio = await portfolioLocalRepository.getPortfolioByName(portfolioName);
-    final Asset assetModel = portfolio.listAssets.firstWhere((element) => element.idCoin == idCoin);
+    final Portfolio? portfolio = await portfolioLocalRepository.getPortfolioByName(portfolioName);
+    final Asset assetModel = portfolio!.listAssets.firstWhere((element) => element.idCoin == idCoin);
     emit(StatisticsSingleCoin(assetModel.listTransactions));
   }
 }
