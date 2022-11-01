@@ -19,22 +19,33 @@ Future<void> init() async {
   final CoinRemoteRepository coinRemoteRepository = CoinRemoteRepository(coinRemoteData);
   final PortfolioLocalRepository portfolioLocalRepository = PortfolioLocalRepository(portfolioLocalData);
 
-  //region Data
+  //#region Data
+
   getIt.registerLazySingleton(() => coinRemoteData);
   getIt.registerLazySingleton(() => portfolioLocalData);
+
+  //#endregion
 
   //region Repository
   getIt.registerLazySingleton(() => coinRemoteRepository);
   getIt.registerLazySingleton(() => portfolioLocalRepository);
 
+  //#endregion
+
   //region Provider
+
   getIt.registerFactory<TransactionModel>(() => TransactionModel(portfolioLocalRepository: getIt.call()));
   getIt.registerLazySingleton(() => SettingsModel(portfolioLocalRepository: getIt.call()));
 
+  //#endregion
+
   //region Cubit
+
   getIt.registerFactory<PortfolioCubit>(
     () => PortfolioCubit(portfolioLocalRepository: getIt.call(), coinRemoteRepository: getIt.call())
   );
   getIt.registerFactory<StatisticsCubit>(() => StatisticsCubit(portfolioLocalRepository: getIt.call()));
   getIt.registerFactory<SearchCubit>(() => SearchCubit(coinRemoteRepository: getIt.call()));
+
+  //#endregion
 }

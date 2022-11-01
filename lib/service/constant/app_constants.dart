@@ -5,4 +5,5 @@ class AppConstants {
   static const transferInTypeTransaction = 'Transfer In';
   static const transferOutTypeTransaction = 'Transfer Out';
   static const themeModeStorage = 'theme_mode_storage';
+  static const currentPortfolioStorage = 'current_portfolio_storage';
 }
