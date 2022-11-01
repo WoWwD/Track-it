@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:track_it/data/model/coin/market_coin_model.dart';
@@ -18,29 +20,82 @@ class PortfolioCubit extends Cubit<PortfolioState> {
     required this.coinRemoteRepository
   }) : super(PortfolioInitial());
 
-  Future<void> getPortfolio(String namePortfolio) async {
+
+  //#region PortfolioList
+
+  Future<void> createPortfolio(String portfolioName) async {
     emit(PortfolioLoading());
-    if (await portfolioLocalRepository.portfolioStorageIsEmpty(namePortfolio)) {
-      await portfolioLocalRepository.createPortfolio(namePortfolio);
+    await portfolioLocalRepository.createPortfolio(portfolioName);
+    final String? currentPortfolioName = await getCurrentPortfolioName();
+    if(currentPortfolioName == null) {
+      await setToCurrentPortfolio(portfolioName);
     }
-    final Portfolio portfolio = await portfolioLocalRepository.getPortfolio(namePortfolio);
-    if(portfolio.listAssets.isEmpty) {
-      emit(PortfolioFirstLaunch());
+    emit(PortfolioList(await portfolioLocalRepository.getListPortfolio(), currentPortfolioName ?? portfolioName));
+  }
+
+  Future<void> deletePortfolioByName(String portfolioName) async {
+    emit(PortfolioLoading());
+    await portfolioLocalRepository.deletePortfolioByName(portfolioName);
+    final List<Portfolio> listPortfolio = await portfolioLocalRepository.getListPortfolio();
+    if(await portfolioLocalRepository.portfolioStorageIsEmpty()) {
+      await portfolioLocalRepository.clearCurrentPortfolioStorage();
+      emit(PortfolioList(listPortfolio, ''));
     }
     else {
-      final List<String> ids = [];
-      for(int i = 0; i < portfolio.listAssets.length; i++) {
-        ids.add(portfolio.listAssets[i].idCoin);
-      }
-      final List<MarketCoin> listCoins = await coinRemoteRepository.getListCoinsByIds(ids);
-      emit(PortfolioInit(portfolio, listCoins));
+      await setToCurrentPortfolio(listPortfolio.first.name);
+      emit(PortfolioList(listPortfolio, listPortfolio.first.name));
     }
   }
 
+  Future<String?> getCurrentPortfolioName() async => await portfolioLocalRepository.getCurrentPortfolioName();
+
+  Future<void> setToCurrentPortfolio(String portfolioName) async {
+    emit(PortfolioLoading());
+    await portfolioLocalRepository.setToCurrentPortfolio(portfolioName);
+    emit(PortfolioList(await portfolioLocalRepository.getListPortfolio(), portfolioName));
+  }
+
+  Future<bool> portfolioAlreadyExists(String portfolioName) async
+    => await portfolioLocalRepository.portfolioAlreadyExists(portfolioName);
+
+  Future<void> getListPortfolio() async {
+    emit(PortfolioLoading());
+    final List<Portfolio> listPortfolio = await portfolioLocalRepository.getListPortfolio();
+    final String? currentPortfolioName = await getCurrentPortfolioName();
+    emit(PortfolioList(listPortfolio, currentPortfolioName ?? ''));
+  }
+
+  //#endregion
+
+  //#region PortfolioCoins
+
+  Future<void> getCoins() async {
+    emit(PortfolioLoading());
+    final Portfolio? currentPortfolioModel = await portfolioLocalRepository.getCurrentPortfolio();
+    if(currentPortfolioModel == null) {
+      emit(PortfolioNotCreated());
+    }
+    else {
+      final List<String> ids = [];
+      final List<MarketCoin> listAssets = [];
+      if(currentPortfolioModel.listAssets.isNotEmpty) {
+        for(int i = 0; i < currentPortfolioModel.listAssets.length; i++) {
+          ids.add(currentPortfolioModel.listAssets[i].idCoin);
+        }
+        listAssets.addAll(await coinRemoteRepository.getListCoinsByIds(ids));
+      }
+      emit(PortfolioCoins(currentPortfolioModel.name, listAssets));
+    }
+  }
+
+  //#endregion
+
+  //#region Other
+
   Future<void> emitToPortfolioTransactionsState(String portfolioName, String idCoin) async {
     emit(PortfolioLoading());
-    final Portfolio portfolio = await portfolioLocalRepository.getPortfolio(portfolioName);
-    final Asset assetModel = portfolio.listAssets.firstWhere((element) => element.idCoin == idCoin);
+    final Portfolio? portfolio = await portfolioLocalRepository.getPortfolioByName(portfolioName);
+    final Asset assetModel = portfolio!.listAssets.firstWhere((element) => element.idCoin == idCoin);
     emit(PortfolioTransactions(assetModel.listTransactions));
   }
 
@@ -70,5 +125,17 @@ class PortfolioCubit extends Cubit<PortfolioState> {
     emit(PortfolioLoading());
     await portfolioLocalRepository.editTransactionByIndex(namePortfolio, indexTransaction, newTransactionModel);
     emitToPortfolioTransactionsState(namePortfolio, newTransactionModel.idCoin);
+  }
+
+  //#endregion
+
+  Future<String> portfolioToJson(String portfolioName) async {
+    final Portfolio? portfolioModel = await portfolioLocalRepository.getPortfolioByName(portfolioName);
+    return jsonEncode(portfolioModel!.toJson());
+  }
+
+  Future<void> portfolioFromJson(String jsonPortfolio, String portfolioName) async {
+    final Portfolio portfolioModel = Portfolio.fromJson(json.decode(jsonPortfolio));
+    await portfolioLocalRepository.setPortfolio(portfolioName, portfolioModel);
   }
 }

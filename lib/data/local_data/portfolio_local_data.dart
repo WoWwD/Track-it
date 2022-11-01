@@ -23,9 +23,15 @@ class PortfolioLocalData implements PortfolioLocalAction {
   }
 
   @override
-  Future<Portfolio> getPortfolioByName(String portfolioName) async {
+  Future<Portfolio?> getPortfolioByName(String portfolioName) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    return Portfolio.fromJson(json.decode(sp.getString(portfolioName) ?? ''));
+    final String? portfolioJson = sp.getString(portfolioName);
+    if(portfolioJson != null) {
+      return Portfolio.fromJson(json.decode(portfolioJson));
+    }
+    else {
+      return null;
+    }
   }
 
   @override
@@ -34,18 +40,23 @@ class PortfolioLocalData implements PortfolioLocalAction {
     final Portfolio newPortfolioModel = Portfolio(name: portfolioName, listAssets: []);
     final List<String> portfolioListKeys = sp.getStringList(_portfolioStorageKeys) ?? [];
     portfolioListKeys.add(portfolioName);
-
     await sp.setString(portfolioName, json.encode(newPortfolioModel.toJson()));
     await sp.setStringList(_portfolioStorageKeys, portfolioListKeys);
   }
 
   @override
-  Future<void> deletePortfolioByName(String portfolioName) async {
+  Future<bool> deletePortfolioByName(String portfolioName) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    final List<String> portfolioListKeys = sp.getStringList(_portfolioStorageKeys) ?? [];
-    portfolioListKeys.remove(portfolioName);
-    await sp.remove(portfolioName);
-    await sp.setStringList(_portfolioStorageKeys, portfolioListKeys);
+    final List<String>? portfolioListKeys = sp.getStringList(_portfolioStorageKeys);
+    if(portfolioListKeys != null) {
+      portfolioListKeys.remove(portfolioName);
+      await sp.remove(portfolioName);
+      await sp.setStringList(_portfolioStorageKeys, portfolioListKeys);
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   @override
@@ -134,14 +145,38 @@ class PortfolioLocalData implements PortfolioLocalAction {
   }
 
   @override
-  Future<Portfolio> getCurrentPortfolio() async {
+  Future<Portfolio?> getCurrentPortfolio() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    return Portfolio.fromJson(json.decode(sp.getString(_currentPortfolioStorage)!));
+    final String? nameCurrentPortfolio = sp.getString(_currentPortfolioStorage);
+    if(nameCurrentPortfolio != null) {
+      return Portfolio.fromJson(json.decode(sp.getString(nameCurrentPortfolio)!));
+    }
+    else {
+      return null;
+    }
   }
 
   @override
   Future<void> setToCurrentPortfolio(String portfolioName) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     await sp.setString(_currentPortfolioStorage, portfolioName);
+  }
+
+  @override
+  Future<void> clearCurrentPortfolioStorage() async {
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    await sp.remove(_currentPortfolioStorage);
+  }
+
+  @override
+  Future<String?> getCurrentPortfolioName() async {
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    final String? nameCurrentPortfolio = sp.getString(_currentPortfolioStorage);
+    if(nameCurrentPortfolio != null) {
+      return nameCurrentPortfolio;
+    }
+    else {
+      return null;
+    }
   }
 }
