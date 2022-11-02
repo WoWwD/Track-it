@@ -120,8 +120,7 @@ class _AddTransactionTabBarState extends State<AddTransactionTabBar> with Ticker
                                         widget.portfolioName,
                                         widget.idCoin,
                                         _getTypeTransaction()!
-                                      );
-                                      widget.refreshPortfolioScreen();
+                                      ).then((value) => widget.refreshPortfolioScreen());
                                       Navigator.pop(context);
                                     }
                                   }

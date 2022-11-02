@@ -1,6 +1,5 @@
 import 'package:track_it/data/local_data/portfolio_local_data.dart';
 import 'package:track_it/data/model/portfolio_model.dart';
-import 'package:track_it/data/model/transaction_model.dart';
 import 'package:track_it/service/interface/portfolio_local_action_interface.dart';
 
 class PortfolioLocalRepository implements PortfolioLocalAction {
@@ -9,32 +8,18 @@ class PortfolioLocalRepository implements PortfolioLocalAction {
   PortfolioLocalRepository(this.portfolioLocalData);
 
   @override
-  Future<void> addTransaction(String portfolioName, Transaction transactionModel) async
-    => await portfolioLocalData.addTransaction(portfolioName, transactionModel);
-
-  @override
   Future<void> createPortfolio(String portfolioName) async => await portfolioLocalData.createPortfolio(portfolioName);
 
   @override
   Future<bool> portfolioStorageIsEmpty() async => await portfolioLocalData.portfolioStorageIsEmpty();
 
   @override
-  Future<Portfolio?> getPortfolioByName(String portfolioName) async => await portfolioLocalData.getPortfolioByName(portfolioName);
+  Future<Portfolio?> getPortfolioByName(String portfolioName) async
+    => await portfolioLocalData.getPortfolioByName(portfolioName);
 
   @override
-  Future<void> deleteAssetById(String portfolioName, String idAsset) async
-    => await portfolioLocalData.deleteAssetById(portfolioName, idAsset);
-
-  @override
-  Future<bool> deletePortfolioByName(String portfolioName) async => await portfolioLocalData.deletePortfolioByName(portfolioName);
-
-  @override
-  Future<void> deleteTransactionByIndex(String portfolioName, int indexTransaction, String idCoin) async
-    => await portfolioLocalData.deleteTransactionByIndex(portfolioName, indexTransaction, idCoin);
-
-  @override
-  Future<void> editTransactionByIndex(String portfolioName, int indexTransaction, Transaction newTransactionModel) async
-    => portfolioLocalData.editTransactionByIndex(portfolioName, indexTransaction, newTransactionModel);
+  Future<bool> deletePortfolioByName(String portfolioName) async
+    => await portfolioLocalData.deletePortfolioByName(portfolioName);
 
   @override
   Future<void> setPortfolio(String portfolioName, Portfolio portfolioModel) async
@@ -44,11 +29,8 @@ class PortfolioLocalRepository implements PortfolioLocalAction {
   Future<List<Portfolio>> getListPortfolio() async => await portfolioLocalData.getListPortfolio();
 
   @override
-  Future<bool> portfolioIsEmpty(String portfolioName) async => await portfolioLocalData.portfolioIsEmpty(portfolioName);
-
-  @override
-  Future<bool> portfolioAlreadyExists(String portfolioName) async
-    => await portfolioLocalData.portfolioAlreadyExists(portfolioName);
+  Future<bool> portfolioNameAlreadyExists(String portfolioName) async
+    => await portfolioLocalData.portfolioNameAlreadyExists(portfolioName);
 
   @override
   Future<Portfolio?> getCurrentPortfolio() async => await portfolioLocalData.getCurrentPortfolio();

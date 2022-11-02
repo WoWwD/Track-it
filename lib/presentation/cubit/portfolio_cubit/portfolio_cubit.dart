@@ -45,7 +45,7 @@ class PortfolioCubit extends Cubit<PortfolioState> {
   }
 
   Future<bool> portfolioAlreadyExists(String portfolioName) async
-    => await portfolioLocalRepository.portfolioAlreadyExists(portfolioName);
+    => await portfolioLocalRepository.portfolioNameAlreadyExists(portfolioName);
 
   Future<void> getListPortfolio() async {
     emit(PortfolioLoading());
@@ -79,8 +79,6 @@ class PortfolioCubit extends Cubit<PortfolioState> {
 
   //#endregion
 
-  //#region Other
-
   Future<void> createPortfolio(String portfolioName) async {
     await portfolioLocalRepository.createPortfolio(portfolioName);
     final String? currentPortfolioName = await getCurrentPortfolioName();
@@ -96,35 +94,29 @@ class PortfolioCubit extends Cubit<PortfolioState> {
     emit(PortfolioTransactions(assetModel.listTransactions));
   }
 
-  List<Transaction> getListTransactionsById(Portfolio portfolio, String idCoin) {
-    final List<Transaction> listTransactions = [];
-    for(int i = 0; i < portfolio.listAssets.length; i++) {
-      if (portfolio.listAssets[i].idCoin == idCoin) {
-        listTransactions.addAll(portfolio.listAssets[i].listTransactions);
-        break;
-      }
+  Future<void> deleteAssetById(String portfolioName, String idCoin) async {
+    final Portfolio? portfolioModel = await portfolioLocalRepository.getPortfolioByName(portfolioName);
+    if(portfolioModel != null) {
+      final Asset assetModel = portfolioModel.listAssets.firstWhere((element) => element.idCoin == idCoin);
+      portfolioModel.listAssets.remove(assetModel);
+      await portfolioLocalRepository.setPortfolio(portfolioName, portfolioModel);
     }
-    return listTransactions;
   }
 
   Future<void> deleteTransactionByIndex(int listTransactionsLength, String portfolioName, int indexTransaction, String idCoin) async {
-    emit(PortfolioLoading());
     if(listTransactionsLength == 1) {
-      await portfolioLocalRepository.deleteAssetById(portfolioName, idCoin);
+      await deleteAssetById(portfolioName, idCoin);
     }
     else{
-      await portfolioLocalRepository.deleteTransactionByIndex(portfolioName, indexTransaction, idCoin);
+      final Portfolio? portfolioModel = await portfolioLocalRepository.getPortfolioByName(portfolioName);
+      if(portfolioModel != null) {
+        final int indexAsset = portfolioModel.listAssets.indexWhere((element) => element.idCoin == idCoin);
+        portfolioModel.listAssets[indexAsset].listTransactions.removeAt(indexTransaction);
+        await portfolioLocalRepository.setPortfolio(portfolioName, portfolioModel);
+      }
       getTransactions(portfolioName, idCoin);
     }
   }
-
-  Future<void> editTransaction(String namePortfolio, int indexTransaction, Transaction newTransactionModel) async {
-    emit(PortfolioLoading());
-    await portfolioLocalRepository.editTransactionByIndex(namePortfolio, indexTransaction, newTransactionModel);
-    getTransactions(namePortfolio, newTransactionModel.idCoin);
-  }
-
-  //#endregion
 
   Future<String> portfolioToJson(String portfolioName) async {
     final Portfolio? portfolioModel = await portfolioLocalRepository.getPortfolioByName(portfolioName);
