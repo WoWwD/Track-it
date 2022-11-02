@@ -59,7 +59,12 @@ class ListPortfolioWidget extends StatelessWidget {
           child: ListTile(
             onTap: () async => await showPrimaryModalBottomSheet(
               context: context,
-              content: CreatePortfolio(refreshState: () => context.read<PortfolioCubit>().getListPortfolio()),
+              content: CreatePortfolio(
+                refreshState: () {
+                  refreshPortfolioScreen();
+                  context.read<PortfolioCubit>().getListPortfolio();
+                }
+              ),
               maxHeight: 150,
               title: 'Создание портфеля'
             ),

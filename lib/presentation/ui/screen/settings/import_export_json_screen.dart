@@ -87,10 +87,11 @@ class ImportExportJsonScreen extends StatelessWidget {
   }
 
   Future<void> _toJson(BuildContext context, PortfolioCubit portfolioCubit, [bool mounted = true]) async {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('JSON скопирован в буфер обмена')));
     final String? portfolioName = await portfolioCubit.getCurrentPortfolioName();
     if(portfolioName != null) {
       await Clipboard.setData(ClipboardData(text: await portfolioCubit.portfolioToJson(portfolioName)));
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('JSON скопирован в буфер обмена')));
     }
     else {
       if (!mounted) return;
