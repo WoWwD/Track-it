@@ -19,9 +19,19 @@ Future<void> showPrimaryModalBottomSheet({
       return Column(
         children: [
           Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Container(
+              width: 30,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp)
+              ),
+            )
+          ),
+          Padding(
             padding: const EdgeInsets.only(left: 18, right: 18, top: 18, bottom: 9),
             child: Row(
-              //mainAxisAlignment: title == null? MainAxisAlignment.end: MainAxisAlignment.end,
               children: [
                 Text(title ?? ''),
                 const Spacer(),
