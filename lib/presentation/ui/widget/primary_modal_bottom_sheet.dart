@@ -7,7 +7,6 @@ Future<void> showPrimaryModalBottomSheet({
     required Widget content,
     String? title,
     double? maxHeight,
-    Function(void)? then
   }) async {
    showModalBottomSheet<void>(
     isScrollControlled: true,
@@ -38,5 +37,5 @@ Future<void> showPrimaryModalBottomSheet({
         ],
       );
     }
-  ).then(then ?? (value) {});
+  );
 }
