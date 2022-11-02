@@ -11,7 +11,9 @@ import '../primary_modal_bottom_sheet.dart';
 import '../skeletons/list_view_skeleton_widget.dart';
 
 class ListPortfolioWidget extends StatelessWidget {
-  const ListPortfolioWidget({Key? key}) : super(key: key);
+  final Function refreshPortfolioScreen;
+
+  const ListPortfolioWidget({Key? key, required this.refreshPortfolioScreen}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,32 +42,33 @@ class ListPortfolioWidget extends StatelessWidget {
                 portfolioName: state.listPortfolio[index].name,
                 amountAssets: state.listPortfolio[index].listAssets.length,
                 isCurrent: state.currentPortfolioName == state.listPortfolio[index].name,
-                deletePortfolio: () => context.read<PortfolioCubit>()
-                  .deletePortfolioByName(state.listPortfolio[index].name),
-                onChanged: () => context.read<PortfolioCubit>().setToCurrentPortfolio(state.listPortfolio[index].name)
+                deletePortfolio: () async {
+                  await context.read<PortfolioCubit>().deletePortfolioByName(state.listPortfolio[index].name);
+                  refreshPortfolioScreen();
+                },
+                onChanged: () {
+                  context.read<PortfolioCubit>().setToCurrentPortfolio(state.listPortfolio[index].name);
+                  refreshPortfolioScreen();
+                }
               );
             }
           ),
         ),
-        _createPortfolio(context)
+        Padding(
+          padding: AppStyles.mainPadding,
+          child: ListTile(
+            onTap: () async => await showPrimaryModalBottomSheet(
+              context: context,
+              content: CreatePortfolio(refreshState: () => context.read<PortfolioCubit>().getListPortfolio()),
+              maxHeight: 150,
+              title: 'Создание портфеля'
+            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp)),
+            leading: const Icon(Icons.add),
+            title: const Text('Добавить портфель'),
+          ),
+        )
       ],
-    );
-  }
-
-  Widget _createPortfolio(BuildContext context) {
-    return Padding(
-      padding: AppStyles.mainPadding,
-      child: ListTile(
-        onTap: () async => await showPrimaryModalBottomSheet(
-          context: context,
-          content: CreatePortfolio(contextCubit: context),
-          maxHeight: 150,
-          title: 'Создание портфеля'
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp)),
-        leading: const Icon(Icons.add),
-        title: const Text('Добавить портфель'),
-      ),
     );
   }
 }

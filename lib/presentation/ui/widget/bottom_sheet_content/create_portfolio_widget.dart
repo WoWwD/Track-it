@@ -7,9 +7,9 @@ import '../button/icon_button_widget.dart';
 import '../text_field/primary_text_field.dart';
 
 class CreatePortfolio extends StatefulWidget {
-  final BuildContext contextCubit;
+  final Function refreshState;
 
-  const CreatePortfolio({Key? key, required this.contextCubit}) : super(key: key);
+  const CreatePortfolio({Key? key, required this.refreshState}) : super(key: key);
 
   @override
   State<CreatePortfolio> createState() => _CreatePortfolioState();
@@ -21,8 +21,6 @@ class _CreatePortfolioState extends State<CreatePortfolio> {
 
   @override
   Widget build(BuildContext context) {
-    final portfolioCubit = BlocProvider.of<PortfolioCubit>(widget.contextCubit);
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Form(
@@ -44,8 +42,9 @@ class _CreatePortfolioState extends State<CreatePortfolio> {
           suffixIcon: IconButtonV2(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                if(!await portfolioCubit.portfolioAlreadyExists(_textEditingController.text)) {
-                  await portfolioCubit.createPortfolio(_textEditingController.text);
+                if(!await context.read<PortfolioCubit>().portfolioAlreadyExists(_textEditingController.text)) {
+                  await context.read<PortfolioCubit>().createPortfolio(_textEditingController.text);
+                  widget.refreshState();
                   if (!mounted) return;
                   Navigator.pop(context);
                 }

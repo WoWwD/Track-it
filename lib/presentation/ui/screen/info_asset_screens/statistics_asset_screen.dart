@@ -18,7 +18,7 @@ class StatisticsAssetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => di.getIt<StatisticsCubit>()..emitToStatisticsSingleCoinState(portfolioName, idCoin),
+      create: (_) => di.getIt<StatisticsCubit>()..getStatisticsSingleCoin(portfolioName, idCoin),
       child: BlocBuilder<StatisticsCubit, StatisticsState>(
         builder: (context, state) {
           if(state is StatisticsSingleCoin) {

@@ -13,19 +13,21 @@ import '../../widget/card/transaction_card_widget.dart';
 class TransactionsAssetScreen extends StatelessWidget {
   final String portfolioName;
   final MarketCoin marketCoinModel;
+  final Function refreshPortfolioScreen;
 
   const TransactionsAssetScreen({
     Key? key,
     required this.portfolioName,
-    required this.marketCoinModel
+    required this.marketCoinModel,
+    required this.refreshPortfolioScreen
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => di.getIt<PortfolioCubit>()..emitToPortfolioTransactionsState(portfolioName, marketCoinModel.id),
+      create: (_) => di.getIt<PortfolioCubit>()..getTransactions(portfolioName, marketCoinModel.id),
       child: BlocBuilder<PortfolioCubit, PortfolioState>(
-        builder: (context, state) {
+        builder: (_, state) {
           if(state is PortfolioTransactions) {
             return Center(
               child: Container(
@@ -34,15 +36,24 @@ class TransactionsAssetScreen extends StatelessWidget {
                   separatorBuilder: (context, index) => const SizedBox(height: 16),
                   padding: AppStyles.mainPadding,
                   itemCount: state.listTransactions.length,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (ctx, index) {
                     return TransactionCard(
                       transactionModel: state.listTransactions[index],
                       marketCoinModel: marketCoinModel,
-                      onPressedEdit: _editTransaction(context, state, index),
-                      onPressedDelete: (context) =>
-                        context.read<PortfolioCubit>()
-                          .deleteTransactionByIndex(state.listTransactions.length, portfolioName, index, marketCoinModel.id)
-                          .then((value) => state.listTransactions.length == 1? Navigator.pop(context): null),
+                      onPressedEdit: _editTransaction(ctx, state, index),
+                      onPressedDelete: (_) {
+                        ctx.read<PortfolioCubit>().deleteTransactionByIndex(
+                          state.listTransactions.length,
+                          portfolioName,
+                          index,
+                          marketCoinModel.id
+                        ).then((value) {
+                          if(state.listTransactions.length == 1) {
+                            refreshPortfolioScreen();
+                            Navigator.pop(ctx);
+                          }
+                        });
+                      }
                     );
                   },
                 ),
@@ -64,6 +75,7 @@ class TransactionsAssetScreen extends StatelessWidget {
             create: (_) => di.getIt()..initForEditing(state.listTransactions[index]),
             builder: (context, child) {
               final model = Provider.of<TransactionModel>(context);
+
               return AddTransactionScreen(
                 portfolioName: portfolioName,
                 model: model,
@@ -76,6 +88,6 @@ class TransactionsAssetScreen extends StatelessWidget {
           );
         }
       )
-    ).then((value) => contextCubit.read<PortfolioCubit>().emitToPortfolioTransactionsState(portfolioName, marketCoinModel.id));
+    ).then((value) => contextCubit.read<PortfolioCubit>().getTransactions(portfolioName, marketCoinModel.id));
   }
 }

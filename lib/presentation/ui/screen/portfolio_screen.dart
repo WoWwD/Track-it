@@ -38,21 +38,18 @@ class PortfolioScreen extends StatelessWidget {
     return  Padding(
       padding: const EdgeInsets.only(right: 24),
       child: IconButtonV2(
-        onPressed: () => _refresh(context),
+        onPressed: () => _refreshPortfolioScreen(context),
         icon: const Icon(Icons.refresh)
       ),
     );
   }
-
-  void _refresh(BuildContext context) => context.read<PortfolioCubit>().getCoins();
 
   Widget _titleAppbar(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp),
       onTap: () => showPrimaryModalBottomSheet(
         context: context,
-        content: const ListPortfolioWidget(),
-        then: (value) => _refresh(context)
+        content: ListPortfolioWidget(refreshPortfolioScreen: () => _refreshPortfolioScreen(context)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -75,10 +72,12 @@ class PortfolioScreen extends StatelessWidget {
         context: context,
         title: state is PortfolioNotCreated? 'Создание портфеля': 'Добавление актива',
         content: state is PortfolioNotCreated
-          ? CreatePortfolio(contextCubit: context)
-          : SearchCoinWidget(portfolioName: state is PortfolioCoins? state.portfolioName: ''),
+          ? CreatePortfolio(refreshState: () => _refreshPortfolioScreen(context))
+          : SearchCoinWidget(
+              portfolioName: state is PortfolioCoins? state.portfolioName: '',
+              refreshPortfolioScreen: () => _refreshPortfolioScreen(context),
+            ),
         maxHeight: state is PortfolioNotCreated? 150: null,
-        then: (value) => _refresh(context)
       )
     );
   }
@@ -115,16 +114,19 @@ class PortfolioScreen extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) {
                     return InfoAssetScreen(
+                      refreshPortfolioScreen: () => _refreshPortfolioScreen(context),
                       idCoin: state.listCoins[index].id,
                       marketCoinModel: state.listCoins[index],
                       portfolioName: state.portfolioName,
                     );
                   }
                 )
-              ).then((value) => _refresh(context));
+              );
             }
           );
         }
     );
   }
+
+  void _refreshPortfolioScreen(BuildContext context) => context.read<PortfolioCubit>().getCoins();
 }

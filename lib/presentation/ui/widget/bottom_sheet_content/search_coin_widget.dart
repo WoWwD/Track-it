@@ -11,8 +11,13 @@ import '../text_field/primary_text_field.dart';
 
 class SearchCoinWidget extends StatelessWidget {
   final String portfolioName;
+  final Function refreshPortfolioScreen;
 
-  const SearchCoinWidget({Key? key, required this.portfolioName}) : super(key: key);
+  const SearchCoinWidget({
+    Key? key,
+    required this.portfolioName,
+    required this.refreshPortfolioScreen
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +75,7 @@ class SearchCoinWidget extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) {
                   return AddTransactionTabBar(
+                    refreshPortfolioScreen: refreshPortfolioScreen,
                     name: state.listCoins[index].name,
                     symbol: state.listCoins[index].symbol,
                     imageUrl: state.listCoins[index].large,

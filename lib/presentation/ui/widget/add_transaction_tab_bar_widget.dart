@@ -13,6 +13,7 @@ class AddTransactionTabBar extends StatefulWidget {
   final String imageUrl;
   final String idCoin;
   final String portfolioName;
+  final Function refreshPortfolioScreen;
 
   const AddTransactionTabBar({
     Key? key,
@@ -20,7 +21,8 @@ class AddTransactionTabBar extends StatefulWidget {
     required this.symbol,
     required this.imageUrl,
     required this.idCoin,
-    required this.portfolioName
+    required this.portfolioName,
+    required this.refreshPortfolioScreen
   }) : super(key: key);
 
   @override
@@ -119,6 +121,7 @@ class _AddTransactionTabBarState extends State<AddTransactionTabBar> with Ticker
                                         widget.idCoin,
                                         _getTypeTransaction()!
                                       );
+                                      widget.refreshPortfolioScreen();
                                       Navigator.pop(context);
                                     }
                                   }

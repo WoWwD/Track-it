@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:track_it/data/model/coin/market_coin_model.dart';
@@ -22,16 +21,6 @@ class PortfolioCubit extends Cubit<PortfolioState> {
 
 
   //#region PortfolioList
-
-  Future<void> createPortfolio(String portfolioName) async {
-    emit(PortfolioLoading());
-    await portfolioLocalRepository.createPortfolio(portfolioName);
-    final String? currentPortfolioName = await getCurrentPortfolioName();
-    if(currentPortfolioName == null) {
-      await setToCurrentPortfolio(portfolioName);
-    }
-    emit(PortfolioList(await portfolioLocalRepository.getListPortfolio(), currentPortfolioName ?? portfolioName));
-  }
 
   Future<void> deletePortfolioByName(String portfolioName) async {
     emit(PortfolioLoading());
@@ -92,7 +81,15 @@ class PortfolioCubit extends Cubit<PortfolioState> {
 
   //#region Other
 
-  Future<void> emitToPortfolioTransactionsState(String portfolioName, String idCoin) async {
+  Future<void> createPortfolio(String portfolioName) async {
+    await portfolioLocalRepository.createPortfolio(portfolioName);
+    final String? currentPortfolioName = await getCurrentPortfolioName();
+    if(currentPortfolioName == null) {
+      await setToCurrentPortfolio(portfolioName);
+    }
+  }
+
+  Future<void> getTransactions(String portfolioName, String idCoin) async {
     emit(PortfolioLoading());
     final Portfolio? portfolio = await portfolioLocalRepository.getPortfolioByName(portfolioName);
     final Asset assetModel = portfolio!.listAssets.firstWhere((element) => element.idCoin == idCoin);
@@ -117,14 +114,14 @@ class PortfolioCubit extends Cubit<PortfolioState> {
     }
     else{
       await portfolioLocalRepository.deleteTransactionByIndex(portfolioName, indexTransaction, idCoin);
-      emitToPortfolioTransactionsState(portfolioName, idCoin);
+      getTransactions(portfolioName, idCoin);
     }
   }
 
   Future<void> editTransaction(String namePortfolio, int indexTransaction, Transaction newTransactionModel) async {
     emit(PortfolioLoading());
     await portfolioLocalRepository.editTransactionByIndex(namePortfolio, indexTransaction, newTransactionModel);
-    emitToPortfolioTransactionsState(namePortfolio, newTransactionModel.idCoin);
+    getTransactions(namePortfolio, newTransactionModel.idCoin);
   }
 
   //#endregion

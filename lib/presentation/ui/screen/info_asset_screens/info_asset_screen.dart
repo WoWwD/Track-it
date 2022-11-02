@@ -7,12 +7,14 @@ class InfoAssetScreen extends StatefulWidget {
   final MarketCoin marketCoinModel;
   final String portfolioName;
   final String idCoin;
+  final Function refreshPortfolioScreen;
 
   const InfoAssetScreen({
     Key? key,
     required this.marketCoinModel,
     required this.portfolioName,
-    required this.idCoin
+    required this.idCoin,
+    required this.refreshPortfolioScreen
   }) : super(key: key);
 
   @override
@@ -64,7 +66,11 @@ class _InfoAssetScreenState extends State<InfoAssetScreen> with TickerProviderSt
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  TransactionsAssetScreen(portfolioName: widget.portfolioName, marketCoinModel: widget.marketCoinModel),
+                  TransactionsAssetScreen(
+                    portfolioName: widget.portfolioName,
+                    marketCoinModel: widget.marketCoinModel,
+                    refreshPortfolioScreen: widget.refreshPortfolioScreen,
+                  ),
                   StatisticsAssetScreen(portfolioName: widget.portfolioName, idCoin: widget.idCoin)
                 ]
               )
