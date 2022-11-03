@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:track_it/presentation/ui/screen/add_transaction_screen.dart';
+import 'package:track_it/presentation/ui/screen/transaction_screens/new_transaction_screen.dart';
 import 'package:track_it/service/transaction_type_enum.dart';
-import '../../../service/constant/app_styles.dart';
-import '../../provider/transaction_model.dart';
+import '../../../../service/constant/app_styles.dart';
+import '../../../provider/transaction_model.dart';
 import 'package:track_it/service/di.dart' as di;
-import 'button/primary_button_widget.dart';
+import '../../widget/button/primary_button_widget.dart';
 
 class AddTransactionTabBar extends StatefulWidget {
   final String name;

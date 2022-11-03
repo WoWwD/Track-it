@@ -5,9 +5,9 @@ import 'package:track_it/presentation/provider/transaction_model.dart';
 import 'package:track_it/presentation/ui/widget/button/primary_button_widget.dart';
 import 'package:track_it/service/constant/app_styles.dart';
 import 'package:track_it/service/extension/date_time_extension.dart';
-import '../../../service/transaction_type_enum.dart';
-import '../widget/text_field/text_field_transaction_note_widget.dart';
-import '../widget/text_field/text_field_transaction_widget.dart';
+import '../../../../service/transaction_type_enum.dart';
+import '../../widget/text_field/text_field_transaction_note_widget.dart';
+import '../../widget/text_field/text_field_transaction_widget.dart';
 import 'package:track_it/service/extension/string_extension.dart';
 
 class AddTransactionScreen extends StatefulWidget {
