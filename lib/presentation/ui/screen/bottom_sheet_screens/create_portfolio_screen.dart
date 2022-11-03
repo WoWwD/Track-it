@@ -3,19 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:track_it/service/extension/string_extension.dart';
 import '../../../../service/error/input_error.dart';
 import '../../../cubit/portfolio_cubit/portfolio_cubit.dart';
-import '../button/icon_button_widget.dart';
-import '../text_field/primary_text_field.dart';
+import '../../widget/button/icon_button_widget.dart';
+import '../../widget/text_field/primary_text_field.dart';
 
-class CreatePortfolio extends StatefulWidget {
+class CreatePortfolioScreen extends StatefulWidget {
   final Function refreshState;
 
-  const CreatePortfolio({Key? key, required this.refreshState}) : super(key: key);
+  const CreatePortfolioScreen({Key? key, required this.refreshState}) : super(key: key);
 
   @override
-  State<CreatePortfolio> createState() => _CreatePortfolioState();
+  State<CreatePortfolioScreen> createState() => _CreatePortfolioScreenState();
 }
 
-class _CreatePortfolioState extends State<CreatePortfolio> {
+class _CreatePortfolioScreenState extends State<CreatePortfolioScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _textEditingController = TextEditingController();
 

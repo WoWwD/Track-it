@@ -6,14 +6,15 @@ import 'package:track_it/presentation/ui/widget/add_transaction_tab_bar_widget.d
 import 'package:track_it/presentation/ui/widget/card/search_coin_card_widget.dart';
 import 'package:track_it/presentation/ui/widget/custom_list_view_widget.dart';
 import 'package:track_it/service/di.dart' as di;
-import '../skeletons/list_view_skeleton_widget.dart';
-import '../text_field/primary_text_field.dart';
 
-class SearchCoinWidget extends StatelessWidget {
+import '../../widget/skeletons/list_view_skeleton_widget.dart';
+import '../../widget/text_field/primary_text_field.dart';
+
+class SearchCoinScreen extends StatelessWidget {
   final String portfolioName;
   final Function refreshPortfolioScreen;
 
-  const SearchCoinWidget({
+  const SearchCoinScreen({
     Key? key,
     required this.portfolioName,
     required this.refreshPortfolioScreen
@@ -70,23 +71,27 @@ class SearchCoinWidget extends StatelessWidget {
             imageUrl: state.listCoins[index].large,
             name: state.listCoins[index].name,
             symbol: state.listCoins[index].symbol,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return AddTransactionTabBar(
-                    refreshPortfolioScreen: refreshPortfolioScreen,
-                    name: state.listCoins[index].name,
-                    symbol: state.listCoins[index].symbol,
-                    imageUrl: state.listCoins[index].large,
-                    idCoin: state.listCoins[index].id,
-                    portfolioName: portfolioName,
-                  );
-                }
-              )
-            )
+            onTap: _onTapCard(context, state, index)
           );
         }
+    );
+  }
+
+  void Function() _onTapCard(BuildContext context, SearchCompleted state, int index) {
+    return () => Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return AddTransactionTabBar(
+            refreshPortfolioScreen: refreshPortfolioScreen,
+            name: state.listCoins[index].name,
+            symbol: state.listCoins[index].symbol,
+            imageUrl: state.listCoins[index].large,
+            idCoin: state.listCoins[index].id,
+            portfolioName: portfolioName,
+          );
+        }
+      )
     );
   }
 }

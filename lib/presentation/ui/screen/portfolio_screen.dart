@@ -3,15 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:track_it/presentation/cubit/portfolio_cubit/portfolio_cubit.dart';
 import 'package:track_it/presentation/ui/screen/info_asset_screens/info_asset_screen.dart';
-import 'package:track_it/presentation/ui/widget/bottom_sheet_content/create_portfolio_widget.dart';
-import 'package:track_it/presentation/ui/widget/bottom_sheet_content/list_portfolio_widget.dart';
 import 'package:track_it/presentation/ui/widget/button/icon_button_widget.dart';
 import 'package:track_it/presentation/ui/widget/card/card_coin_widget.dart';
 import 'package:track_it/presentation/ui/widget/custom_list_view_widget.dart';
 import 'package:track_it/presentation/ui/widget/primary_modal_bottom_sheet.dart';
 import 'package:track_it/presentation/ui/widget/skeletons/list_view_skeleton_widget.dart';
 import '../../../service/constant/app_styles.dart';
-import '../widget/bottom_sheet_content/search_coin_widget.dart';
+import 'bottom_sheet_screens/create_portfolio_screen.dart';
+import 'bottom_sheet_screens/list_portfolio_screen.dart';
+import 'bottom_sheet_screens/search_coin_screen.dart';
 
 class PortfolioScreen extends StatelessWidget {
   const PortfolioScreen({Key? key}) : super(key: key);
@@ -49,7 +49,7 @@ class PortfolioScreen extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp),
       onTap: () => showPrimaryModalBottomSheet(
         context: context,
-        content: ListPortfolioWidget(refreshPortfolioScreen: () => _refreshPortfolioScreen(context)),
+        content: ListPortfolioScreen(refreshPortfolioScreen: () => _refreshPortfolioScreen(context)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -72,8 +72,8 @@ class PortfolioScreen extends StatelessWidget {
         context: context,
         title: state is PortfolioNotCreated? 'Создание портфеля': 'Добавление актива',
         content: state is PortfolioNotCreated
-          ? CreatePortfolio(refreshState: () => _refreshPortfolioScreen(context))
-          : SearchCoinWidget(
+          ? CreatePortfolioScreen(refreshState: () => _refreshPortfolioScreen(context))
+          : SearchCoinScreen(
               portfolioName: state is PortfolioCoins? state.portfolioName: '',
               refreshPortfolioScreen: () => _refreshPortfolioScreen(context),
             ),
