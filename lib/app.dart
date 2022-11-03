@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:track_it/app_routes.dart';
 import 'package:track_it/presentation/provider/settings_model.dart';
-import 'package:track_it/presentation/ui/screen/main_screen.dart';
+import 'package:track_it/presentation/ui/widget/nav_bar_widget.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
