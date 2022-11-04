@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:track_it/data/model/coin/market_coin_model.dart';
 import 'package:track_it/presentation/ui/screen/transaction_screens/new_transaction_screen.dart';
 import 'package:track_it/service/constant/app_styles.dart';
 import 'package:track_it/service/di.dart' as di;
+import 'package:track_it/service/helpers.dart';
 import '../../../cubit/transaction_cubit/transaction_cubit.dart';
-import '../../../provider/transaction_model.dart';
 import '../../widget/card/transaction_card_widget.dart';
 
 class TransactionsAssetScreen extends StatelessWidget {
   final String portfolioName;
   final MarketCoin marketCoinModel;
-  final Function refreshMainScreen;
+  final Function refreshPreviousScreen;
 
   const TransactionsAssetScreen({
     Key? key,
     required this.portfolioName,
     required this.marketCoinModel,
-    required this.refreshMainScreen
+    required this.refreshPreviousScreen
   }) : super(key: key);
 
   @override
@@ -35,7 +34,7 @@ class TransactionsAssetScreen extends StatelessWidget {
                   separatorBuilder: (context, index) => const SizedBox(height: 16),
                   padding: AppStyles.mainPadding,
                   itemCount: state.listTransactions.length,
-                  itemBuilder: (ctx, index) {
+                  itemBuilder: (_, index) {
                     return TransactionCard(
                       transactionModel: state.listTransactions[index],
                       marketCoinModel: marketCoinModel,
@@ -44,36 +43,30 @@ class TransactionsAssetScreen extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return ChangeNotifierProvider<TransactionModel>(
-                                create: (_) => TransactionModel(
-                                  portfolioLocalRepository: di.getIt()
-                                )..initForEditing(state.listTransactions[index]),
-                                builder: (context, child) {
-                                  final model = Provider.of<TransactionModel>(context);
-
-                                  return NewTransactionScreen(
-                                    portfolioName: portfolioName,
-                                    model: model,
-                                    isEdit: true,
-                                    oldTransactionModel: state.listTransactions[index],
-                                    indexOldTransaction: index,
-                                  );
-                                },
+                              return NewTransactionScreen(
+                                portfolioName: portfolioName,
+                                isEdit: true,
+                                oldTransactionModel: state.listTransactions[index],
+                                indexOldTransaction: index,
+                                transactionType: Helpers.getEnumTypeTransaction(state.listTransactions[index].typeOfTransaction),
+                                idCoin: marketCoinModel.id,
+                                refreshPreviousScreen: () => contextTransaction.read<TransactionCubit>()
+                                  .getTransactions(portfolioName, marketCoinModel.id),
                               );
                             }
                           )
-                        ).then((value) => _refreshTransactionsScreen(contextTransaction));
+                        );
                       },
                       onPressedDelete: (_) {
-                        ctx.read<TransactionCubit>().deleteTransactionByIndex(
+                        contextTransaction.read<TransactionCubit>().deleteTransactionByIndex(
                           state.listTransactions.length,
                           portfolioName,
                           index,
                           marketCoinModel.id
                         ).then((value) {
                           if (state.listTransactions.length == 1) {
-                            refreshMainScreen();
-                            Navigator.pop(ctx);
+                            refreshPreviousScreen();
+                            Navigator.pop(contextTransaction);
                           }
                         });
                       }
@@ -88,7 +81,4 @@ class TransactionsAssetScreen extends StatelessWidget {
       ),
     );
   }
-
-  void _refreshTransactionsScreen(BuildContext context) =>
-    context.read<TransactionCubit>().getTransactions(portfolioName, marketCoinModel.id);
 }

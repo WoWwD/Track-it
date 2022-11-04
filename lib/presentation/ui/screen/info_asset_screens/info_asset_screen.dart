@@ -69,7 +69,7 @@ class _InfoAssetScreenState extends State<InfoAssetScreen> with TickerProviderSt
                   TransactionsAssetScreen(
                     portfolioName: widget.portfolioName,
                     marketCoinModel: widget.marketCoinModel,
-                    refreshMainScreen: widget.refreshPortfolioScreen,
+                    refreshPreviousScreen: widget.refreshPortfolioScreen,
                   ),
                   StatisticsAssetScreen(portfolioName: widget.portfolioName, idCoin: widget.idCoin)
                 ]

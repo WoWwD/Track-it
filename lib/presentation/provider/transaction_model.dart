@@ -10,6 +10,9 @@ import '../../domain/repository/local_repository/portfolio_local_repository.dart
 class TransactionModel extends ChangeNotifier {
   final PortfolioLocalRepository portfolioLocalRepository;
   final TransactionType transactionType;
+  final String idCoin;
+  final String portfolioName;
+
   double _amount = 0.0;
   double _price = 0.0;
   double _cost = 0.0;
@@ -19,7 +22,9 @@ class TransactionModel extends ChangeNotifier {
 
   TransactionModel({
     required this.portfolioLocalRepository,
-    this.transactionType = TransactionType.buy
+    required this.transactionType,
+    required this.idCoin,
+    required this.portfolioName
   });
 
   double get amount => _amount;
@@ -46,10 +51,17 @@ class TransactionModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setCost(double cost) {
-    _cost = cost;
-    notifyListeners();
+  String setCost() {
+    if (price * amount == 0.0) {
+      return '';
+    } else {
+      _cost = price * amount;
+      notifyListeners();
+      return '\$${(price * amount)}';
+    }
   }
+
+  String initTextEditingController() => price * amount == 0.0 ? '' : '\$${(price * amount)}';
 
   void setDateTime(DateTime dateTime) {
     _dateTime = dateTime;
@@ -61,15 +73,15 @@ class TransactionModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addTransaction(String portfolioName, String idCoin) async {
+  Future<void> addTransaction() async {
     final Transaction transactionModel = Transaction(
       idCoin: idCoin,
       typeOfTransaction: Helpers.typeTransactionEnumToModel(transactionType),
       dateTime: _dateTime.dateTimeFormatToString(),
       note: _note,
       amount: _amount,
-      price: _isBuyOrSell()? _price: 0.0,
-      cost: _isBuyOrSell()? _cost: 0.0,
+      price: isBuyOrSell()? _price: 0.0,
+      cost: isBuyOrSell()? _cost: 0.0,
     );
 
     final Portfolio? portfolioModel = await portfolioLocalRepository.getPortfolioByName(portfolioName);
@@ -90,10 +102,11 @@ class TransactionModel extends ChangeNotifier {
         }
       }
       await portfolioLocalRepository.setPortfolio(portfolioName, portfolioModel);
+      notifyListeners();
     }
   }
 
-  Future<void> editTransaction(String namePortfolio, Transaction oldTransactionModel, int indexOldTransaction) async {
+  Future<void> editTransaction(Transaction oldTransactionModel, int indexOldTransaction) async {
     final Transaction newTransactionModel = Transaction(
       idCoin: oldTransactionModel.idCoin,
       typeOfTransaction: oldTransactionModel.typeOfTransaction,
@@ -103,16 +116,17 @@ class TransactionModel extends ChangeNotifier {
       price: _price,
       cost: _cost
     );
-    final Portfolio? portfolioModel = await portfolioLocalRepository.getPortfolioByName(namePortfolio);
+    final Portfolio? portfolioModel = await portfolioLocalRepository.getPortfolioByName(portfolioName);
     if(portfolioModel != null) {
       final int indexAsset = portfolioModel.listAssets
         .indexWhere((element) => element.idCoin == newTransactionModel.idCoin);
       portfolioModel.listAssets[indexAsset].listTransactions.removeAt(indexOldTransaction);
       portfolioModel.listAssets[indexAsset].listTransactions.add(newTransactionModel);
-      await portfolioLocalRepository.setPortfolio(namePortfolio, portfolioModel);
+      await portfolioLocalRepository.setPortfolio(portfolioName, portfolioModel);
+      notifyListeners();
     }
   }
 
-  bool _isBuyOrSell()
+  bool isBuyOrSell()
     => transactionType == TransactionType.buy || transactionType == TransactionType.sell;
 }

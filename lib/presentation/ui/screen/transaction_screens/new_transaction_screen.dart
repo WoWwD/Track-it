@@ -1,86 +1,99 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:track_it/data/model/transaction_model.dart';
 import 'package:track_it/presentation/provider/transaction_model.dart';
-import 'package:track_it/presentation/ui/widget/button/primary_button_widget.dart';
 import 'package:track_it/service/constant/app_styles.dart';
 import 'package:track_it/service/extension/date_time_extension.dart';
 import '../../../../service/transaction_type_enum.dart';
+import '../../widget/button/primary_button_widget.dart';
 import '../../widget/text_field/text_field_transaction_note_widget.dart';
 import '../../widget/text_field/text_field_transaction_widget.dart';
 import 'package:track_it/service/extension/string_extension.dart';
+import 'package:track_it/service/di.dart' as di;
 
 class NewTransactionScreen extends StatefulWidget {
-  final String? portfolioName;
+  final TransactionType transactionType;
+  final String portfolioName;
+  final String idCoin;
+  final Function refreshPreviousScreen;
   final Transaction? oldTransactionModel;
   final int? indexOldTransaction;
-  final TransactionModel model;
   final bool isEdit;
 
   const NewTransactionScreen({
     Key? key,
-    required this.model,
+    required this.transactionType,
+    required this.portfolioName,
+    required this.idCoin,
+    required this.refreshPreviousScreen,
     this.isEdit = false,
-    this.portfolioName,
     this.oldTransactionModel,
-    this.indexOldTransaction
+    this.indexOldTransaction,
   }) : super(key: key);
 
   @override
   State<NewTransactionScreen> createState() => _NewTransactionScreenState();
 }
 
-class _NewTransactionScreenState extends State<NewTransactionScreen> {
+class _NewTransactionScreenState extends State<NewTransactionScreen> with AutomaticKeepAliveClientMixin {
   TextEditingController? textEditingController;
   final _formKey = GlobalKey<FormState>();
 
   @override
-  void initState() {
-    if(_isBuyOrSell()) {
-      textEditingController = TextEditingController(
-        text: widget.model.price * widget.model.amount == 0.0? '': '\$${(widget.model.price * widget.model.amount)}'
-      );
-    }
-    super.initState();
-  }
+  bool get wantKeepAlive => true;
 
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
-    if(widget.isEdit) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Редактирование')),
-        body: Center(
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
-            child: Column(
-              children: [
-                Expanded(child: Form(key: _formKey, child: _mainWidget())),
-                PrimaryButton(
-                  text: 'Изменить',
-                  onPressed: () {
-                    if(_formKey.currentState!.validate()){
-                      widget.model.editTransaction(
-                        widget.portfolioName!,
-                        widget.oldTransactionModel!,
-                        widget.indexOldTransaction!
-                      );
-                      Navigator.pop(context);
-                    }
-                  }
-                ),
-                const SizedBox(height: 16)
-              ],
-            ),
-          )
-        )
-      );
-    }
-    else {
-      return _mainWidget();
-    }
+    return ChangeNotifierProvider<TransactionModel>(
+      create: (_) {
+        if(widget.isEdit) {
+          return TransactionModel(
+            portfolioLocalRepository: di.getIt(),
+            transactionType: widget.transactionType,
+            idCoin: widget.idCoin,
+            portfolioName: widget.portfolioName
+          )..initForEditing(widget.oldTransactionModel!);
+        }
+        else {
+          return TransactionModel(
+            portfolioLocalRepository: di.getIt(),
+            transactionType: widget.transactionType,
+            idCoin: widget.idCoin,
+            portfolioName: widget.portfolioName
+          );
+        }
+      },
+      builder: (context, child) {
+        final TransactionModel model = Provider.of<TransactionModel>(context);
+        if (model.isBuyOrSell()) {
+          textEditingController = TextEditingController(text: model.initTextEditingController());
+        }
+
+        return Form(
+          key: _formKey,
+          child: widget.isEdit
+            ? _editWidget(model)
+            : _mainWidget(model, widget.isEdit)
+        );
+      }
+    );
   }
 
-  Widget _mainWidget() {
+  Widget _editWidget(TransactionModel model) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Редактирование')),
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
+          child: _mainWidget(model, widget.isEdit),
+        )
+      )
+    );
+  }
+
+  Widget _mainWidget(TransactionModel model, bool isEdit) {
     return Padding(
       padding: AppStyles.mainPadding,
       child: Column(
@@ -90,20 +103,37 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
             labelText: 'Количество',
             onChanged: (value) {
               if (value.isNotEmpty) {
-                widget.model.setAmount(double.parse(value));
-                _isBuyOrSell()? setCost(textEditingController!, widget.model): null;
+                model.setAmount(double.parse(value));
+                model.isBuyOrSell() ? model.setCost() : null;
               }
             },
-            initialValue: widget.model.amount == 0.0? '': widget.model.amount.toString(),
+            initialValue: model.amount == 0.0 ? '' : model.amount.toString(),
           ),
-          _isBuyOrSell()? _forTypeTransactionBuyAndSell(): const SizedBox(),
-          _forAllTypeTransactions()
+          model.isBuyOrSell() ? _forTypeTransactionBuyAndSell(model) : const SizedBox(),
+          _forAllTypeTransactions(model),
+          const Expanded(child: SizedBox.shrink()),
+          PrimaryButton(
+            text: isEdit? 'Изменить': 'Добавить',
+            onPressed: () {
+              if(_formKey.currentState!.validate()){
+                if(isEdit) {
+                  model.editTransaction(widget.oldTransactionModel!, widget.indexOldTransaction!)
+                    .then((value) => widget.refreshPreviousScreen());
+                }
+                else {
+                  model.addTransaction()
+                    .then((value) => widget.refreshPreviousScreen());
+                }
+                Navigator.pop(context);
+              }
+            }
+          ),
         ]
       ),
     );
   }
 
-  Widget _forAllTypeTransactions() {
+  Widget _forAllTypeTransactions(TransactionModel model) {
     return Column(
       children: [
         const SizedBox(height: 24),
@@ -114,17 +144,17 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
           ),
           type: DateTimePickerType.dateTime,
           dateMask: 'dd.MM.yyyy - HH:mm',
-          initialValue: widget.model.dateTime.dateTimeFormatToString(),
+          initialValue: model.dateTime.dateTimeFormatToString(),
           firstDate: DateTime(2008, 08, 01),
-          lastDate: widget.model.dateTime,
-          onChanged: (value) => widget.model.setDateTime(value.toDateTime()),
+          lastDate: model.dateTime,
+          onChanged: (value) => model.setDateTime(value.toDateTime()),
         ),
         const SizedBox(height: 24),
         TextFieldTransactionNote(
-          initialValue: widget.model.note,
+          initialValue: model.note,
           onChanged: (value) {
             if (value.isNotEmpty) {
-              widget.model.setNote(value);
+              model.setNote(value);
             }
           },
         )
@@ -132,7 +162,7 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
     );
   }
 
-  Widget _forTypeTransactionBuyAndSell() {
+  Widget _forTypeTransactionBuyAndSell(TransactionModel model) {
     return Column(
       children: [
         const SizedBox(height: 24),
@@ -141,11 +171,11 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
           labelText: 'Цена',
           onChanged: (value) {
             if (value.isNotEmpty) {
-              widget.model.setPrice(double.parse(value));
-              setCost(textEditingController!, widget.model);
+              model.setPrice(double.parse(value));
+              model.setCost();
             }
           },
-          initialValue: widget.model.price == 0.0? '': widget.model.price.toString(),
+          initialValue: model.price == 0.0 ? '' : model.price.toString(),
         ),
         const SizedBox(height: 24),
         TextFieldTransaction(
@@ -156,20 +186,5 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
         ),
       ],
     );
-  }
-
-  bool _isBuyOrSell()
-    => widget.model.transactionType == TransactionType.buy || widget.model.transactionType == TransactionType.sell;
-
-  void setCost(TextEditingController tec, TransactionModel transactionModel) {
-    setState(() {
-      if(transactionModel.price * transactionModel.amount == 0.0) {
-        tec.text = '';
-      }
-      else {
-        transactionModel.setCost(transactionModel.price * transactionModel.amount);
-        tec.text = '\$${(transactionModel.price * transactionModel.amount)}';
-      }
-    });
   }
 }
