@@ -7,29 +7,29 @@ import '../../../provider/transaction_model.dart';
 import 'package:track_it/service/di.dart' as di;
 import '../../widget/button/primary_button_widget.dart';
 
-class AddTransactionTabBar extends StatefulWidget {
+class SelectTransactionScreen extends StatefulWidget {
   final String name;
   final String symbol;
   final String imageUrl;
   final String idCoin;
   final String portfolioName;
-  final Function refreshPortfolioScreen;
+  final Function refreshMainScreen;
 
-  const AddTransactionTabBar({
+  const SelectTransactionScreen({
     Key? key,
     required this.name,
     required this.symbol,
     required this.imageUrl,
     required this.idCoin,
     required this.portfolioName,
-    required this.refreshPortfolioScreen
+    required this.refreshMainScreen
   }) : super(key: key);
 
   @override
-  State<AddTransactionTabBar> createState() => _AddTransactionTabBarState();
+  State<SelectTransactionScreen> createState() => _SelectTransactionScreenState();
 }
 
-class _AddTransactionTabBarState extends State<AddTransactionTabBar> with TickerProviderStateMixin {
+class _SelectTransactionScreenState extends State<SelectTransactionScreen> with TickerProviderStateMixin {
   static const _tabLength = 4;
   late TabController _tabController;
   final List<Widget> _tabsName = const [
@@ -67,16 +67,28 @@ class _AddTransactionTabBarState extends State<AddTransactionTabBar> with Ticker
         )
       ),
       body: ChangeNotifierProvider<TransactionModel>(
-        create: (_) => di.getIt(),
+        create: (_) => TransactionModel(
+          portfolioLocalRepository: di.getIt(),
+          transactionType: TransactionType.buy
+        ),
         builder: (contextBuy, child) {
           return ChangeNotifierProvider<TransactionModel>(
-            create: (_) => di.getIt(),
+            create: (_) => TransactionModel(
+              portfolioLocalRepository: di.getIt(),
+              transactionType: TransactionType.sell
+            ),
             builder: (contextSell, child) {
               return ChangeNotifierProvider<TransactionModel>(
-                create: (_) => di.getIt(),
+                create: (_) => TransactionModel(
+                  portfolioLocalRepository: di.getIt(),
+                  transactionType: TransactionType.transferIn
+                ),
                 builder: (contextTransferIn, child) {
                   return ChangeNotifierProvider<TransactionModel>(
-                    create: (_) => di.getIt(),
+                    create: (_) => TransactionModel(
+                      portfolioLocalRepository: di.getIt(),
+                      transactionType: TransactionType.transferOut
+                    ),
                     builder: (contextTransferOut, child) {
                       modelBuy = Provider.of<TransactionModel>(contextBuy);
                       modelSell = Provider.of<TransactionModel>(contextSell);
@@ -104,10 +116,10 @@ class _AddTransactionTabBarState extends State<AddTransactionTabBar> with Ticker
                                     child: TabBarView(
                                       controller: _tabController,
                                       children: [
-                                        AddTransactionScreen(model: modelBuy, transactionType: TransactionType.buy),
-                                        AddTransactionScreen(model: modelSell, transactionType: TransactionType.sell),
-                                        AddTransactionScreen(model: modelTransferIn, transactionType: TransactionType.transferIn),
-                                        AddTransactionScreen(model: modelTransferOut, transactionType: TransactionType.transferOut),
+                                        NewTransactionScreen(model: modelBuy),
+                                        NewTransactionScreen(model: modelSell),
+                                        NewTransactionScreen(model: modelTransferIn),
+                                        NewTransactionScreen(model: modelTransferOut),
                                       ]
                                     ),
                                   ),
@@ -119,8 +131,7 @@ class _AddTransactionTabBarState extends State<AddTransactionTabBar> with Ticker
                                       _getModel()!.addTransaction(
                                         widget.portfolioName,
                                         widget.idCoin,
-                                        _getTypeTransaction()!
-                                      ).then((value) => widget.refreshPortfolioScreen());
+                                      ).then((value) => widget.refreshMainScreen());
                                       Navigator.pop(context);
                                     }
                                   }
@@ -147,16 +158,6 @@ class _AddTransactionTabBarState extends State<AddTransactionTabBar> with Ticker
       case 1: return modelSell;
       case 2: return modelTransferIn;
       case 3: return modelTransferOut;
-    }
-    return null;
-  }
-
-  TransactionType? _getTypeTransaction() {
-    switch (_tabController.index) {
-      case 0: return TransactionType.buy;
-      case 1: return TransactionType.sell;
-      case 2: return TransactionType.transferIn;
-      case 3: return TransactionType.transferOut;
     }
     return null;
   }

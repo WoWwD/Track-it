@@ -50,7 +50,7 @@ class TransactionCard extends StatelessWidget {
           children: [
             _isBuyOrSell()? const SizedBox(): const Text(' '),
             Text(
-              '${Helpers.getTypeTransactionFromModel(transactionModel.typeOfTransaction)} '
+              '${Helpers.typeTransactionFromModel(transactionModel.typeOfTransaction)} '
               '${transactionModel.amount.noZero()} ${marketCoinModel.symbol.toUpperCase()}'
             ),
             _isBuyOrSell()? Text('Цена: \$${transactionModel.price.noZero()}'): const SizedBox(),

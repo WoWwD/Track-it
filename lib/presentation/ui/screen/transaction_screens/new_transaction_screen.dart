@@ -10,29 +10,27 @@ import '../../widget/text_field/text_field_transaction_note_widget.dart';
 import '../../widget/text_field/text_field_transaction_widget.dart';
 import 'package:track_it/service/extension/string_extension.dart';
 
-class AddTransactionScreen extends StatefulWidget {
+class NewTransactionScreen extends StatefulWidget {
   final String? portfolioName;
-  final int? indexTransaction;
   final Transaction? oldTransactionModel;
+  final int? indexOldTransaction;
   final TransactionModel model;
-  final TransactionType transactionType;
   final bool isEdit;
 
-  const AddTransactionScreen({
+  const NewTransactionScreen({
     Key? key,
     required this.model,
-    required this.transactionType,
     this.isEdit = false,
     this.portfolioName,
-    this.indexTransaction,
-    this.oldTransactionModel
+    this.oldTransactionModel,
+    this.indexOldTransaction
   }) : super(key: key);
 
   @override
-  State<AddTransactionScreen> createState() => _AddTransactionScreenState();
+  State<NewTransactionScreen> createState() => _NewTransactionScreenState();
 }
 
-class _AddTransactionScreenState extends State<AddTransactionScreen> {
+class _NewTransactionScreenState extends State<NewTransactionScreen> {
   TextEditingController? textEditingController;
   final _formKey = GlobalKey<FormState>();
 
@@ -63,8 +61,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     if(_formKey.currentState!.validate()){
                       widget.model.editTransaction(
                         widget.portfolioName!,
-                        widget.indexTransaction!,
-                        widget.oldTransactionModel!
+                        widget.oldTransactionModel!,
+                        widget.indexOldTransaction!
                       );
                       Navigator.pop(context);
                     }
@@ -161,7 +159,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   }
 
   bool _isBuyOrSell()
-    => widget.transactionType == TransactionType.buy || widget.transactionType == TransactionType.sell;
+    => widget.model.transactionType == TransactionType.buy || widget.model.transactionType == TransactionType.sell;
 
   void setCost(TextEditingController tec, TransactionModel transactionModel) {
     setState(() {
