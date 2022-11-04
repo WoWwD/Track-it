@@ -82,8 +82,8 @@ class SearchCoinScreen extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return AddTransactionTabBar(
-            refreshPortfolioScreen: refreshPortfolioScreen,
+          return SelectTransactionScreen(
+            refreshMainScreen: refreshPortfolioScreen,
             name: state.listCoins[index].name,
             symbol: state.listCoins[index].symbol,
             imageUrl: state.listCoins[index].large,
