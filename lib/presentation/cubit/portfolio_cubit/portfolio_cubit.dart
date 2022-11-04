@@ -3,8 +3,6 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:track_it/data/model/coin/market_coin_model.dart';
 import 'package:track_it/data/model/portfolio_model.dart';
-import 'package:track_it/data/model/transaction_model.dart';
-import '../../../data/model/asset_model.dart';
 import '../../../domain/repository/local_repository/portfolio_local_repository.dart';
 import '../../../domain/repository/remote_repository/coin_remote_repository.dart';
 
@@ -84,37 +82,6 @@ class PortfolioCubit extends Cubit<PortfolioState> {
     final String? currentPortfolioName = await getCurrentPortfolioName();
     if(currentPortfolioName == null) {
       await setToCurrentPortfolio(portfolioName);
-    }
-  }
-
-  Future<void> getTransactions(String portfolioName, String idCoin) async {
-    emit(PortfolioLoading());
-    final Portfolio? portfolio = await portfolioLocalRepository.getPortfolioByName(portfolioName);
-    final Asset assetModel = portfolio!.listAssets.firstWhere((element) => element.idCoin == idCoin);
-    emit(PortfolioTransactions(assetModel.listTransactions));
-  }
-
-  Future<void> deleteAssetById(String portfolioName, String idCoin) async {
-    final Portfolio? portfolioModel = await portfolioLocalRepository.getPortfolioByName(portfolioName);
-    if(portfolioModel != null) {
-      final Asset assetModel = portfolioModel.listAssets.firstWhere((element) => element.idCoin == idCoin);
-      portfolioModel.listAssets.remove(assetModel);
-      await portfolioLocalRepository.setPortfolio(portfolioName, portfolioModel);
-    }
-  }
-
-  Future<void> deleteTransactionByIndex(int listTransactionsLength, String portfolioName, int indexTransaction, String idCoin) async {
-    if(listTransactionsLength == 1) {
-      await deleteAssetById(portfolioName, idCoin);
-    }
-    else{
-      final Portfolio? portfolioModel = await portfolioLocalRepository.getPortfolioByName(portfolioName);
-      if(portfolioModel != null) {
-        final int indexAsset = portfolioModel.listAssets.indexWhere((element) => element.idCoin == idCoin);
-        portfolioModel.listAssets[indexAsset].listTransactions.removeAt(indexTransaction);
-        await portfolioLocalRepository.setPortfolio(portfolioName, portfolioModel);
-      }
-      getTransactions(portfolioName, idCoin);
     }
   }
 

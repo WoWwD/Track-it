@@ -20,9 +20,3 @@ class PortfolioList extends PortfolioState {
 
   PortfolioList(this.listPortfolio, this.currentPortfolioName);
 }
-
-class PortfolioTransactions extends PortfolioState {
-  final List<Transaction> listTransactions;
-
-  PortfolioTransactions(this.listTransactions);
-}

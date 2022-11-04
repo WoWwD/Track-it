@@ -4,8 +4,8 @@ import 'package:track_it/data/local_data/portfolio_local_data.dart';
 import 'package:track_it/presentation/cubit/portfolio_cubit/portfolio_cubit.dart';
 import 'package:track_it/presentation/cubit/search_cubit/search_cubit.dart';
 import 'package:track_it/presentation/cubit/statistics_cubit/statistics_cubit.dart';
+import 'package:track_it/presentation/cubit/transaction_cubit/transaction_cubit.dart';
 import 'package:track_it/presentation/provider/settings_model.dart';
-import 'package:track_it/presentation/provider/transaction_model.dart';
 import '../data/remote_data/coin_remote_data.dart';
 import '../domain/repository/local_repository/portfolio_local_repository.dart';
 import '../domain/repository/remote_repository/coin_remote_repository.dart';
@@ -34,7 +34,6 @@ Future<void> init() async {
 
   //region Provider
 
-  getIt.registerFactory<TransactionModel>(() => TransactionModel(portfolioLocalRepository: getIt.call()));
   getIt.registerLazySingleton(() => SettingsModel());
 
   //#endregion
@@ -44,6 +43,7 @@ Future<void> init() async {
   getIt.registerFactory<PortfolioCubit>(
     () => PortfolioCubit(portfolioLocalRepository: getIt.call(), coinRemoteRepository: getIt.call())
   );
+  getIt.registerFactory<TransactionCubit>(() => TransactionCubit(portfolioLocalRepository: getIt.call()));
   getIt.registerFactory<StatisticsCubit>(() => StatisticsCubit(portfolioLocalRepository: getIt.call()));
   getIt.registerFactory<SearchCubit>(() => SearchCubit(coinRemoteRepository: getIt.call()));
 
