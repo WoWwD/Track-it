@@ -3,38 +3,49 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:track_it/presentation/cubit/portfolio_cubit/portfolio_cubit.dart';
 import 'package:track_it/service/constant/app_styles.dart';
+import 'package:track_it/service/di.dart' as di;
 
 class ImportExportJsonScreen extends StatelessWidget {
   const ImportExportJsonScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final PortfolioCubit portfolioCubit = BlocProvider.of<PortfolioCubit>(context);
+    return BlocProvider<PortfolioCubit>(
+      create: (_) => di.getIt(),
+      child: BlocBuilder<PortfolioCubit, PortfolioState>(
+        builder: (context, state) {
+          final portfolioCubit = BlocProvider.of<PortfolioCubit>(context);
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Импорт / экспорт портфеля')),
-      body: Center(
-        child: Container(
-            padding: AppStyles.mainPadding,
-            constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
-            child: Column(
-              children: [
-                _card(
-                  context,
-                  'Импортировать JSON из буфера обмена',
-                  () async => await showDialog(context: context,builder: (context) => _dialog(context, portfolioCubit))
-                ),
+          return Scaffold(
+            appBar: AppBar(title: const Text('Импорт / экспорт портфеля')),
+            body: Center(
+              child: Container(
+                padding: AppStyles.mainPadding,
+                constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
+                child: Column(
+                  children: [
+                    _card(
+                      context,
+                      'Импортировать JSON из буфера обмена',
+                      () async => await showDialog(
+                        context: context,
+                        builder: (context) => _dialog(context, portfolioCubit)
+                      )
+                    ),
 
-                const SizedBox(height: 16),
-                _card(
-                  context,
-                  'Экспортировать JSON в буфер обмена',
-                  () => _toJson(context, portfolioCubit),
-                  false
-                ),
-              ],
+                    const SizedBox(height: 16),
+                    _card(
+                      context,
+                      'Экспортировать JSON в буфер обмена',
+                      () => _toJson(context, portfolioCubit),
+                      false
+                    ),
+                  ],
+                )
+              ),
             )
-        ),
+          );
+        },
       )
     );
   }

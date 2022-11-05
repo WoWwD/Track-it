@@ -7,9 +7,9 @@ import 'package:track_it/presentation/ui/widget/nav_bar_widget.dart';
 class AppRoutes {
   static Map<String, Widget Function(BuildContext)> getRoutes() {
     return {
-      '/main': (context) => const MainScreen(),
+      '/main': (context) => const NavBarWidget(),
       '/settings': (context) => const SettingsScreen(),
-      '/portfolio': (context) => const PortfolioScreen(),
+      '/portfolio': (context) => const MainScreen(),
       '/importExportJson': (context) => const ImportExportJsonScreen(),
     };
   }

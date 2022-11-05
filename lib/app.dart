@@ -15,7 +15,7 @@ class App extends StatelessWidget {
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: themeMode.darkMode ? ThemeMode.dark : ThemeMode.light,
-      home: const MainScreen(),
+      home: const NavBarWidget(),
       routes: AppRoutes.getRoutes(),
     );
   }
