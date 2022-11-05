@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:track_it/presentation/ui/screen/main_screen.dart';
 import 'package:track_it/presentation/ui/screen/settings/settings_screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+class NavBarWidget extends StatefulWidget {
+  const NavBarWidget({Key? key}) : super(key: key);
 
   @override
-  State<MainScreen> createState() => _MainScreen();
+  State<NavBarWidget> createState() => _MainScreen();
 }
 
-class _MainScreen extends State<MainScreen> {
+class _MainScreen extends State<NavBarWidget> {
   int _selectedIndex = 0;
 
   @override
@@ -20,7 +20,10 @@ class _MainScreen extends State<MainScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
-      body: _screens.elementAt(_selectedIndex),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _screens
+      ),
     );
   }
 
@@ -35,5 +38,5 @@ class _MainScreen extends State<MainScreen> {
     const BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Настройки'),
   ];
 
-  static const List<Widget> _screens = [PortfolioScreen(), SettingsScreen()];
+  static const List<Widget> _screens = [MainScreen(), SettingsScreen()];
 }
