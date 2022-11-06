@@ -42,7 +42,10 @@ class _CreatePortfolioScreenState extends State<CreatePortfolioScreen> {
           suffixIcon: IconButtonV2(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                if(!await context.read<PortfolioCubit>().portfolioAlreadyExists(_textEditingController.text)) {
+                final bool? portfolioAlreadyExists =
+                  await context.read<PortfolioCubit>().portfolioAlreadyExists(_textEditingController.text);
+                if(portfolioAlreadyExists != null && !portfolioAlreadyExists) {
+                  if (!mounted) return;
                   await context.read<PortfolioCubit>().createPortfolio(_textEditingController.text);
                   widget.refreshState();
                   if (!mounted) return;

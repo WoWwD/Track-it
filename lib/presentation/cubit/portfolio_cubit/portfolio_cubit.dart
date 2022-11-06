@@ -17,20 +17,21 @@ class PortfolioCubit extends Cubit<PortfolioState> {
     required this.coinRemoteRepository
   }) : super(PortfolioInitial());
 
-
   //#region PortfolioList
 
   Future<void> deletePortfolioByName(String portfolioName) async {
     emit(PortfolioLoading());
     await portfolioLocalRepository.deletePortfolioByName(portfolioName);
-    final List<Portfolio> listPortfolio = await portfolioLocalRepository.getListPortfolio();
-    if(await portfolioLocalRepository.portfolioStorageIsEmpty()) {
-      await portfolioLocalRepository.clearCurrentPortfolioStorage();
-      emit(PortfolioList(listPortfolio, ''));
-    }
-    else {
-      await setToCurrentPortfolio(listPortfolio.first.name);
-      emit(PortfolioList(listPortfolio, listPortfolio.first.name));
+    final List<Portfolio>? listPortfolio = await portfolioLocalRepository.getListPortfolio();
+    if (listPortfolio != null) {
+      if(await portfolioLocalRepository.portfolioStorageIsEmpty()) {
+        await portfolioLocalRepository.clearCurrentPortfolioStorage();
+        emit(PortfolioList(listPortfolio, ''));
+      }
+      else {
+        await setToCurrentPortfolio(listPortfolio.first.name);
+        emit(PortfolioList(listPortfolio, listPortfolio.first.name));
+      }
     }
   }
 
@@ -39,17 +40,22 @@ class PortfolioCubit extends Cubit<PortfolioState> {
   Future<void> setToCurrentPortfolio(String portfolioName) async {
     emit(PortfolioLoading());
     await portfolioLocalRepository.setToCurrentPortfolio(portfolioName);
-    emit(PortfolioList(await portfolioLocalRepository.getListPortfolio(), portfolioName));
+    final List<Portfolio>? listPortfolio = await portfolioLocalRepository.getListPortfolio();
+    if (listPortfolio != null) {
+      emit(PortfolioList(listPortfolio, portfolioName));
+    }
   }
 
-  Future<bool> portfolioAlreadyExists(String portfolioName) async
-    => await portfolioLocalRepository.portfolioNameAlreadyExists(portfolioName);
+  Future<bool?> portfolioAlreadyExists(String portfolioName) async =>
+    await portfolioLocalRepository.portfolioNameAlreadyExists(portfolioName);
 
   Future<void> getListPortfolio() async {
     emit(PortfolioLoading());
-    final List<Portfolio> listPortfolio = await portfolioLocalRepository.getListPortfolio();
+    final List<Portfolio>? listPortfolio = await portfolioLocalRepository.getListPortfolio();
     final String? currentPortfolioName = await getCurrentPortfolioName();
-    emit(PortfolioList(listPortfolio, currentPortfolioName ?? ''));
+    if (listPortfolio != null && currentPortfolioName != null) {
+      emit(PortfolioList(listPortfolio, currentPortfolioName));
+    }
   }
 
   //#endregion

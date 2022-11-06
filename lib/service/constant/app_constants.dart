@@ -1,5 +1,5 @@
 class AppConstants {
-  static const portfolioStorageKeys = 'portfolio_storage_keys';
+  static const portfolioKeysStorage = 'portfolio_storage_keys';
   static const buyTypeTransaction = 'Buy';
   static const sellTypeTransaction = 'Sell';
   static const transferInTypeTransaction = 'Transfer In';

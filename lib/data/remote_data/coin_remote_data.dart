@@ -15,7 +15,7 @@ class CoinRemoteData extends BaseApi implements CoinRemoteAction {
 
   @override
   Future<Coin> getCoinById(String id) async {
-    Response response = await dio.get('${super.baseUrl}/coins/$id');
+    final Response response = await dio.get('${super.baseUrl}/coins/$id');
     if (response.statusCode == 200) {
       return Coin.fromJson(response.data);
     }
@@ -27,8 +27,8 @@ class CoinRemoteData extends BaseApi implements CoinRemoteAction {
   @override
   Future<List<MarketCoin>> getListCoinsByIds(List<String> ids) async {
     final String idsFromList = Helpers.createStringFromItemsList(ids);
-    List<MarketCoin> listCoins = [];
-    Response response =
+    final List<MarketCoin> listCoins = [];
+    final Response response =
       await dio.get('${super.baseUrl}/coins/markets?vs_currency=$currency&ids=$idsFromList&order=market_cap_desc&per_page=100&page=1&sparkline=false');
     if (response.statusCode == 200) {
       for (var item in response.data) {
@@ -43,7 +43,7 @@ class CoinRemoteData extends BaseApi implements CoinRemoteAction {
 
   @override
   Future<ListSearchCoin> searchCoinByName(String name) async {
-    Response response =  await dio.get('${super.baseUrl}/search?query=$name');
+    final Response response =  await dio.get('${super.baseUrl}/search?query=$name');
     if (response.statusCode == 200) {
       return ListSearchCoin.fromJson(response.data);
     }

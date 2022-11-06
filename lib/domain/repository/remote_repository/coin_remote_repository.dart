@@ -13,8 +13,8 @@ class CoinRemoteRepository implements CoinRemoteAction {
   Future<Coin> getCoinById(String id) async => await coinRemoteData.getCoinById(id);
 
   @override
-  Future<List<MarketCoin>> getListCoinsByIds(List<String> ids) async
-    => await coinRemoteData.getListCoinsByIds(ids);
+  Future<List<MarketCoin>> getListCoinsByIds(List<String> ids) async =>
+    await coinRemoteData.getListCoinsByIds(ids);
 
   @override
   Future<ListSearchCoin> searchCoinByName(String name) async => await coinRemoteData.searchCoinByName(name);

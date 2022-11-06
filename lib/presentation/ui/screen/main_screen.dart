@@ -13,8 +13,8 @@ import 'bottom_sheet_screens/create_portfolio_screen.dart';
 import 'bottom_sheet_screens/list_portfolio_screen.dart';
 import 'bottom_sheet_screens/search_coin_screen.dart';
 
-class PortfolioScreen extends StatelessWidget {
-  const PortfolioScreen({Key? key}) : super(key: key);
+class MainScreen extends StatelessWidget {
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
