@@ -25,7 +25,7 @@ class TransactionsAssetScreen extends StatelessWidget {
     return BlocProvider<TransactionCubit>(
       create: (_) => di.getIt<TransactionCubit>()..getTransactions(portfolioName, marketCoinModel.id),
       child: BlocBuilder<TransactionCubit, TransactionState>(
-        builder: (contextTransaction, state) {
+        builder: (context, state) {
           if (state is TransactionsReceived) {
             return Center(
               child: Container(
@@ -38,11 +38,11 @@ class TransactionsAssetScreen extends StatelessWidget {
                     return TransactionCard(
                       transactionModel: state.listTransactions[index],
                       marketCoinModel: marketCoinModel,
-                      onPressedEdit: (context) {
+                      onPressedEdit: (_) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) {
+                            builder: (_) {
                               return NewTransactionScreen(
                                 portfolioName: portfolioName,
                                 isEdit: true,
@@ -50,26 +50,23 @@ class TransactionsAssetScreen extends StatelessWidget {
                                 indexOldTransaction: index,
                                 transactionType: Helpers.getEnumTypeTransaction(state.listTransactions[index].typeOfTransaction),
                                 idCoin: marketCoinModel.id,
-                                refreshPreviousScreen: () => contextTransaction.read<TransactionCubit>()
-                                  .getTransactions(portfolioName, marketCoinModel.id),
+                                refreshPreviousScreen: () => context.read<TransactionCubit>()
+                                  .getTransactions(portfolioName, marketCoinModel.id)
+                                  .then((value) => refreshPreviousScreen())
                               );
                             }
                           )
                         );
                       },
-                      onPressedDelete: (_) {
-                        contextTransaction.read<TransactionCubit>().deleteTransactionByIndex(
-                          state.listTransactions.length,
-                          portfolioName,
-                          index,
-                          marketCoinModel.id
-                        ).then((value) {
-                          if (state.listTransactions.length == 1) {
+                      onPressedDelete: (_) => context.read<TransactionCubit>()
+                        .deleteTransactionByIndex(state.listTransactions.length, portfolioName, index, marketCoinModel.id)
+                        .then((value) {
                             refreshPreviousScreen();
-                            Navigator.pop(contextTransaction);
+                            if (state.listTransactions.length == 1) {
+                              Navigator.pop(context);
+                            }
                           }
-                        });
-                      }
+                        )
                     );
                   },
                 ),
