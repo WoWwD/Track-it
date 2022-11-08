@@ -5,6 +5,7 @@ abstract class StatisticsState {}
 
 class StatisticsInitial extends StatisticsState {}
 class StatisticsLoading extends StatisticsState {}
+
 class StatisticsSingleCoin extends StatisticsState {
   final List<Transaction> listTransactions;
 
@@ -23,7 +24,16 @@ class StatisticsSingleCoin extends StatisticsState {
   double getAllAmount() {
     double allAmount = 0.0;
     for(int i = 0; i < listTransactions.length; i++) {
-      allAmount += listTransactions[i].amount;
+      if (listTransactions[i].typeOfTransaction == AppConstants.buyTypeTransaction ||
+          listTransactions[i].typeOfTransaction == AppConstants.transferInTypeTransaction
+      ) {
+        allAmount += listTransactions[i].amount;
+      }
+      if (listTransactions[i].typeOfTransaction == AppConstants.sellTypeTransaction ||
+          listTransactions[i].typeOfTransaction == AppConstants.transferOutTypeTransaction
+      ) {
+        allAmount -= listTransactions[i].amount;
+      }
     }
     return allAmount;
   }

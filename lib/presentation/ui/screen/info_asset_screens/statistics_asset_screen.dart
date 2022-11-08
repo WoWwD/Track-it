@@ -28,7 +28,7 @@ class StatisticsAssetScreen extends StatelessWidget {
                 child: ListView(
                   padding: AppStyles.mainPadding,
                   children: [
-                    Text('Вложено: \$${state.getAllCost().noZero()}'),
+                    Text('Инвестиции: \$${state.getAllCost().noZero()}'),
                     const SizedBox(height: 12),
                     Text('Количество монет: ${state.getAllAmount().noZero()}'),
                     const SizedBox(height: 12),
