@@ -11,13 +11,13 @@ import '../../widget/skeletons/list_view_skeleton_widget.dart';
 import 'create_portfolio_screen.dart';
 
 class ListPortfolioScreen extends StatelessWidget {
-  final Function refreshPortfolioScreen;
+  final Function refreshMainScreen;
 
-  const ListPortfolioScreen({Key? key, required this.refreshPortfolioScreen}) : super(key: key);
+  const ListPortfolioScreen({Key? key, required this.refreshMainScreen}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<PortfolioCubit>(
       create: (_) => di.getIt<PortfolioCubit>()..getListPortfolio(),
       child: BlocBuilder<PortfolioCubit, PortfolioState>(
         builder: (context, state) {
@@ -43,12 +43,12 @@ class ListPortfolioScreen extends StatelessWidget {
                 amountAssets: state.listPortfolio[index].listAssets.length,
                 isCurrent: state.currentPortfolioName == state.listPortfolio[index].name,
                 deletePortfolio: () async {
-                  await context.read<PortfolioCubit>().deletePortfolioByName(state.listPortfolio[index].name);
-                  refreshPortfolioScreen();
+                  context.read<PortfolioCubit>().deletePortfolioByName(state.listPortfolio[index].name);
+                  refreshMainScreen();
                 },
                 onChanged: () {
                   context.read<PortfolioCubit>().setToCurrentPortfolio(state.listPortfolio[index].name);
-                  refreshPortfolioScreen();
+                  refreshMainScreen();
                 }
               );
             }
@@ -61,8 +61,8 @@ class ListPortfolioScreen extends StatelessWidget {
               context: context,
               content: CreatePortfolioScreen(
                 refreshState: () {
-                  refreshPortfolioScreen();
                   context.read<PortfolioCubit>().getListPortfolio();
+                  refreshMainScreen();
                 }
               ),
               maxHeight: 150,
