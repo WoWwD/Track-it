@@ -70,7 +70,10 @@ class PortfolioLocalData implements PortfolioLocalAction {
     final List<String>? listPortfolioNames = sp.getStringList(_portfolioKeysStorage);
     if (listPortfolioNames != null) {
       for(int i = 0; i < listPortfolioNames.length; i++) {
-        listPortfolio.add(Portfolio.fromJson(json.decode(sp.getString(listPortfolioNames[i])!)));
+        String? portfolioJson = sp.getString(listPortfolioNames[i]);
+        if (portfolioJson != null) {
+          listPortfolio.add(Portfolio.fromJson(json.decode(portfolioJson)));
+        }
       }
       return listPortfolio;
     }
@@ -91,12 +94,13 @@ class PortfolioLocalData implements PortfolioLocalAction {
   Future<Portfolio?> getCurrentPortfolio() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     final String? currentPortfolioName = sp.getString(_currentPortfolioStorage);
-    if(currentPortfolioName != null) {
-      return Portfolio.fromJson(json.decode(sp.getString(currentPortfolioName)!));
+    if (currentPortfolioName != null) {
+      final String? currentPortfolioJson = sp.getString(currentPortfolioName);
+      if (currentPortfolioJson != null) {
+        return Portfolio.fromJson(json.decode(currentPortfolioJson));
+      }
     }
-    else {
-      return null;
-    }
+    return null;
   }
 
   @override

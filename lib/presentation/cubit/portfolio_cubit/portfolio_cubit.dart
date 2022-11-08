@@ -3,8 +3,10 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:track_it/data/model/coin/market_coin_model.dart';
 import 'package:track_it/data/model/portfolio_model.dart';
+import 'package:track_it/data/model/transaction_model.dart';
 import '../../../domain/repository/local_repository/portfolio_local_repository.dart';
 import '../../../domain/repository/remote_repository/coin_remote_repository.dart';
+import '../../../service/constant/app_constants.dart';
 
 part 'portfolio_state.dart';
 
@@ -53,16 +55,14 @@ class PortfolioCubit extends Cubit<PortfolioState> {
     emit(PortfolioLoading());
     final List<Portfolio>? listPortfolio = await portfolioLocalRepository.getListPortfolio();
     final String? currentPortfolioName = await getCurrentPortfolioName();
-    if (listPortfolio != null && currentPortfolioName != null) {
-      emit(PortfolioList(listPortfolio, currentPortfolioName));
-    }
+    emit(PortfolioList(listPortfolio ?? [], currentPortfolioName ?? ''));
   }
 
   //#endregion
 
   //#region PortfolioCoins
 
-  Future<void> getCoins() async {
+  Future<void> getPortfolio() async {
     emit(PortfolioLoading());
     final Portfolio? currentPortfolioModel = await portfolioLocalRepository.getCurrentPortfolio();
     if(currentPortfolioModel == null) {
@@ -77,7 +77,7 @@ class PortfolioCubit extends Cubit<PortfolioState> {
         }
         listAssets.addAll(await coinRemoteRepository.getListCoinsByIds(ids));
       }
-      emit(PortfolioCoins(currentPortfolioModel.name, listAssets));
+      emit(PortfolioReceived(currentPortfolioModel, listAssets));
     }
   }
 
