@@ -6,29 +6,42 @@ import 'package:track_it/presentation/ui/screen/info_asset_screens/info_asset_sc
 import 'package:track_it/presentation/ui/widget/button/icon_button_widget.dart';
 import 'package:track_it/presentation/ui/widget/card/card_coin_widget.dart';
 import 'package:track_it/presentation/ui/widget/custom_list_view_widget.dart';
+import 'package:track_it/presentation/ui/widget/main_screen_widgets/portfolio_statistics_widget.dart';
 import 'package:track_it/presentation/ui/widget/primary_modal_bottom_sheet.dart';
+import 'package:track_it/presentation/ui/widget/skeletons/item_skeleton_widget.dart';
 import 'package:track_it/presentation/ui/widget/skeletons/list_view_skeleton_widget.dart';
+import '../../../data/model/coin/market_coin_model.dart';
 import '../../../service/constant/app_styles.dart';
 import 'bottom_sheet_screens/create_portfolio_screen.dart';
 import 'bottom_sheet_screens/list_portfolio_screen.dart';
 import 'bottom_sheet_screens/search_coin_screen.dart';
+import 'package:track_it/service/di.dart' as di;
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PortfolioCubit, PortfolioState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: _titleAppbar(context),
-            actions: [_refreshButton(context)],
-          ),
-          floatingActionButton: _floatingActionButton(context, state),
-          body: Center(child: _getContent(state))
-        );
-      },
+    return BlocProvider<PortfolioCubit>(
+      create: (_) => di.getIt()..getPortfolio(),
+      child: BlocBuilder<PortfolioCubit, PortfolioState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: _titleAppbar(context),
+              actions: [_refreshButton(context)],
+            ),
+            floatingActionButton: _floatingActionButton(context, state),
+            body: Center(
+              child: Container(
+                padding: const EdgeInsets.only(top: 16),
+                constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
+                child: _getContent(state, context)
+              ),
+            )
+          );
+        },
+      ),
     );
   }
   Widget _firstAsset() => const Text('Добавьте первый актив в ваш портфель');
@@ -49,7 +62,7 @@ class MainScreen extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp),
       onTap: () => showPrimaryModalBottomSheet(
         context: context,
-        content: ListPortfolioScreen(refreshPortfolioScreen: () => _refreshMainScreen(context)),
+        content: ListPortfolioScreen(refreshMainScreen: () => _refreshMainScreen(context)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -74,7 +87,7 @@ class MainScreen extends StatelessWidget {
         content: state is PortfolioNotCreated
           ? CreatePortfolioScreen(refreshState: () => _refreshMainScreen(context))
           : SearchCoinScreen(
-              portfolioName: state is PortfolioCoins? state.portfolioName: '',
+              portfolioName: state is PortfolioReceived? state.portfolioModel.name: '',
               refreshPortfolioScreen: () => _refreshMainScreen(context),
             ),
         maxHeight: state is PortfolioNotCreated? 150: null,
@@ -82,42 +95,58 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  Widget _getContent(PortfolioState state) {
-    if(state is PortfolioNotCreated) return _firstPortfolio();
-
-    return Container(
-      constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
-      child: Skeleton(
-        isLoading: state is PortfolioLoading,
-        skeleton: const ListViewSkeleton(),
-        child: state is PortfolioCoins
-          ? state.listCoins.isNotEmpty
-            ? _getCoins(state)
-            : _firstAsset()
-          : const SizedBox()
-      ),
+  Widget _mainScreenSkeleton(double containerHeight, containerWidth) {
+    return Column(
+      children: [
+        ItemSkeleton(height: containerHeight, width: containerWidth),
+        const SizedBox(height: 24),
+        const Expanded(child: ListViewSkeleton())
+      ],
     );
   }
 
-  Widget _getCoins(PortfolioCoins state) {
+  Widget _getContent(PortfolioState state, BuildContext context) {
+    const double containerHeight = 180;
+    const double containerWidth = 360;
+
+    if(state is PortfolioNotCreated) return _firstPortfolio();
+
+    return Skeleton(
+      isLoading: state is PortfolioLoading,
+      skeleton: _mainScreenSkeleton(containerHeight, containerWidth),
+      child: state is PortfolioReceived
+        ? state.listCoins.isNotEmpty
+          ? Column(
+            children: [
+              PortfolioStatistics(state: state),
+              const SizedBox(height: 24),
+              Expanded(child: _getCoins(state.listCoins, state.portfolioModel.name, context)),
+            ],
+          )
+          : _firstAsset()
+        : const SizedBox()
+    );
+  }
+
+  Widget _getCoins(List<MarketCoin> listCoins, String portfolioName, BuildContext context) {
     return CustomListView(
-      itemCount: state.listCoins.length,
+      itemCount: listCoins.length,
         itemBuilder: (context, index) {
           return CardCoin(
-            imageUrl: state.listCoins[index].image,
-            name: state.listCoins[index].name,
-            symbol: state.listCoins[index].symbol,
-            price: state.listCoins[index].currentPrice,
+            imageUrl: listCoins[index].image,
+            name: listCoins[index].name,
+            symbol: listCoins[index].symbol,
+            price: listCoins[index].currentPrice,
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) {
+                  builder: (_) {
                     return InfoAssetScreen(
-                      refreshPortfolioScreen: () => _refreshMainScreen(context),
-                      idCoin: state.listCoins[index].id,
-                      marketCoinModel: state.listCoins[index],
-                      portfolioName: state.portfolioName,
+                      refreshMainScreen: () => _refreshMainScreen(context),
+                      idCoin: listCoins[index].id,
+                      marketCoinModel: listCoins[index],
+                      portfolioName: portfolioName,
                     );
                   }
                 )
@@ -128,5 +157,5 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  void _refreshMainScreen(BuildContext context) => context.read<PortfolioCubit>().getCoins();
+  void _refreshMainScreen(BuildContext context) => context.read<PortfolioCubit>().getPortfolio();
 }
