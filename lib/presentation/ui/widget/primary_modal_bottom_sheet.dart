@@ -5,11 +5,12 @@ import 'button/icon_button_widget.dart';
 Future<void> showPrimaryModalBottomSheet({
     required BuildContext context,
     required Widget content,
+    bool? isScrollControlled,
     String? title,
     double? maxHeight,
   }) async {
    showModalBottomSheet<void>(
-    isScrollControlled: true,
+    isScrollControlled: isScrollControlled ?? false,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(AppStyles.borderRadiusApp))
     ),

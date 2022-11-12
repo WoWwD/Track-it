@@ -59,13 +59,14 @@ class ListPortfolioScreen extends StatelessWidget {
           child: ListTile(
             onTap: () async => await showPrimaryModalBottomSheet(
               context: context,
+              isScrollControlled: true,
               content: CreatePortfolioScreen(
                 refreshState: () {
                   context.read<PortfolioCubit>().getListPortfolio();
                   refreshMainScreen();
                 }
               ),
-              maxHeight: 150,
+              //maxHeight: 150,
               title: 'Создание портфеля'
             ),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp)),

@@ -94,43 +94,46 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> with Automa
   }
 
   Widget _mainWidget(TransactionModel model, bool isEdit) {
-    return Padding(
+    return ListView(
+      controller: ScrollController(),
       padding: AppStyles.mainPadding,
-      child: Column(
-        children: [
-          const SizedBox(height: 24),
-          TextFieldTransaction(
-            labelText: 'Количество',
-            onChanged: (value) {
-              if (value.isNotEmpty) {
-                model.setAmount(double.parse(value));
-                model.isBuyOrSell() ? model.setCost() : null;
-              }
-            },
-            initialValue: model.amount == 0.0 ? '' : model.amount.toString(),
-          ),
-          model.isBuyOrSell() ? _forTypeTransactionBuyAndSell(model) : const SizedBox(),
-          _forAllTypeTransactions(model),
-          const Expanded(child: SizedBox.shrink()),
-          PrimaryButton(
-            text: isEdit? 'Изменить': 'Добавить',
-            onPressed: () {
-              if(_formKey.currentState!.validate()){
-                if(isEdit) {
-                  model.editTransaction(widget.oldTransactionModel!, widget.indexOldTransaction!)
-                    .then((value) => widget.refreshPreviousScreen());
-                }
-                else {
-                  model.addTransaction()
-                    .then((value) => widget.refreshPreviousScreen());
-                }
-                Navigator.pop(context);
-              }
+      children: [
+        const SizedBox(height: 24),
+        TextFieldTransaction(
+          labelText: 'Количество',
+          onChanged: (value) {
+            if (value.isNotEmpty) {
+              model.setAmount(double.parse(value));
+              model.isBuyOrSell()? model.setCost(): null;
             }
+          },
+          initialValue: model.amount == 0.0 ? '' : model.amount.toString(),
+        ),
+        model.isBuyOrSell() ? _forTypeTransactionBuyAndSell(model) : const SizedBox(),
+        _forAllTypeTransactions(model),
+        const SizedBox(height: 24),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 96),
+          child: PrimaryButton(
+            text: isEdit? 'Изменить': 'Добавить',
+            onPressed: () => _onPressedTransactionButton(isEdit, model)
           ),
-        ]
-      ),
+        ),
+      ]
     );
+  }
+
+  void _onPressedTransactionButton(bool isEdit, TransactionModel model) {
+    if(_formKey.currentState!.validate()){
+      if(isEdit) {
+        model.editTransaction(widget.oldTransactionModel!, widget.indexOldTransaction!)
+          .then((value) => widget.refreshPreviousScreen());
+      }
+      else {
+        model.addTransaction().then((value) => widget.refreshPreviousScreen());
+      }
+      Navigator.pop(context);
+    }
   }
 
   Widget _forAllTypeTransactions(TransactionModel model) {
