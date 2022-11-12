@@ -28,11 +28,11 @@ class StatisticsAssetScreen extends StatelessWidget {
                 child: ListView(
                   padding: AppStyles.mainPadding,
                   children: [
-                    Text('Инвестиции: \$${state.getAllCost().noZero()}'),
+                    Text('Инвестиции: \$${state.getAllCost().myRound()}'),
                     const SizedBox(height: 12),
-                    Text('Количество монет: ${state.getAllAmount().noZero()}'),
+                    Text('Количество монет: ${state.getAllAmount().myRound()}'),
                     const SizedBox(height: 12),
-                    Text('Средняя цена покупки: ${state.getAveragePriceBuy().toStringAsFixed(6)}'),
+                    Text('Средняя цена покупки: ${state.getAveragePriceBuy().myRound()}'),
                   ],
                 ),
               )

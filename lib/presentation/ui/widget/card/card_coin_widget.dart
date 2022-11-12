@@ -25,7 +25,7 @@ class CardCoin extends StatelessWidget {
       leading: SizedBox(width: 36, height: 36, child: Image.network(imageUrl)),
       title: Text(name),
       subtitle: Text(symbol.toUpperCase(), style: const TextStyle(fontSize: 10)),
-      trailing: Text('\$${price.noZero()}'),
+      trailing: Text('\$${price.myRound()}'),
       onTap: onTap,
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:track_it/service/extension/date_time_extension.dart';
+import 'package:track_it/service/extension/double_extension.dart';
 import 'package:track_it/service/helpers.dart';
 import 'package:track_it/service/transaction_type_enum.dart';
 import '../../data/model/asset_model.dart';
@@ -61,7 +62,7 @@ class TransactionModel extends ChangeNotifier {
     }
   }
 
-  String initTextEditingController() => price * amount == 0.0 ? '' : '\$${(price * amount)}';
+  String initTextEditingController() => price * amount == 0.0 ? '' : '\$${(price * amount).myRound(6)}';
 
   void setDateTime(DateTime dateTime) {
     _dateTime = dateTime;

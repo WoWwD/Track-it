@@ -51,9 +51,9 @@ class TransactionCard extends StatelessWidget {
             _isBuyOrSell()? const SizedBox(): const Text(' '),
             Text(
               '${Helpers.typeTransactionFromModel(transactionModel.typeOfTransaction)} '
-              '${transactionModel.amount.noZero()} ${marketCoinModel.symbol.toUpperCase()}'
+              '${transactionModel.amount.myRound()} ${marketCoinModel.symbol.toUpperCase()}'
             ),
-            _isBuyOrSell()? Text('Цена: \$${transactionModel.price.noZero()}'): const SizedBox(),
+            _isBuyOrSell()? Text('Цена: \$${transactionModel.price.myRound()}'): const SizedBox(),
           ],
         ),
         subtitle: Column(
@@ -66,7 +66,7 @@ class TransactionCard extends StatelessWidget {
             ),
           ],
         ),
-        trailing: _isBuyOrSell()? Text('Стоимость: \$${transactionModel.cost.noZero()}'): const SizedBox(),
+        trailing: _isBuyOrSell()? Text('Стоимость: \$${transactionModel.cost.myRound()}'): const SizedBox(),
       ),
     );
   }

@@ -33,11 +33,11 @@ class PortfolioStatistics extends StatelessWidget {
         children: [
           Text(state.portfolioModel.name, style: const TextStyle(fontSize: 20)),
           const SizedBox(height: 24),
-          Text('Инвестиции: \$${getAmountInvestment.noZero()}'),
+          Text('Инвестиции: \$${getAmountInvestment.myRound(2)}'),
           const SizedBox(height: 12),
-          Text('Текущая стоимость: \$${getCurrentCostPortfolio.noZero()}'),
+          Text('Текущая стоимость: \$${getCurrentCostPortfolio.myRound(2)}'),
           const SizedBox(height: 12),
-          Text('Прибыль: \$${(getCurrentCostPortfolio - getAmountInvestment).noZero()}')
+          Text('Прибыль: \$${(getCurrentCostPortfolio - getAmountInvestment).myRound(2)}')
         ],
       ),
     );
