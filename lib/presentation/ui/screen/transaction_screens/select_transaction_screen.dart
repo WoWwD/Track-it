@@ -49,6 +49,20 @@ class _SelectTransactionScreenState extends State<SelectTransactionScreen> with 
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> listWidgets = List<Widget>.generate(_tabLength, (index) => NewTransactionScreen(
+        portfolioName: widget.portfolioName,
+        transactionType: index == 0
+          ? TransactionType.buy
+          : index == 1
+            ? TransactionType.sell
+            : index == 2
+              ? TransactionType.transferIn
+              : TransactionType.transferOut,
+        idCoin: widget.idCoin,
+        refreshPreviousScreen: widget.refreshPreviousScreen
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: ListTile(
@@ -61,7 +75,6 @@ class _SelectTransactionScreenState extends State<SelectTransactionScreen> with 
         length: _tabLength,
         child: Center(
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 16),
             constraints: const BoxConstraints(maxWidth: AppStyles.maxWidth),
             child: Column(
               children: [
@@ -75,32 +88,7 @@ class _SelectTransactionScreenState extends State<SelectTransactionScreen> with 
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
-                    children: [
-                      NewTransactionScreen(
-                        portfolioName: widget.portfolioName,
-                        transactionType: TransactionType.buy,
-                        idCoin: widget.idCoin,
-                        refreshPreviousScreen: widget.refreshPreviousScreen
-                      ),
-                      NewTransactionScreen(
-                        portfolioName: widget.portfolioName,
-                        transactionType: TransactionType.sell,
-                        idCoin: widget.idCoin,
-                        refreshPreviousScreen: widget.refreshPreviousScreen
-                      ),
-                      NewTransactionScreen(
-                        portfolioName: widget.portfolioName,
-                        transactionType: TransactionType.transferIn,
-                        idCoin: widget.idCoin,
-                        refreshPreviousScreen: widget.refreshPreviousScreen
-                      ),
-                      NewTransactionScreen(
-                        portfolioName: widget.portfolioName,
-                        transactionType: TransactionType.transferOut,
-                        idCoin: widget.idCoin,
-                        refreshPreviousScreen: widget.refreshPreviousScreen
-                      ),
-                    ]
+                    children: listWidgets
                   ),
                 ),
               ],

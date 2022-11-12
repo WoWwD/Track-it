@@ -17,6 +17,9 @@ class StatisticsSingleCoin extends StatisticsState {
       if(listTransactions[i].typeOfTransaction == AppConstants.buyTypeTransaction) {
         allCost += listTransactions[i].cost;
       }
+      if (listTransactions[i].typeOfTransaction == AppConstants.sellTypeTransaction) {
+        allCost -= listTransactions[i].cost;
+      }
     }
     return allCost;
   }
