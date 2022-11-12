@@ -27,6 +27,7 @@ class MainScreen extends StatelessWidget {
       child: BlocBuilder<PortfolioCubit, PortfolioState>(
         builder: (context, state) {
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               title: _titleAppbar(context),
               actions: [_refreshButton(context)],
@@ -58,20 +59,22 @@ class MainScreen extends StatelessWidget {
   }
 
   Widget _titleAppbar(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp),
+    return GestureDetector(
       onTap: () => showPrimaryModalBottomSheet(
         context: context,
+        isScrollControlled: true,
+        title: 'Список ваших портфелей',
         content: ListPortfolioScreen(refreshMainScreen: () => _refreshMainScreen(context)),
+        maxHeight: MediaQuery.of(context).size.height - kTextTabBarHeight
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: const [
-            Padding(padding: EdgeInsets.only(bottom: 6.0), child: Text('Список портфелей')),
+            Text('Список портфелей'),
             SizedBox(width: 4),
-            Icon(Icons.arrow_forward_ios, size: 18)
+            Icon(Icons.arrow_drop_down)
           ],
         ),
       ),
@@ -83,6 +86,7 @@ class MainScreen extends StatelessWidget {
       child: const Icon(Icons.add),
       onPressed: () => showPrimaryModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         title: state is PortfolioNotCreated? 'Создание портфеля': 'Добавление актива',
         content: state is PortfolioNotCreated
           ? CreatePortfolioScreen(refreshState: () => _refreshMainScreen(context))
@@ -90,7 +94,6 @@ class MainScreen extends StatelessWidget {
               portfolioName: state is PortfolioReceived? state.portfolioModel.name: '',
               refreshPortfolioScreen: () => _refreshMainScreen(context),
             ),
-        maxHeight: state is PortfolioNotCreated? 150: null,
       )
     );
   }
