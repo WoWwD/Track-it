@@ -38,8 +38,8 @@ class ImportExportJsonScreen extends StatelessWidget {
                           title: 'Добавить портфель?',
                           contentText: 'Текущий портфель будет заменён',
                           onPressedConfirm: () async {
-                            await _fromJson(context, portfolioCubit)
-                              .then((value) => Navigator.pop(context));
+                            // await _fromJson(context, portfolioCubit)
+                            //   .then((value) => Navigator.pop(context));
                           }
                         )
                       )
@@ -48,7 +48,7 @@ class ImportExportJsonScreen extends StatelessWidget {
                     _card(
                       context,
                       'Экспортировать в виде JSON',
-                      () => _toJson(context, portfolioCubit),
+                      () => //_toJson(context, portfolioCubit),
                       false
                     ),
                   ],
@@ -87,27 +87,34 @@ class ImportExportJsonScreen extends StatelessWidget {
     }
     else {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Необходимо создать портфель')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Необходимо создать портфель и сделать его текущим'))
+      );
     }
   }
 
   Future<void> _fromJson(BuildContext context, PortfolioCubit portfolioCubit, [bool mounted = true]) async {
-    try {
+    final String? portfolioName = await portfolioCubit.getCurrentPortfolioName();
+    if (portfolioName != null) {
       final String? portfolioJson = await Clipboard.getData(Clipboard.kTextPlain).then((value) => value?.text);
-      final String? portfolioName = await portfolioCubit.getCurrentPortfolioName();
-      if (portfolioName != null && portfolioJson != null) {
-        final Portfolio portfolioModel = Portfolio.fromJson(json.decode(portfolioJson));
-        await portfolioCubit.portfolioFromJson(portfolioModel, portfolioName);
+      Portfolio? portfolioModel;
+      if (portfolioJson != null) {
+        try {
+          portfolioModel = Portfolio.fromJson(json.decode(portfolioJson));
+        }
+        on FormatException {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Неверный формат JSON')));
+        }
+        if (portfolioModel != null) {
+          await portfolioCubit.portfolioFromJson(portfolioModel, portfolioName);
+        }
       }
-      else {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Необходимо создать портфель'))
-        );
-      }
-    }
-    on FormatException {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Неверный формат JSON')));
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Необходимо создать портфель и сделать его текущим'))
+      );
     }
   }
 }
