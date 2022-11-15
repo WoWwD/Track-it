@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:track_it/data/model/coin/market_coin_model.dart';
 import 'package:track_it/presentation/ui/screen/transaction_screens/new_transaction_screen.dart';
-import 'package:track_it/service/constant/app_styles.dart';
+import 'package:track_it/service/constants/app_styles.dart';
 import 'package:track_it/service/di.dart' as di;
 import 'package:track_it/service/helpers.dart';
 import '../../../cubit/transaction_cubit/transaction_cubit.dart';

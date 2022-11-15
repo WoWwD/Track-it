@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:track_it/service/extension/string_extension.dart';
-import '../../../../service/error/input_error.dart';
+import 'package:track_it/service/extensions/string_extension.dart';
+import '../../../../service/errors/input_error.dart';
 import '../../../cubit/portfolio_cubit/portfolio_cubit.dart';
 import '../../widget/button/icon_button_widget.dart';
 import '../../widget/text_field/primary_text_field.dart';
@@ -38,29 +38,9 @@ class _CreatePortfolioScreenState extends State<CreatePortfolioScreen> {
                     onChanged: (value) => setState(() {
                       _textEditingController.text = value;
                     }),
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return InputError.empty;
-                      }
-                      if (value.toString().isMaxLength()) {
-                        return InputError.maxLength;
-                      }
-                      return null;
-                    },
+                    validator: (value) => _validator(value ?? ''),
                     suffixIcon: IconButtonV2(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          final bool? portfolioAlreadyExists =
-                            await context.read<PortfolioCubit>().portfolioAlreadyExists(_textEditingController.text);
-                          if (portfolioAlreadyExists == null || !portfolioAlreadyExists) {
-                            if (!mounted) return;
-                            await context.read<PortfolioCubit>().createPortfolio(_textEditingController.text);
-                            widget.refreshState();
-                            if (!mounted) return;
-                            Navigator.pop(context);
-                          }
-                        }
-                      },
+                      onPressed: () => _createPortfolio(context),
                       icon: const Icon(Icons.arrow_forward_ios),
                     ),
                   ),
@@ -71,5 +51,29 @@ class _CreatePortfolioScreenState extends State<CreatePortfolioScreen> {
         ),
       ),
     );
+  }
+
+  String? _validator(String value) {
+    if (value.toString().isEmpty) {
+      return InputError.empty;
+    }
+    if (value.toString().isMaxLength()) {
+      return InputError.maxLength;
+    }
+    return null;
+  }
+
+  void _createPortfolio(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      final bool? portfolioAlreadyExists =
+        await context.read<PortfolioCubit>().portfolioAlreadyExists(_textEditingController.text);
+      if (portfolioAlreadyExists == null || !portfolioAlreadyExists) {
+        if (!mounted) return;
+        await context.read<PortfolioCubit>().createPortfolio(_textEditingController.text);
+        widget.refreshState();
+        if (!mounted) return;
+        Navigator.pop(context);
+      }
+    }
   }
 }

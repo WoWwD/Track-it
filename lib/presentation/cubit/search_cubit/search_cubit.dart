@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:track_it/data/model/coin/search_coin_model.dart';
-import 'package:track_it/service/extension/string_extension.dart';
+import 'package:track_it/service/extensions/string_extension.dart';
 import '../../../domain/repository/remote_repository/coin_remote_repository.dart';
 
 part 'search_state.dart';

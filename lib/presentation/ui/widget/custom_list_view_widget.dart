@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import '../../../service/constant/app_styles.dart';
+import '../../../service/constants/app_styles.dart';
 
 class CustomListView extends StatelessWidget {
   final int itemCount;

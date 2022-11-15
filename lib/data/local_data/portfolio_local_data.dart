@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:track_it/data/model/portfolio_model.dart';
-import 'package:track_it/service/constant/app_constants.dart';
-import 'package:track_it/service/interface/portfolio_local_action_interface.dart';
+import 'package:track_it/service/constants/app_constants.dart';
+import 'package:track_it/service/interfaces/portfolio_local_action_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PortfolioLocalData implements PortfolioLocalAction {
@@ -12,7 +12,7 @@ class PortfolioLocalData implements PortfolioLocalAction {
   Future<bool> portfolioStorageIsEmpty() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     final List<String>? listKeys = sp.getStringList(_portfolioKeysStorage);
-    if(listKeys == null || listKeys.isEmpty) {
+    if (listKeys == null || listKeys.isEmpty) {
       return true;
     }
     else {
@@ -24,7 +24,7 @@ class PortfolioLocalData implements PortfolioLocalAction {
   Future<Portfolio?> getPortfolioByName(String portfolioName) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     final String? portfolioJson = sp.getString(portfolioName);
-    if(portfolioJson != null) {
+    if (portfolioJson != null) {
       return Portfolio.fromJson(json.decode(portfolioJson));
     }
     else {
@@ -46,7 +46,7 @@ class PortfolioLocalData implements PortfolioLocalAction {
   Future<bool> deletePortfolioByName(String portfolioName) async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     final List<String>? portfolioListKeys = sp.getStringList(_portfolioKeysStorage);
-    if(portfolioListKeys != null && portfolioListKeys.contains(portfolioName)) {
+    if (portfolioListKeys != null && portfolioListKeys.contains(portfolioName)) {
       portfolioListKeys.remove(portfolioName);
       await sp.remove(portfolioName);
       await sp.setStringList(_portfolioKeysStorage, portfolioListKeys);
@@ -69,7 +69,7 @@ class PortfolioLocalData implements PortfolioLocalAction {
     final List<Portfolio> listPortfolio = [];
     final List<String>? listPortfolioNames = sp.getStringList(_portfolioKeysStorage);
     if (listPortfolioNames != null) {
-      for(int i = 0; i < listPortfolioNames.length; i++) {
+      for (int i = 0; i < listPortfolioNames.length; i++) {
         String? portfolioJson = sp.getString(listPortfolioNames[i]);
         if (portfolioJson != null) {
           listPortfolio.add(Portfolio.fromJson(json.decode(portfolioJson)));
@@ -119,7 +119,7 @@ class PortfolioLocalData implements PortfolioLocalAction {
   Future<String?> getCurrentPortfolioName() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     final String? currentPortfolioName = sp.getString(_currentPortfolioStorage);
-    if(currentPortfolioName != null) {
+    if (currentPortfolioName != null) {
       return currentPortfolioName;
     }
     else {

@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:skeletons/skeletons.dart';
-import '../../../../service/constant/app_styles.dart';
+import '../../../../service/constants/app_styles.dart';
 
 class ItemSkeleton extends StatelessWidget {
   final double height;

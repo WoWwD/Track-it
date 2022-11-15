@@ -11,7 +11,7 @@ import 'package:track_it/presentation/ui/widget/primary_modal_bottom_sheet.dart'
 import 'package:track_it/presentation/ui/widget/skeletons/item_skeleton_widget.dart';
 import 'package:track_it/presentation/ui/widget/skeletons/list_view_skeleton_widget.dart';
 import '../../../data/model/coin/market_coin_model.dart';
-import '../../../service/constant/app_styles.dart';
+import '../../../service/constants/app_styles.dart';
 import 'bottom_sheet_screens/create_portfolio_screen.dart';
 import 'bottom_sheet_screens/list_portfolio_screen.dart';
 import 'bottom_sheet_screens/search_coin_screen.dart';
@@ -88,12 +88,13 @@ class MainScreen extends StatelessWidget {
         context: context,
         isScrollControlled: true,
         title: state is PortfolioNotCreated? 'Создание портфеля': 'Добавление актива',
+        maxHeight: MediaQuery.of(context).size.height - kTextTabBarHeight,
         content: state is PortfolioNotCreated
-          ? CreatePortfolioScreen(refreshState: () => _refreshMainScreen(context))
-          : SearchCoinScreen(
-              portfolioName: state is PortfolioReceived? state.portfolioModel.name: '',
-              refreshPortfolioScreen: () => _refreshMainScreen(context),
-            ),
+        ? CreatePortfolioScreen(refreshState: () => _refreshMainScreen(context))
+        : SearchCoinScreen(
+            portfolioName: state is PortfolioReceived? state.portfolioModel.name: '',
+            refreshPortfolioScreen: () => _refreshMainScreen(context),
+          ),
       )
     );
   }

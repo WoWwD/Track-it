@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:track_it/service/extension/date_time_extension.dart';
-import 'package:track_it/service/extension/double_extension.dart';
+import 'package:track_it/service/extensions/date_time_extension.dart';
+import 'package:track_it/service/extensions/double_extension.dart';
 import 'package:track_it/service/helpers.dart';
 import 'package:track_it/service/transaction_type_enum.dart';
 import '../../data/model/asset_model.dart';

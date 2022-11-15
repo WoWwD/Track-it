@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:track_it/presentation/ui/widget/theme_switcher.dart';
-import 'package:track_it/service/constant/app_styles.dart';
+import 'package:track_it/presentation/ui/widget/theme_switcher_widget.dart';
+import 'package:track_it/service/constants/app_styles.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class SettingsScreen extends StatelessWidget {
               ListTile(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp)),
                 onTap: () => Navigator.pushNamed(context, '/importExportJson'),
-                title: const Text('Импорт / экспорт портфеля'),
+                title: const Text('Импорт / экспорт текущего портфеля'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 18),
               ),
             ],

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:track_it/data/model/coin/market_coin_model.dart';
 import 'package:track_it/data/model/transaction_model.dart';
-import 'package:track_it/service/constant/app_constants.dart';
-import 'package:track_it/service/extension/double_extension.dart';
+import 'package:track_it/service/constants/app_constants.dart';
+import 'package:track_it/service/extensions/double_extension.dart';
 import 'package:track_it/service/helpers.dart';
-import '../../../../service/constant/app_styles.dart';
+import '../../../../service/constants/app_styles.dart';
 
 class TransactionCard extends StatelessWidget {
   final Transaction transactionModel;

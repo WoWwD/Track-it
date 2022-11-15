@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:track_it/presentation/cubit/portfolio_cubit/portfolio_cubit.dart';
-import 'package:track_it/service/extension/double_extension.dart';
-import '../../../../service/constant/app_styles.dart';
+import 'package:track_it/service/extensions/double_extension.dart';
+import '../../../../service/constants/app_styles.dart';
 
 class PortfolioStatistics extends StatelessWidget {
   final double containerHeight;

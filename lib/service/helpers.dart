@@ -1,5 +1,5 @@
 import 'package:track_it/service/transaction_type_enum.dart';
-import 'constant/app_constants.dart';
+import 'constants/app_constants.dart';
 
 class Helpers {
   static String createStringFromItemsList(List<String> list) {

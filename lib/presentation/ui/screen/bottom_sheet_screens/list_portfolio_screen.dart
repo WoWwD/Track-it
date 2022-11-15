@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:track_it/presentation/ui/widget/custom_list_view_widget.dart';
-import '../../../../service/constant/app_styles.dart';
+import '../../../../service/constants/app_styles.dart';
 import '../../../cubit/portfolio_cubit/portfolio_cubit.dart';
 import 'package:track_it/service/di.dart' as di;
 import '../../widget/card/card_portfolio_widget.dart';
@@ -66,7 +66,6 @@ class ListPortfolioScreen extends StatelessWidget {
                   refreshMainScreen();
                 }
               ),
-              //maxHeight: 150,
               title: 'Создание портфеля'
             ),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp)),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../service/constant/app_styles.dart';
+import 'package:track_it/presentation/ui/widget/primary_dialog_widget.dart';
+import '../../../../service/constants/app_styles.dart';
 
 class CardPortfolio extends StatelessWidget {
   final String portfolioName;
@@ -32,7 +33,16 @@ class CardPortfolio extends StatelessWidget {
             : _button(context, onChanged, Colors.grey, 'Выбрать', null),
           _button(
             context,
-            () => showDialog(context: context, builder: (context) => _dialog(context)),
+            () => showDialog(
+              context: context,
+              builder: (context) => PrimaryDialog(
+                onPressedConfirm: () {
+                  deletePortfolio();
+                  Navigator.pop(context);
+                },
+                title: 'Удалить портфель?',
+              )
+            ),
             Colors.redAccent,
             'Удалить',
             Icons.delete
@@ -69,35 +79,6 @@ class CardPortfolio extends StatelessWidget {
               ),
         ),
       ),
-    );
-  }
-
-  Widget _dialogButton(Function() onPressed, String text) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: Text(text)
-    );
-  }
-
-  Widget _dialog(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Удалить портфель?'),
-      actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _dialogButton(
-              () {
-                deletePortfolio();
-                Navigator.pop(context);
-              },
-              'Да'
-            ),
-            const SizedBox(width: 24),
-            _dialogButton(() => Navigator.pop(context), 'Нет'),
-          ],
-        ),
-      ],
     );
   }
 }

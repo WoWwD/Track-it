@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:track_it/data/model/transaction_model.dart';
 import 'package:track_it/presentation/provider/transaction_model.dart';
-import 'package:track_it/service/constant/app_styles.dart';
-import 'package:track_it/service/extension/date_time_extension.dart';
+import 'package:track_it/service/constants/app_styles.dart';
+import 'package:track_it/service/extensions/date_time_extension.dart';
 import '../../../../service/transaction_type_enum.dart';
 import '../../widget/button/primary_button_widget.dart';
 import '../../widget/text_field/text_field_transaction_note_widget.dart';
 import '../../widget/text_field/text_field_transaction_widget.dart';
-import 'package:track_it/service/extension/string_extension.dart';
+import 'package:track_it/service/extensions/string_extension.dart';
 import 'package:track_it/service/di.dart' as di;
 
 class NewTransactionScreen extends StatefulWidget {

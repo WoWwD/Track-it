@@ -1,15 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:track_it/data/model/coin/coin_model.dart';
 import 'package:track_it/data/model/coin/search_coin_model.dart';
-import 'package:track_it/service/exception/api_exception.dart';
+import 'package:track_it/service/exceptions/api_exception.dart';
 import 'package:track_it/service/helpers.dart';
-import 'package:track_it/service/interface/coin_remote_action_interface.dart';
+import 'package:track_it/service/interfaces/coin_remote_action_interface.dart';
 import '../model/coin/market_coin_model.dart';
 import 'api/base_api.dart';
 
 class CoinRemoteData extends BaseApi implements CoinRemoteAction {
   final Dio dio;
-  final String currency = 'usd';
+  static const String _currency = 'usd';
 
   CoinRemoteData(this.dio);
 
@@ -29,7 +29,14 @@ class CoinRemoteData extends BaseApi implements CoinRemoteAction {
     final String idsFromList = Helpers.createStringFromItemsList(ids);
     final List<MarketCoin> listCoins = [];
     final Response response =
-      await dio.get('${super.baseUrl}/coins/markets?vs_currency=$currency&ids=$idsFromList&order=market_cap_desc&per_page=100&page=1&sparkline=false');
+      await dio.get('${super.baseUrl}/coins/markets?'
+        'vs_currency=$_currency'
+        '&ids=$idsFromList'
+        '&order=market_cap_desc'
+        '&per_page=100'
+        '&page=1'
+        '&sparkline=false'
+      );
     if (response.statusCode == 200) {
       for (var item in response.data) {
         listCoins.add(MarketCoin.fromJson(item));

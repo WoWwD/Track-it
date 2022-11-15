@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../service/constant/app_styles.dart';
+import '../../../service/constants/app_styles.dart';
 import 'button/icon_button_widget.dart';
 
 Future<void> showPrimaryModalBottomSheet({
@@ -38,7 +38,10 @@ Future<void> showPrimaryModalBottomSheet({
                 const Spacer(),
                 Container(
                   alignment: Alignment.centerRight,
-                  child: IconButtonV2(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close)),
+                  child: IconButtonV2(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.close)
+                  ),
                 ),
               ],
             ),

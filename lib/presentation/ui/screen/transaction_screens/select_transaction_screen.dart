@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:track_it/presentation/ui/screen/transaction_screens/new_transaction_screen.dart';
 import 'package:track_it/service/transaction_type_enum.dart';
-import '../../../../service/constant/app_styles.dart';
+import '../../../../service/constants/app_styles.dart';
 
 class SelectTransactionScreen extends StatefulWidget {
   final String name;

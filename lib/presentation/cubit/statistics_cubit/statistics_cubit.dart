@@ -5,7 +5,7 @@ import 'package:track_it/data/model/portfolio_model.dart';
 import 'package:track_it/data/model/transaction_model.dart';
 import '../../../data/model/asset_model.dart';
 import '../../../domain/repository/local_repository/portfolio_local_repository.dart';
-import '../../../service/constant/app_constants.dart';
+import '../../../service/constants/app_constants.dart';
 
 part 'statistics_state.dart';
 
