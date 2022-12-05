@@ -23,6 +23,13 @@ class SettingsScreen extends StatelessWidget {
                 title: const Text('Импорт / экспорт текущего портфеля'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 18),
               ),
+              const SizedBox(height: 16),
+              ListTile(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppStyles.borderRadiusApp)),
+                onTap: () => Navigator.pushNamed(context, '/changeLanguage'),
+                title: const Text('Смена языка'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 18),
+              )
             ],
           ),
         ),

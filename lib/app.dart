@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:track_it/app_routes.dart';
@@ -12,6 +13,9 @@ class App extends StatelessWidget {
     final themeMode = Provider.of<SettingsModel>(context);
 
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: themeMode.darkMode ? ThemeMode.dark : ThemeMode.light,
