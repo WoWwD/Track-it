@@ -43,11 +43,11 @@ class ListPortfolioScreen extends StatelessWidget {
                 amountAssets: state.listPortfolio[index].listAssets.length,
                 isCurrent: state.currentPortfolioName == state.listPortfolio[index].name,
                 deletePortfolio: () async {
-                  context.read<PortfolioCubit>().deletePortfolioByName(state.listPortfolio[index].name);
+                  await context.read<PortfolioCubit>().deletePortfolioByName(state.listPortfolio[index].name);
                   refreshMainScreen();
                 },
-                onChanged: () {
-                  context.read<PortfolioCubit>().setToCurrentPortfolio(state.listPortfolio[index].name);
+                onChanged: () async {
+                  await context.read<PortfolioCubit>().setToCurrentPortfolio(state.listPortfolio[index].name);
                   refreshMainScreen();
                 }
               );

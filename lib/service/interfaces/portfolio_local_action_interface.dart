@@ -2,6 +2,7 @@ import 'package:track_it/data/model/portfolio_model.dart';
 
 abstract class PortfolioLocalAction {
   Future<bool> portfolioStorageIsEmpty();
+  /// Возвращает null если список портфелей пуст
   Future<bool?> portfolioNameAlreadyExists(String portfolioName);
   Future<void> createPortfolio(String portfolioName);
   Future<Portfolio?> getPortfolioByName(String portfolioName);

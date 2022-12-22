@@ -86,17 +86,40 @@ class PortfolioCubit extends Cubit<PortfolioState> {
   Future<void> createPortfolio(String portfolioName) async {
     await portfolioLocalRepository.createPortfolio(portfolioName);
     final String? currentPortfolioName = await getCurrentPortfolioName();
-    if(currentPortfolioName == null) {
+    if (currentPortfolioName == null) {
       await setToCurrentPortfolio(portfolioName);
     }
   }
 
-  Future<String> portfolioToJson(String portfolioName) async {
-    final Portfolio? portfolioModel = await portfolioLocalRepository.getPortfolioByName(portfolioName);
-    return jsonEncode(portfolioModel!.toJson());
+  Future<String?> portfolioToJson() async {
+    final String? currentPortfolioName = await portfolioLocalRepository.getCurrentPortfolioName();
+    if (currentPortfolioName != null) {
+      final Portfolio? portfolioModel = await portfolioLocalRepository.getPortfolioByName(currentPortfolioName);
+      return jsonEncode(portfolioModel!.toJson());
+    }
+    return null;
   }
 
-  Future<void> portfolioFromJson(Portfolio portfolioModel, String portfolioName) async {
-    await portfolioLocalRepository.setPortfolio(portfolioName, portfolioModel);
+  Future<bool> portfolioFromJson(String portfolioJson) async {
+    Portfolio? portfolioJsonModel;
+    try {
+      portfolioJsonModel = Portfolio.fromJson(json.decode(portfolioJson));
+      final bool? alreadyExists = await portfolioLocalRepository.portfolioNameAlreadyExists(portfolioJsonModel.name);
+      if (alreadyExists != null && alreadyExists) {
+        final String portfolioName = DateTime.now().microsecondsSinceEpoch.toString();
+        await createPortfolio(portfolioName);
+        await portfolioLocalRepository.setPortfolio(
+          portfolioName,
+          Portfolio(name: portfolioName, listAssets: portfolioJsonModel.listAssets)
+        );
+        return true;
+      }
+      await createPortfolio(portfolioJsonModel.name);
+      await portfolioLocalRepository.setPortfolio(portfolioJsonModel.name, portfolioJsonModel);
+      return true;
+    }
+    on FormatException {
+      return false;
+    }
   }
 }
