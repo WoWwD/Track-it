@@ -1,18 +1,5 @@
-# track_it
+# Track it
 
-A new Flutter project.
-
-Платформы: Windows, Android
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The app can be run on android and Windows. 
+The app allows you to create portfolios and add crypto assets. 
+You can monitor the statistics of your portfolio and import/export it in JSON format.
