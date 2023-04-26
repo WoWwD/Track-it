@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   get_it: ^7.2.0
   bloc: ^8.1.0
-  dio: ^4.0.6
+  dio: ^5.1.1
   flutter_bloc: ^8.1.1
   cached_network_image: ^3.2.1
   skeletons: ^0.0.3
