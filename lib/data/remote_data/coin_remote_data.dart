@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:track_it/data/interface/coin_remote_action_interface.dart';
 import 'package:track_it/data/model/coin/coin_model.dart';
 import 'package:track_it/data/model/coin/search_coin_model.dart';
-import 'package:track_it/service/exceptions/api_exception.dart';
+import 'package:track_it/service/api_exception.dart';
 import 'package:track_it/service/helpers.dart';
-import 'package:track_it/service/interfaces/coin_remote_action_interface.dart';
 import '../model/coin/market_coin_model.dart';
 import 'api/base_api.dart';
 

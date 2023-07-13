@@ -1,6 +1,6 @@
+import 'package:track_it/data/interface/coin_remote_action_interface.dart';
 import 'package:track_it/data/model/coin/coin_model.dart';
 import 'package:track_it/data/model/coin/search_coin_model.dart';
-import 'package:track_it/service/interfaces/coin_remote_action_interface.dart';
 import '../../../data/model/coin/market_coin_model.dart';
 import '../../../data/remote_data/coin_remote_data.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:track_it/service/errors/input_error.dart';
+import 'package:track_it/service/input_error.dart';
 import 'package:track_it/service/extensions/string_extension.dart';
 
 class TextFieldTransaction extends StatelessWidget {

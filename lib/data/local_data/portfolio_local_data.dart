@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:track_it/data/model/portfolio_model.dart';
 import 'package:track_it/service/constants/app_constants.dart';
-import 'package:track_it/service/interfaces/portfolio_local_action_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../interface/portfolio_local_action_interface.dart';
 
 class PortfolioLocalData implements PortfolioLocalAction {
   final String _portfolioKeysStorage = AppConstants.portfolioKeysStorage;

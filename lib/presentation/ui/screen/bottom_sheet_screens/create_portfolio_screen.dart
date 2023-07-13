@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:track_it/service/extensions/string_extension.dart';
-import '../../../../service/errors/input_error.dart';
+import '../../../../service/input_error.dart';
 import '../../../cubit/portfolio_cubit/portfolio_cubit.dart';
 import '../../widget/button/icon_button_widget.dart';
 import '../../widget/text_field/primary_text_field.dart';
